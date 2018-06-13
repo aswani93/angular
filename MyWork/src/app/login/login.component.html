@@ -3,13 +3,14 @@
        <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
         <p id="profile-name" class="profile-name-card"></p>
         
-        <form  [formGroup]="loginForm" class="form-signin" name="loginForm">
+        <form  class="form-signin" [formGroup]="loginForm">
             <span id="reauth-email" class="reauth-email"></span>
-            <input type="text" [formControlName]="email" class="form-control" placeholder="Email address" >
-            <input type="text" [formControlName]="password" class="form-control" placeholder="Password" >
+            <input type="text" formControlName="email" class="form-control"  >
+            <input type="text" formControlName="password" class="form-control"  >
+           
             <div class="checkbox">
                 <label>
-                    <input type="checkbox" [formControlName]="rememberme" value="remember-me"> Remember me
+                    <input type="checkbox" formControlName="rememberme" value="remember-me"> Remember me
                 </label>
             </div>
             <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit" [disabled]="loginForm.invalid">Sign in</button>
