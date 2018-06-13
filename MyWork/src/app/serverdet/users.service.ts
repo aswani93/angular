@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+
 
 export const user =  [
   {
@@ -45,11 +45,10 @@ export const user =  [
     "password": "rukma123"
   }];
 
-@Injectable()
 export class UsersService {
 
   constructor() { }
-  public static getUserdet():string[]{
+  getUserdet():string[]{
     let users:string[]=[];
     for(let list in user){
       users.push(list);
@@ -57,12 +56,12 @@ export class UsersService {
     return users;
   }
 
-  public static getuser(emailval,passwordval){
+  getuser(emailval,passwordval){
     var status = 'Not exist';
     for(let i = 0;i<user.length;i++){
       let email = user[i].email;
       let password = user[i].password;
-      if(email == emailval && password == passwordval){
+      if((email == emailval) && (password == passwordval)){
         status = 'exist';
         break;
       }
