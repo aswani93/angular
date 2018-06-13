@@ -91,7 +91,7 @@
 .form-signin button {
     width: 100%;
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     z-index: 1;
     position: relative;
     -moz-box-sizing: border-box;
@@ -131,4 +131,10 @@
 }
 button.btn.btn-lg.btn-primary.btn-block.btn-signin[disabled] {
     background-color: #5494ca;
+}
+.invalid-feedback {
+    margin-bottom: 8px;
+    color: red;
+    font-size: 13px;
+    margin-left: 10px;
 }
