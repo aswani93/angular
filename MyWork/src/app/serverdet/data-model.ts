@@ -3,3 +3,12 @@ export class User {
     password:'';
     rememberme:'';
 }
+
+export class LoginUsers{
+    id : '';
+    name: "";
+    email: "";
+    age: "";
+    place: "";
+    password: "";
+}
