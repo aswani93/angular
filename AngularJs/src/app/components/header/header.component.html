@@ -1,0 +1,71 @@
+<mat-toolbar class="toolbar">
+    <div  class="logo" fxShow="true" fxHide.lt-md>
+       <img  src="../assets/images/logo2.png">
+    </div>
+    <div  class="logo" fxShow="false" fxShow.lt-md>
+       <img  src="../assets/images/logo2-mob.png">
+    </div>
+    <div  class="rightArea">
+       <ul class="rightIconArea">
+          <li>
+             <button mat-icon-button>
+                <mat-icon>search</mat-icon>
+             </button>
+          </li>
+          <li fxShow="true" fxHide.lt-md>
+             <button mat-icon-button>
+                <mat-icon>email</mat-icon>
+                <span class="notification">5</span>
+             </button>
+          </li>
+          <li fxShow="true" fxHide.lt-md>
+             <button mat-icon-button>
+                <mat-icon>add_alert</mat-icon>
+                <span class="notification">3</span>
+             </button>
+          </li>
+          <li fxShow="true" fxHide.lt-md>
+             <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>account_box</mat-icon>
+             </button>
+          </li>
+          <li fxShow="false" fxShow.lt-md>
+             <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>view_list</mat-icon>
+             </button>
+          </li>
+       </ul>
+       <mat-menu #menu="matMenu" [overlapTrigger]="false" class="userMenu">
+       <div ngClass.lt-md="right-menu-on-mobile" fxShow="false" fxShow.lt-md>
+           <button mat-menu-item>
+               <mat-icon>email</mat-icon>
+               <span class="notification">5</span>
+               <span>Messages</span>
+            </button>
+            <button mat-menu-item>
+               <mat-icon>add_alert</mat-icon>
+               <span class="notification">3</span>
+               <span>Notification</span>
+            </button>
+            <mat-divider></mat-divider>
+       </div>
+       <button mat-menu-item class="profile-menu-btn">
+          <mat-icon>account_circle</mat-icon>
+          <span>Profile</span>
+       </button>
+       <button mat-menu-item>
+          <mat-icon>settings</mat-icon>
+          <span>Settings</span>
+       </button>
+       <button mat-menu-item>
+          <mat-icon>help</mat-icon>
+          <span>Help</span>
+       </button>
+       <mat-divider></mat-divider>
+       <button mat-menu-item>
+          <mat-icon>exit_to_app</mat-icon>
+          <span (click)="Logout();">Logout</span>
+       </button>
+       </mat-menu>
+    </div>
+ </mat-toolbar>

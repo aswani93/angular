@@ -1,0 +1,127 @@
+<div class="conatiner">
+    <app-header></app-header>
+  <div class="content" fxLayout="row" fxLayout.xs="column" fxFlexFill>
+      <div fxFlex="22" class="section-1">
+          <div class="section-1-inner">
+            <div class="profile-img-area">
+              <img src="../assets/images/user.jpg" width="100%" height="100%">
+            </div>
+            <div class="detail-area">
+              <p class="detail-head"><span>Personal</span> <span class="line"></span></p>
+              <div class="details">
+                  <label class="data-label">First Name</label>
+                  <span class="data-value">Vishnu</span>
+              </div>
+              <div class="details">
+                  <label class="data-label">Last Name</label>
+                  <span class="data-value">R</span>
+              </div>
+              <div class="details">
+                  <label class="data-label">Location</label>
+                  <span class="data-value">VVDN Kochi</span>
+              </div>
+              <div class="details">
+                  <label class="data-label">Employee ID</label>
+                  <span class="data-value">VVDN/1962</span>
+              </div>
+              <div class="details">
+                  <label class="data-label">Designation</label>
+                  <span class="data-value">Sr Engineer (SW)</span>
+              </div>
+              <div class="details">
+                  <label class="data-label">Department </label>
+                  <span class="data-value"> Engineering - Software </span>
+              </div>
+              <div class="details">
+                  <label class="data-label"> Tech Group </label>
+                  <span class="data-value">Cloud - Frontend</span>
+              </div>
+
+              <p class="detail-head"><span>Skills</span> <span class="line-skill"></span></p>
+              <mat-chip-list>
+                  <mat-chip>AngularJs</mat-chip>
+                  <mat-chip>Javascript</mat-chip>
+                  <mat-chip>PHP</mat-chip>
+                  <mat-chip>Jquery</mat-chip>
+                  <mat-chip>HTML</mat-chip>
+                  <mat-chip>CSS</mat-chip>
+              </mat-chip-list>
+            </div>
+          </div>
+      </div>
+      <div fxFlex="78" class="section-2">
+          <div class="section-2-inner">
+            <mat-card class="user-card" fxFlex="33.33">
+                <div class="card-header" data-background-color="orange">
+                    <i class="material-icons">perm_phone_msg</i>
+                </div>
+                <div class="detail-area">
+                    <p class="detail-title">Contact Details</p>
+                </div>
+                <div class="detail-list">
+                    <div  class="details">
+                        <label class="data-label-card"><fa name="phone"></fa>Mobile</label>
+                        <span class="data-value-card">9544624762</span>
+                    </div>
+                    <div  class="details">
+                        <label class="data-label-card"><fa name="envelope"></fa>Email</label>
+                        <span class="data-value-card">vishnu@vvdntech.in</span>
+                    </div>
+                    <div  class="details">
+                        <label class="data-label-card"><fa name="skype"></fa>Skype Id</label>
+                        <span class="data-value-card">connecttovish@gmail.com</span>
+                    </div>
+                </div>
+            </mat-card>
+            <mat-card class="user-card" fxFlex="33.33">
+                <div class="card-header" data-background-color="green">
+                    <i class="material-icons">work</i>
+                </div>
+                <div class="detail-area">
+                    <p class="detail-title">Active Projects</p>
+                </div>
+                <div class="detail-list">
+                    <div  class="details">
+                        <label class="single-line-label"><span class="data-index">1.</span>HFCI_WLCD</label>
+                    </div>
+                    <div  class="details">
+                        <label class="single-line-label"><span class="data-index">2.</span>INTRNL_PR</label>
+                    </div>
+                    <div class="line-card"></div>
+                    <div class="stats">
+                        <i class="material-icons">add_circle_outline</i>
+                        <a (click)="openDialog()">Click here to see more projects</a>
+                    </div>
+                </div>
+            </mat-card>
+            <mat-card class="user-card" fxFlex="33.33">
+                <div class="card-header" data-background-color="blue">
+                    <i class="material-icons">info_outline</i>
+                </div>
+                <div class="detail-area">
+                    <p class="detail-title">Direct Reports</p>
+                </div>
+                <div class="detail-list">
+                    <div  class="details">
+                        <label class="single-line-label"><span class="data-index">1.</span>Rahul OM</label>
+                    </div>
+                    <div  class="details">
+                        <label class="single-line-label"><span class="data-index">2.</span>Nikhil Chandran Thekkekottaram</label>
+                    </div>
+                    <div class="line-card"></div>
+                    <div class="stats">
+                        <i class="material-icons" style="color:#26c6da !important">add_circle_outline</i>
+                        <a href="javascript:void(0)">Click here to see more peoples</a>
+                    </div>
+                </div>
+            </mat-card>
+          </div>
+          <div class="section-2-graph">
+             <mat-card [chart]="chart" class="chartsStyle"></mat-card>
+             
+          </div>
+      </div>
+  </div>
+
+</div>
+

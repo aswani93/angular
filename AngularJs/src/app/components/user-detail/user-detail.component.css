@@ -1,0 +1,191 @@
+.section-1{
+     background-color: rgba(148, 136, 136, 0.185); 
+     width: 100%;
+     height: 100vh;
+}
+.section-2{
+  
+    background-color: rgba(201, 47, 47, 0.185); 
+    width: 100%;
+    height: 100vh;
+}
+.section-1-inner
+{
+    padding: 50px;
+    box-sizing: border-box;
+}
+.detail-head{
+    font-family: Roboto,Helvetica,Arial,sans-serif;
+    font-weight: 300;
+    font-size: 1.1em;
+    color: #827d7d;      
+}
+.line{
+    width: calc(100% - 85px);
+    border: 1px solid #ccc;
+    display: inline-block;
+    margin-left: 10px;
+}
+.line-skill{
+    width: calc(100% - 60px);
+    border: 1px solid #ccc;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.detail-area{
+    margin-top: 30px;
+    position: relative;
+}
+.user-personal-details{
+    display: flex; 
+    justify-content: space-between;
+}
+.data-label{
+    display: inline-block;
+    width: 35%;
+    font-family: Roboto,Helvetica,Arial,sans-serif;
+    font-weight: 300;
+    line-height: 2em;
+    font-size:  0.9em;
+}
+.data-value{
+    font-family: Roboto,Helvetica,Arial,sans-serif;
+    font-weight: 500;
+    font-size: 1.2em;
+    color: #111;
+}
+::ng-deep mat-chip{
+  min-width:100px;
+  margin: 15px 15px 0 0px !important;
+  font-family: Roboto,Helvetica,Arial,sans-serif;
+  font-size: 0.9em !important;
+  
+}
+.section-2-inner
+{
+    padding: 40px;
+    box-sizing: border-box;
+    padding-top: 70px;
+}
+.user-card{
+    width: 100%;
+    height: 200px;
+    margin: 10px;
+}
+.card-header {
+    float: left;
+    text-align: center;
+    box-shadow: 0 10px 30px -12px rgba(0,0,0,.42), 0 4px 25px 0 rgba(0,0,0,.12), 0 8px 10px -5px rgba(0,0,0,.2);
+    margin: -20px 15px 0;
+    border-radius: 3px;
+    padding: 10px;
+    background-color: #999;
+    position: absolute;
+    top: -30px;
+    left: 0px;
+    width: 75px;
+    height: 75px;
+    box-sizing: border-box;
+}
+.card-header[data-background-color=orange] {
+    background: linear-gradient(60deg,#ffa726,#fb8c00);
+    box-shadow: 0 12px 20px -10px rgba(255,152,0,.28), 0 4px 20px 0 rgba(0,0,0,.12), 0 7px 8px -5px rgba(255,152,0,.2);
+}
+.card-header[data-background-color=green] {
+    background: linear-gradient(60deg,#66bb6a,#43a047);
+    box-shadow: 0 12px 20px -10px rgba(76,175,80,.28), 0 4px 20px 0 rgba(0,0,0,.12), 0 7px 8px -5px rgba(76,175,80,.2);
+}
+.card-header[data-background-color=red] {
+    background: linear-gradient(60deg,#ef5350,#e53935);
+    box-shadow: 0 12px 20px -10px rgba(244,67,54,.28), 0 4px 20px 0 rgba(0,0,0,.12), 0 7px 8px -5px rgba(244,67,54,.2);
+}
+.card-header[data-background-color=blue] {
+    background: linear-gradient(60deg,#26c6da,#00acc1);
+    box-shadow: 0 12px 20px -10px rgba(0,188,212,.28), 0 4px 20px 0 rgba(0,0,0,.12), 0 7px 8px -5px rgba(0,188,212,.2);
+}
+.user-card .material-icons{
+    font-size: 36px;
+    line-height: 56px;
+    width: 56px;
+    height: 56px;
+    color: #fff;
+}
+p.detail-title {
+    position: absolute;
+    top: -53px;
+    right: -5px;
+    font-family: Roboto,Helvetica,Arial,sans-serif;
+    font-weight: 500;
+    font-size: 1.2em;
+    color: #999;
+}
+.list-p .material-icons{
+    color: #999;
+    font-size: 20px;
+    width: 15px;
+    height: 15px;
+    line-height: 0;
+}
+.details fa{
+    font-size: 20px;
+    padding-right: 10px;
+    width: 20px;
+    display: inline-block;
+    color: #999;
+}
+.details{
+    padding-top: 10px;
+}
+.data-label-card{
+    display: inline-block;
+    width: 30%;
+    font-family: Roboto,Helvetica,Arial,sans-serif;
+    font-weight: 300;
+    line-height: 2em;
+    font-size:  0.9em;
+}
+.data-value-card{
+    font-family: Roboto,Helvetica,Arial,sans-serif;
+    font-weight: 300;
+    font-size: 1em;
+    color: #666;
+}
+.data-index{
+    padding-right: 10px;
+    font-weight: 500;
+}
+.line-card{
+    margin-top: 20px;
+    border: .5px solid #ccc;
+}
+.stats .material-icons{
+    font-size: 25px;
+    text-decoration: none;
+    width: 25px;
+    height: 25px;
+    line-height: 45px;
+    color: #66bb6a !important;
+}
+.stats a{
+    font-size: 15px;
+    text-decoration: none;
+    color: #89229b;
+    line-height: -6;
+    position: relative;
+    top: -5px;
+    left: 5px;
+}
+.single-line-label{
+    display: inline-block;
+    font-family: Roboto,Helvetica,Arial,sans-serif;
+    font-weight: 300;
+    line-height: 2em;
+    font-size:  0.9em;
+}
+.section-2-graph
+{
+    padding: 50px;
+    box-sizing: border-box;
+    padding-top: 0;
+}

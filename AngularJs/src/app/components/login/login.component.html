@@ -1,0 +1,60 @@
+<div class="conatiner">
+    <div class="content" fxLayout="row" fxLayout.xs="column" fxFlexFill>
+        <div fxFlex="70" class="section-1" fxShow="true" fxHide.lt-md>
+            <div class="login-intro" fxflex="" fxhide="" fxshow.gt-xs="" id="login-intro" style="flex: 1 1 1e-09px; box-sizing: border-box; display: block;">
+
+                <div class="logo logo-name">
+                    <img src="../assets/images/vvdn-logo white.png" width="100%">
+                </div>
+                <div class="white-line"> </div>
+                <div class="page-name">
+                    <span class="page-name-text">Phonebook</span>
+                </div>
+
+            </div>
+        </div>
+        <div fxFlex="30" class="section-2" fxFlex.lt-md="100" ngClass.lt-md="set-bg-md">
+            <div ngClass.lt-md="align-vertically">
+                <div class="section-2-inner-container">
+                    <div  ngClass.gt-md="content-wrapper" ngClass.lt-md="content-wrapper-lt">
+                        <div class="mob-logo" fxShow="false" fxShow.lt-md>
+                            <img src="../assets/images/logo.png">
+                        </div>
+                        <div class="title form-title">LOGIN TO YOUR ACCOUNT</div>
+                        <form class="login-form" #loginForm="ngForm" (ngSubmit)="loginResource()">
+                            <mat-form-field class="login-form-field-full-width">
+                                <input matInput placeholder="Username" [errorStateMatcher]="matcher" [formControl]="usernameFormControl" name="username" [(ngModel)]="model.username" ngClass.lt-md="place-lt">
+
+                                <mat-error *ngIf="usernameFormControl.hasError('required')">
+                                    Username is required
+                                </mat-error>
+                            </mat-form-field>
+                            <mat-form-field class="login-form-field-full-width">
+                                <input matInput placeholder="Password" name="password" type="password" [errorStateMatcher]="matcher" [formControl]="passwordFormControl" name="password" [(ngModel)]="model.password">
+                                <mat-error *ngIf="passwordFormControl.hasError('required')">
+                                    Password is required
+                                </mat-error>
+                            </mat-form-field>
+                        
+                            <button mat-raised-button color="primary" class="login-button">
+                                <span class="btn-text">Login</span>
+                                <span class="btn-icon"><i class="material-icons">arrow_forward</i></span>
+                            </button>
+                            <div class="divider-container">
+                                <span class="divider"></span>
+                                <span class="divider-text">or with google</span>
+                                <span class="divider"></span>
+                            </div>
+                            <button mat-raised-button color="warn" class="login-button">
+                                    <span class="btn-text">Google</span>
+                                    <span class="btn-icon"><i class="material-icons">arrow_forward</i></span>
+                            </button>
+                        </form>
+                        <!-- <a class="forgot-password" href="#"> Forgot Password?</a> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
