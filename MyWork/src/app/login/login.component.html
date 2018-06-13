@@ -4,7 +4,7 @@
         <p id="profile-name" class="profile-name-card"></p>
         
         <form  class="form-signin" [formGroup]="loginForm" (ngSubmit)="SignIn()">
-            <span id="reauth-email" class="reauth-email"></span>
+            <span *ngIf="statuserror" class="reauth-email invalid-feedback">{{error}}</span>
             <input type="text" formControlName="email" class="form-control" >  
             <div *ngIf="loginForm.get('email').invalid && loginForm.get('email').touched" class="invalid-feedback">
                 Email is not valid
