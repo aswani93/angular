@@ -10,15 +10,16 @@ import { UsersService } from '../serverdet/users.service';
 })
 export class LoginComponent implements OnInit {
   loginForm : FormGroup;
-  usersService : UsersService;
+  
   error = '';
   statuserror = true;
   emailPattern = "^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$";
-  constructor(private fb : FormBuilder )  { 
+  constructor(private fb : FormBuilder ,private usersService : UsersService)  { 
     this.createLoginForm();
   }
 
   ngOnInit() {
+    console.log(this.usersService);
   }
   createLoginForm(){
     this.loginForm = this.fb.group({
@@ -28,12 +29,11 @@ export class LoginComponent implements OnInit {
     });
   } 
   SignIn(){
-   if(this.usersService.getuser(this.loginForm.value.email,this.loginForm.value.password) == 'exist'){
+  if(this.usersService.getuser(this.loginForm.value.email,this.loginForm.value.password) == 'exist'){
       this.statuserror = true;
     }else{
       this.error = 'EmailId or Password is incorrect';
       this.statuserror = false;
     }
-   // console.log(this.usersService.getuser(this.loginForm.value.email,this.loginForm.value.password));
   }
 }
