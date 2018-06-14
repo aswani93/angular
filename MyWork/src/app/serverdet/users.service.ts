@@ -1,5 +1,3 @@
-
-
 export const user =  [
   {
     "id" : 1,
@@ -46,7 +44,6 @@ export const user =  [
   }];
 
 export class UsersService {
-
   constructor() { }
   getUserdet():string[]{
     let users:string[]=[];
@@ -57,16 +54,32 @@ export class UsersService {
   }
 
   getuser(emailval,passwordval){
-    var status = 'Not exist';
+    var userslist = [
+      {
+        "status": 'Not_exist',
+        "id":  0,
+        "name" :  '', 
+        "email" : ''
+      }
+    ];
+
+   
     for(let i = 0;i<user.length;i++){
       let email = user[i].email;
       let password = user[i].password;
       if((email == emailval) && (password == passwordval)){
-        status = 'exist';
+        var userslist = [
+          {
+            "status": 'exist',
+            "id":  user[i].id,
+            "name" :  user[i].name,
+            "email" : user[i].email
+          }
+        ];
         break;
       }
     }
-    return status;
+    return userslist;
   }
 }
 
