@@ -78,6 +78,31 @@ export class UsersService {
     }
     return userslist;
   }
+
+  postuser(value){
+    console.log(value.email);
+    if(this.checkuser(value.email) == 'Not_exist'){
+      user.push(value);
+      console.log(user);
+      return 1;
+    }else{
+      return 0;
+    }
+  }
+
+
+  checkuser(emailval){
+    var userslist = 'Not_exist';
+    for(let i = 0;i<user.length;i++){
+      let email = user[i].email;
+      let password = user[i].password;
+      if(email == emailval){
+        var userslist = 'exist';
+        break;
+      }
+    }
+    return userslist;
+  }
 }
 
 

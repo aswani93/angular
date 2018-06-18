@@ -1,0 +1,15 @@
+.reg-form input{
+    width: 50%;
+    border-radius: 5px;
+    padding: 5px;
+}
+.reg-form button{
+    background-color: #122143;
+    border-color: #122143;
+}
+.reg-form .help-block{
+  color:red;
+}
+.reg-form .control-group {
+    margin-top: 12px;
+}

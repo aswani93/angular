@@ -1,0 +1,83 @@
+<div class="container-fluid display-table">
+  <div class="row display-table-row">
+      <app-sidebar></app-sidebar>
+      <div class="col-md-10 col-sm-11 display-table-cell v-align">
+          <!--<button type="button" class="slide-toggle">Slide Toggle</button> -->
+          <div class="row">
+              <app-header></app-header>
+          </div>
+          <div class="container">
+            <form class="form-horizontal" action='' method="POST" class="reg-form" [formGroup]="regform">
+              <fieldset>
+                <div id="legend">
+                  <legend class="">Register</legend>
+                </div>
+                <div class="control-group">
+                  <!-- Username -->
+                  <label class="control-label"  for="name">Name</label>
+                  <div class="controls">
+                    <input type="text"  name="name"  class="input-xlarge" formControlName="name">
+                    <p class="help-block" *ngIf="regform.get('name').invalid && regform.get('name').touched">Name can contain any letters or numbers</p>
+                  </div>
+                </div>
+               
+                <div class="control-group">
+                  <!-- E-mail -->
+                  <label class="control-label" for="email">E-mail</label>
+                  <div class="controls">
+                    <input type="text" name="email" formControlName="email" class="input-xlarge">
+                    <p class="help-block" *ngIf="regform.get('email').invalid && regform.get('email').touched">Please provide your E-mail</p>
+                    <p class="help-block" *ngIf="error">{{errormsg}}</p>
+                    
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <!-- E-mail -->
+                  <label class="control-label" for="age">Age</label>
+                  <div class="controls">
+                    <input type="text"  name="age" formControlName="age" class="input-xlarge">
+                    <p class="help-block" *ngIf="regform.get('age').invalid && regform.get('age').touched">Please provide your Age</p>
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <!-- E-mail -->
+                  <label class="control-label" for="place">District</label>
+                  <div class="controls">
+                    <input type="text" name="place" formControlName="place"  class="input-xlarge">
+                    <p class="help-block" *ngIf="regform.get('place').invalid && regform.get('place').touched">Please provide your District</p>
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <!-- Password-->
+                  <label class="control-label" for="password">Password</label>
+                  <div class="controls">
+                    <input type="password"  name="password" formControlName="password" class="input-xlarge">
+                    <p class="help-block" *ngIf="regform.get('password').invalid && regform.get('password').touched">Password should be at least 5 characters</p>
+                  </div>
+                </div>
+             
+                <div class="control-group">
+                  <!-- Password -->
+                  <label class="control-label"  for="password_confirm">Password (Confirm)</label>
+                  <div class="controls">
+                    <input type="password"  name="password_confirm" formControlName="password_confirm" class="input-xlarge">
+                    <p *ngIf="regform.get('password_confirm').invalid && regform.get('password_confirm').touched" class="help-block">Please confirm password</p>
+                  </div>
+                </div>
+             
+                <div class="control-group">
+                  <!-- Button -->
+                  <div class="controls">
+                    <button class="btn btn-success" [disabled]="regform.invalid" (click)="submitRegform();">Register</button>
+                  </div>
+                </div>
+              </fieldset>
+            </form>
+          </div>
+      </div>
+  </div>
+
+</div>

@@ -325,12 +325,12 @@ li,ul{
     transition: all 0.5s ease;
 }
 .search input {
-    border: none;
-    font-size: 15px;
-    padding: 15px 9px;
+    font-size: 14px;
+    padding: 9px 9px;
     width: 100%;
-    background: #ccc;
+    background: #fff;
     color: #8492af;
+    border-radius: 22px;
 }
 
 header {
