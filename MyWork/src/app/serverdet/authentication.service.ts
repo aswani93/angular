@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-
+import { Router} from '@angular/router';
 @Injectable()
 export class AuthenticationService {
 
-  constructor() { }
-  isLoggined(){console.log(localStorage);
+  constructor(private router:Router) { }
+  isLoggined(){
     if(localStorage.length > 0){
       return true;
     }else{
@@ -14,9 +14,11 @@ export class AuthenticationService {
 
   logout(){
     localStorage.clear();
+    this.router.navigate(['/']);
+    return false
   }
 
-  login(user){console.log(user);
+  login(user){
     localStorage.setItem("item",JSON.stringify(user));
     //console.log(localStorage.getItem('item'));
   }

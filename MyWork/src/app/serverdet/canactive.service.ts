@@ -7,7 +7,7 @@ export class CanActiveService {
 
   constructor(private authService: AuthenticationService, private router:Router) {}
   
-    canActivate() {console.log(this.authService.isLoggined());
+    canActivate() {
       if(this.authService.isLoggined()){
       return true; 
       }

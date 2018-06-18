@@ -13,12 +13,13 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { HeaderComponent } from './header/header.component';
 import { AuthenticationService } from './serverdet/authentication.service';
 import { CanActiveService } from './serverdet/canactive.service';
+import { AdduserComponent } from './adduser/adduser.component';
 
 const appRoutes : Routes = [
   {path: '', redirectTo:'/login',pathMatch:'full'},
-  { path:'login' , component:LoginComponent},
+  { path:'login' , component:LoginComponent },
   { path: "users" ,component:UsersComponent, canActivate :[CanActiveService] },
-  
+  { path:"adduser",component:AdduserComponent, canActivate :[CanActiveService] }
   
 ];
 
@@ -28,7 +29,8 @@ const appRoutes : Routes = [
     LoginComponent,
     UsersComponent,
     SidebarComponent,
-    HeaderComponent
+    HeaderComponent,
+    AdduserComponent
   ],
   imports: [
     BrowserModule,

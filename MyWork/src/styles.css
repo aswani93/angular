@@ -1,5 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
-/* @import '../node_modules/bootstrap/dist/css/bootstrap.min.css'; */
+ @import '../node_modules/bootstrap/dist/css/bootstrap.min.css'; 
 
 /*Main CSS*/
 
@@ -216,11 +216,7 @@ li,ul{
 .v-align {
     vertical-align: top;
 }
-.logo img {
-    max-width: 180px;
-    padding: 16px 0 17px;
-    width: 100%;
-}
+
 
 .header-top {
     margin: 0;
@@ -563,12 +559,26 @@ header {
     border-top-right-radius: 5px;
 }
 
+.logo span {
+    /* margin-right: 13px; */
+    color: #fff;
+    text-transform:  uppercase;
+}
 
 
+.logo img {
+    border-radius: 25px;
+    height: 45px;
+    width: 45px;
+    margin-top: 10px;
+    margin-left: 0px;
+}
 
-
-
-
-
+li.hidden-xs.log-out {
+    cursor: pointer;
+}
+td, th {
+    padding: 15px;
+}
 
 

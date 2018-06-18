@@ -1,3 +1,4 @@
+import { LoginUsers } from './data-model';
 export const user =  [
   {
     "id" : 1,
@@ -45,12 +46,8 @@ export const user =  [
 
 export class UsersService {
   constructor() { }
-  getUserdet():string[]{
-    let users:string[]=[];
-    for(let list in user){
-      users.push(list);
-    }
-    return users;
+  getUserdet(){
+    return user;
   }
 
   getuser(emailval,passwordval){
