@@ -12,12 +12,12 @@ import { UsersComponent } from './users/users.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { HeaderComponent } from './header/header.component';
 import { AuthenticationService } from './serverdet/authentication.service';
-import { CanactiveService } from './serverdet/canactive.service';
+import { CanActiveService } from './serverdet/canactive.service';
 
 const appRoutes : Routes = [
   {path: '', redirectTo:'/login',pathMatch:'full'},
   { path:'login' , component:LoginComponent},
-  { path: "users" ,component:UsersComponent, canActivate :[CanactiveService] },
+  { path: "users" ,component:UsersComponent, canActivate :[CanActiveService] },
   
   
 ];
@@ -38,7 +38,7 @@ const appRoutes : Routes = [
 
   ],
   exports: [RouterModule],
-  providers: [UsersService,AuthenticationService,CanactiveService],
+  providers: [UsersService,AuthenticationService,CanActiveService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

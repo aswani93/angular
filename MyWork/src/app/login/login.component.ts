@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
   if(this.checkuser[0].status == 'exist'){
       this.statuserror = true;
      // this.auth.login(this.checkuser);
-      //console.log()
+      console.log('hete')
       this._router.navigate(['/users']);
     }else{
       this.error = 'EmailId or Password is incorrect';

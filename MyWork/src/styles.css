@@ -1,5 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
-@import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+/* @import '../node_modules/bootstrap/dist/css/bootstrap.min.css'; */
 
 /*Main CSS*/
 
@@ -7,7 +7,7 @@
 /*Login Signup Page*/
 a:focus,a:hover,a{
     outline:none;
-    text-decoration: none;
+    text-decoration: none; 
 }
 li,ul{
     list-style: none;
@@ -18,7 +18,7 @@ li,ul{
     font-size: 18px;
 }
 .bg-image {
-    background: #ccc;
+    background: #ccc; 
     position: relative;
     width: 100%;
     height: 100vh;

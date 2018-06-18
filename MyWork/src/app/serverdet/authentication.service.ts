@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 export class AuthenticationService {
 
   constructor() { }
-  isLoggined(){
+  isLoggined(){console.log(localStorage);
     if(localStorage.length > 0){
       return true;
     }else{
@@ -16,7 +16,7 @@ export class AuthenticationService {
     localStorage.clear();
   }
 
-  login(user){
+  login(user){console.log(user);
     localStorage.setItem("item",JSON.stringify(user));
     //console.log(localStorage.getItem('item'));
   }
