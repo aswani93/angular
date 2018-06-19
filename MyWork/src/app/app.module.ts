@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule, Routes,ActivatedRoute } from '@angular/router';
 import { LocalStorageModule } from 'angular-2-local-storage';
-
+import {DataTableModule} from "angular2-datatable";
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -37,7 +37,7 @@ const appRoutes : Routes = [
     ReactiveFormsModule,
     FormsModule,
     RouterModule.forRoot(appRoutes),
-
+    DataTableModule
   ],
   exports: [RouterModule],
   providers: [UsersService,AuthenticationService,CanActiveService],

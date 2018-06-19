@@ -7,15 +7,16 @@ import { UsersService } from '../serverdet/users.service';
   styleUrls: ['./users.component.css']
 })
 export class UsersComponent implements OnInit {
-  users = [];
-
+  data : any[];
+  sortBy = 'name';
+  sortOrder = "asc";
   constructor(private _service : UsersService) { }
  
   ngOnInit() {
      this.getUser();
   }
   getUser(){
-    this.users = this._service.getUserdet();
-    console.log(this.users);
+    this.data = this._service.getUserdet();
+    console.log(this.data);
   }
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthenticationService } from '../serverdet/authentication.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -8,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 export class SidebarComponent implements OnInit {
   users = [];
   
-  constructor() { }
+  constructor(private auth: AuthenticationService) { }
 
   ngOnInit() {
    this.users =  this.transform(localStorage.getItem('item'));
@@ -16,5 +17,9 @@ export class SidebarComponent implements OnInit {
   }
   transform(value) {
     return typeof value==='string' ? JSON.parse(value.replace(/'/g, '"')) : value;
+}
+logout(){
+  this.auth.logout();
+  
 }
 }
