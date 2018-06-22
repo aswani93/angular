@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule, Routes,ActivatedRoute } from '@angular/router';
 import { LocalStorageModule } from 'angular-2-local-storage';
 import {DataTableModule} from "angular2-datatable";
+import {ChartModule  } from 'highcharts';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -14,13 +15,14 @@ import { HeaderComponent } from './header/header.component';
 import { AuthenticationService } from './serverdet/authentication.service';
 import { CanActiveService } from './serverdet/canactive.service';
 import { AdduserComponent } from './adduser/adduser.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 const appRoutes : Routes = [
   {path: '', redirectTo:'/login',pathMatch:'full'},
   { path:'login' , component:LoginComponent },
   { path: "users" ,component:UsersComponent, canActivate :[CanActiveService] },
-  { path:"adduser",component:AdduserComponent, canActivate :[CanActiveService] }
-  
+  { path:"adduser",component:AdduserComponent, canActivate :[CanActiveService] },
+  {path: 'dashboard',component: DashboardComponent ,canActivate :[CanActiveService]}
 ];
 
 @NgModule({
@@ -30,14 +32,16 @@ const appRoutes : Routes = [
     UsersComponent,
     SidebarComponent,
     HeaderComponent,
-    AdduserComponent
+    AdduserComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
     FormsModule,
     RouterModule.forRoot(appRoutes),
-    DataTableModule
+    DataTableModule,
+    ChartModule
   ],
   exports: [RouterModule],
   providers: [UsersService,AuthenticationService,CanActiveService],
