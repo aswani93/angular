@@ -1,0 +1,78 @@
+.portlet.light>.portlet-title {
+  padding: 5px 20px 2px 0;
+}
+
+.custom-title{
+  background-color: #334157;
+  border-radius: 8px 8px 0 0;
+}
+.custom-title .caption{
+  color: #fff;
+}
+
+::ng-deep .nav-tabs {
+  margin-bottom: 0px;
+  padding: 0px;
+  display: inline-block;
+}
+::ng-deep .nav-tabs>li {
+  float: left;
+  list-style: none;
+  width: 200px;
+  max-width: 200px;
+  text-align: center;
+  border-bottom: 1px solid #fff;
+}
+::ng-deep .nav-tabs>li>a {
+  padding: 9px 15px;
+  display: inline-block;
+  background: #efefef;
+  color: #838587;
+  -webkit-transition: all linear 0.15s;
+  transition: all linear 0.15s;
+  display: block;
+  border: solid 1px #dedede;
+  text-decoration: none;
+  margin: 0px;
+  border-radius: 0px;
+}
+::ng-deep .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+  color: #838587;
+  background-color: #fff;
+}
+::ng-deep li.nav-item.inner-tab.ng-star-inserted {
+  max-width: 130px;
+}
+::ng-deep .tab-content {
+  margin-top: -5px;
+  border-top: none;
+}
+::ng-deep .bs-datepicker table td {
+  padding: 0 !important;
+}
+::ng-deep .bs-datepicker-container{
+  padding:  0 !important;
+}
+::ng-deep .bs-datepicker-body{
+  padding:  0 !important;
+}
+::ng-deep .bs-datepicker-body table th{
+  color: #fff !important;
+}
+::ng-deep timepicker table td {
+  padding: 0 !important;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.text-danger {
+  padding-top: 3px;
+}

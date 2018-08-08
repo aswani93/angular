@@ -1,0 +1,200 @@
+/*======================================/DASHBOARD/======================================*/
+.portlet.light.stats>.portlet-title {
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-right: 10px;
+}
+.top-btns-right ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+.top-btns-right>ul>li {
+    display: inline-block;
+    border-right: 1px solid #eef1f5;
+    float: left;
+    padding: 0 10px;
+}
+.top-btns-right>ul>li:last-child {
+    border: 0;
+    padding-right: 0;
+}
+.top-btns-right .scrollableList.graph {
+    width: 110px;
+}
+.top-btns-right .scrollableList .selectedOption {
+    height: 30px;
+    line-height: 30px;
+    font-size: 12px;
+}
+.top-btns-right>ul>li a {
+    padding: 0 4px;
+    display: block;
+}
+.top-btns-right>ul>li .icon {
+    color: #808e96;
+}
+
+.carousel-wrap{
+    overflow: hidden;
+    padding: 0 15px;
+}
+.carousel-wrap .owl-item{
+    float: left;
+    text-align: center;
+}
+
+.owl-theme .owl-nav .owl-prev{
+    position: absolute;
+    top: 50%;
+    background: transparent;
+    left: 0;
+    /* transform: translateY(-50%); */
+    border: 0;
+    color: #333;
+    font-size: 35px;
+    margin: 0;
+}
+.owl-theme .owl-nav .owl-next{
+    position: absolute;
+    top: 50%;
+    background: transparent;
+    right: 0;
+    /* transform: translateY(-50%); */
+    border: 0;
+    color: #333;
+    font-size: 35px;
+    margin: 0;
+}
+.owl-theme .owl-nav .owl-prev:hover, .owl-theme .owl-nav .owl-next:hover{
+    background: transparent;
+    color: #333;
+}
+.devices-status{
+    margin: 0;
+    padding: 0;
+    padding-left: 10px;
+    list-style-type: none;
+    display: flex;
+    text-align: left;
+}
+.devices-status li{
+    flex: 1;
+    position: relative;
+    text-align: left;
+    padding-left: 30px;
+}
+
+/*======================================/DASHBOARD ENDS/======================================*/
+
+  .custom-title{
+    background-color: #334157;
+    border-radius: 8px 8px 0 0;
+  }
+  .custom-title .caption{
+   color: #fff;
+  }
+  .custom-title  .btn-theme-inverse {
+  background-color: #fff; 
+    color:  #111;
+    border-color: #111;
+   
+  }
+  .custom-title  .dropdown.btn-theme-inverse ul li a {
+    color: #111 !important;
+  }
+  .custom-title .dropdown.btn-theme-inverse ul li a:hover {
+    background-color: #333;
+    color: #fff !important;
+  }
+   .custom-portlet{
+    border-radius: 8px;
+  }
+  .top-btns-right > ul > li {
+    border-right: solid 1px #526074 !important;
+}
+.top-btns-right > ul > li:last-child {
+    border:0 !important;
+}
+.top-btns-right > ul > li .icon {
+   color:#ffffff !important;
+}
+
+::ng-deep .custom-portlet text.highcharts-title {
+    display: none !important;
+}
+::ng-deep .custom-portlet.forSemi text.highcharts-title {
+    display: block !important;
+}
+
+::ng-deep .highcharts-container{
+    width: 1000px;
+} 
+::ng-deep i.icon.icon-router1.title-icon {
+    font-size: 2.2em;
+    text-align: center;
+    display: block;
+}
+::ng-deep .dash-carousel .carousel-inner {
+    left: 6px;
+}
+::ng-deep  .dash-carousel .carousel-control.right {
+    color: #111;
+    position: absolute;
+    top: -35px;
+    right: -25px;
+}
+::ng-deep .dash-carousel .carousel-control.left {
+    color: #111;
+    position: absolute;
+    left: -25px;
+    top: -35px;
+}
+::ng-deep p.innerText {
+  
+    text-align: center;
+}
+
+  ::ng-deep .devices-status{
+    margin: 0;
+    padding: 0;
+   
+    list-style-type: none;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    text-align: left;
+    padding-left: 0;
+    padding-right: 10px;
+}
+::ng-deep .devices-status li{
+    -webkit-box-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
+    position: relative;
+    text-align: left;
+    padding-left: 30px;
+}
+
+
+.apChart ul.devices-status {
+    width: 125px !important;
+}
+::ng-deep .carousel.slide{
+    margin-bottom: -6px !important;
+}
+
+::ng-deep  .carousel-control-prev,::ng-deep  .carousel-control-next{
+    background: transparent !important;
+    background-image: none;
+}
+
+.fill-circle{position: relative;}
+.fill-circle span{position: absolute; width:10px; height:10px; border-radius:5px; background:#CCCCCC; z-index: 10;display: block; left: 14px; top:4px;} 
+.fill-circle span.connected-device{background: #3bb300;}
+.fill-circle span.disconnected-device{background: #cc0000;}
+
+::ng-deep .fill-circle{position: relative; font-size:13px;}
+::ng-deep .fill-circle span{position: absolute; width:10px; height:10px; border-radius:5px; background:#CCCCCC; z-index: 10;display: block; left: 14px; top:3px;} 
+/*::ng-deep .fill-circle span.connected-device{background: #3bb300;}
+::ng-deep .fill-circle span.disconnected-device{background: #cc0000;}*/

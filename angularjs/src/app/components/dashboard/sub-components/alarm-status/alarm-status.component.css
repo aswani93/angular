@@ -1,0 +1,241 @@
+/*======================================/DASHBOARD/======================================*/
+.portlet.light.stats>.portlet-title {
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-right: 10px;
+}
+.top-btns-right ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+.top-btns-right>ul>li {
+    display: inline-block;
+    border-right: 1px solid #eef1f5;
+    float: left;
+    padding: 0 10px;
+}
+.top-btns-right>ul>li:last-child {
+    border: 0;
+    padding-right: 0;
+}
+.top-btns-right .scrollableList.graph {
+    width: 110px;
+}
+.top-btns-right .scrollableList .selectedOption {
+    height: 30px;
+    line-height: 30px;
+    font-size: 12px;
+}
+.top-btns-right>ul>li a {
+    padding: 0 4px;
+    display: block;
+}
+.top-btns-right>ul>li .icon {
+    color: #808e96;
+}
+
+.group-item{
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    margin-bottom: 6px;
+    text-align: left;
+}
+.group-item li{
+    flex: 1;
+}
+
+.alarm-notification{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.alarm-notification li{
+    display: block;
+    margin-bottom: 30px;
+}
+.alarm-notification .noti-count{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: inline-block;
+    padding: 15px;
+    text-align: center;
+    color: #fff;
+    margin-right: 15px;
+}
+.alarm-notification .critical .noti-count{
+    background: #ff5050;
+}
+.alarm-notification .major .noti-count{
+    background: #ff9141;
+}
+.alarm-notification .minor .noti-count{
+    background: #ffcf0f;
+}
+.top-alarms{
+    margin: 0;
+    padding: 0;
+    list-style-position: inside;
+}
+.top-alarms li{
+    margin-bottom: 15px;
+    color: #9BA0A4;
+}
+.noti-list h5{
+    margin-bottom: 15px;
+}
+.noti-list .total-noti{
+    color: #4176B8;
+    text-align: right;
+}
+
+
+
+/*======================================/DASHBOARD ENDS/======================================*/
+
+.portlet.light>.portlet-title {
+    padding: 5px 20px 2px 0;
+  }
+  
+  .custom-title{
+    background-color: #334157;
+    border-radius: 8px 8px 0 0;
+  }
+  .custom-title .caption{
+   color: #fff;
+  }
+  .custom-title  .btn-theme-inverse {
+  background-color: #fff; 
+    color:  #111;
+    border-color: #111;
+   
+  }
+  .custom-title  .dropdown.btn-theme-inverse ul li a {
+    color: #111 !important;
+  }
+  .custom-title .dropdown.btn-theme-inverse ul li a:hover {
+    background-color: #333;
+    color: #fff !important;
+  }
+  ::ng-deep p.no-data {
+    font-size: 16px;
+    color: #111;
+    margin-left: 18px !important;
+    margin-top: 10px !important;
+    padding-top: 10px  !important;
+  }
+  .custom-portlet{
+    border-radius: 8px;
+  }
+.top-btns-right > ul > li {
+    border-right: solid 1px #526074 !important;
+}
+.top-btns-right > ul > li:last-child {
+    border:0 !important;
+}
+.top-btns-right > ul > li .icon {
+   color:#ffffff !important;
+}
+
+::ng-deep .custom-portlet text.highcharts-title {
+    display: none !important;
+}
+::ng-deep .custom-portlet.forSemi text.highcharts-title {
+    display: block !important;
+}
+
+::ng-deep .highcharts-container{
+    width: 1000px;
+} 
+::ng-deep i.icon.icon-router1.title-icon {
+    font-size: 2.2em;
+    text-align: center;
+    display: block;
+}
+
+/*****************tab****************/
+
+.tab {
+    float: left;
+   
+}
+.tabDiv{
+    margin-bottom: 15px;
+}
+/* Style the buttons that are used to open the tab content */
+.tab button {
+    width: 100%;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: inline-block;
+    padding: 10px;
+    text-align: center;
+    color: #fff;
+    margin-right: 15px;
+}
+.s1{
+    background-color: #ff5050;
+}
+.s2{
+    background-color: #ff9141;
+}
+.s3{
+    background-color: #ffcf0f;
+}
+.tabDiv p{
+    cursor: pointer;
+}
+.s1p{
+    margin-left: 5px !important;
+}
+.s2p, .s3p{
+    margin-left: 10px !important;
+}
+
+.tab-active button{
+    width: 55px;
+    height: 55px;
+}
+.tab-active p{
+    font-weight: bold;
+    font-size: 14px;
+}
+.tab-inactive{
+  margin-left: 2px;
+}
+div.tab button.s1:hover {
+    background-color: #d42525;
+}
+div.tab button.s2:hover {
+    background-color: #e87724fa;
+}
+div.tab button.s3:hover {
+    background-color: #ecbf0b;
+}
+.tabDiv p{
+    margin-left: 5px;
+    margin-top: 4px;
+}
+.top-alarms {
+    margin-left: -15px;
+}
+.ovr-flw-200{
+    overflow: auto;
+    overflow-x: hidden;
+    max-height:250px;
+}
+.ovr-flw-200 .row{
+    border-bottom:solid 1px #EEE;
+    padding:10px 0px; 
+}
+.ovr-flw-200 .row p{margin-bottom: 0px;}
+
+ 

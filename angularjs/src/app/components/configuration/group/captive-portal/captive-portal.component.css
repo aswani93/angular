@@ -1,0 +1,227 @@
+input[type=number] {
+    -moz-appearance: textfield;
+ }
+::ng-deep mfdefaultsorter .glyphicon{
+    display: none;
+}
+::ng-deep .activeIcon{
+    font-weight: bold;
+
+    color: #fff !important;
+}
+::ng-deep .btn-blank {
+    color: #fff;
+    background-color: #f76f6f;
+    border-color: #f76f6f !important;
+    padding: 6px 20px;
+    width: 100%;
+    height: 50px;
+    font-size: 18px;
+}
+::ng-deep .btn-blank:hover{
+    color: #fff;
+    background-color: #f76f6f;
+    border-color:#f76f6f !important;
+}
+::ng-deep .modal-footer {
+    padding: 0px;
+
+}
+::ng-deep .modal-content {
+    padding: 0;
+    width:500px !important;
+
+}
+
+::ng-deep .modal-body {
+    height: 180px;
+    padding: 0;
+    text-align: center;
+    padding-top: 15px;
+}
+::ng-deep .error-icon{
+    font-size: 60px;
+   color: #f76f6f;
+}
+::ng-deep .error-modal-p1{
+    padding-top: 25px;
+    font-size: 20px;
+
+
+}
+::ng-deep .error-modal-p2{
+    font-size: 15px;
+
+}
+::ng-deep .btn-large{
+    height: 35px;
+}
+
+.disabled{
+    pointer-events: none;
+}
+.no-anchor{
+    text-decoration: none;
+}
+
+
+::ng-deep .nav-tabs {
+    margin-bottom: 0px;
+    padding: 0px;
+    display: inline-block;
+}
+::ng-deep .nav-tabs>li {
+    float: left;
+    list-style: none;
+    width: 200px;
+    max-width: 200px;
+    text-align: center;
+    border-bottom: 1px solid #efeff0;
+}
+::ng-deep .nav-tabs>li>a {
+    padding: 9px 15px;
+    display: inline-block;
+    background: #efefef;
+    color: #838587;
+    -webkit-transition: all linear 0.15s;
+    transition: all linear 0.15s;
+    display: block;
+    border: solid 1px #dedede;
+    text-decoration: none;
+    margin: 0px;
+    border-radius: 0px;
+}
+::ng-deep .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+    color: #838587;
+    background-color: #fff;
+}
+::ng-deep li.nav-item.inner-tab.ng-star-inserted {
+    max-width: 130px;
+}
+
+input.ng-touched.ng-invalid {
+    border: 1px solid red;
+}
+::ng-deep .pull-custom{
+    margin-left:23px;
+    margin-top: 2px;
+}
+
+::ng-deep .tab-links .tab-content>.active {
+    display: block;
+    text-align: center !important;
+}
+::ng-deep .char-limit{
+    display: block !important;
+    text-align: left !important;
+}
+.w90{width: 90px !important;}
+.w78{width: 78px !important;}
+::ng-deep  .inner-accord{margin-bottom: 25px;}
+::ng-deep  .inner-accord .accordian{ border-width:1px 0px; margin-bottom:0px;}
+::ng-deep  .inner-accord .accordian:first-child{ border-bottom:0px;}
+::ng-deep .accordian-title{line-height:25px; font-weight:500; border-bottom: 0px;font-size: 14px;}
+
+::ng-deep  .panel-default>.panel-heading {
+    color: #333 !important;
+    background-color: #fff !important;
+    border-color: #eee !important;
+    border-top: 1px solid #eee !important;
+    text-align: left !important;
+}
+
+::ng-deep  .panel-default>.panel-heading{
+    background-color:#fff !important;
+}
+::ng-deep .panel {
+    margin-bottom: initial !important;
+    border: none !important;
+    border-radius: initial !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
+::ng-deep  .panel-group .panel-heading+.panel-collapse>.panel-body{
+    border-top: none !important;
+}
+
+::ng-deep .pointer{
+    cursor: pointer;
+}
+::ng-deep .btn-add {
+    height: 38px;
+    width: 100px;
+}
+::ng-deep .fa-custom{
+    margin-right: 10px;
+    font-size: 16px;
+}
+::ng-deep .selectedSsid{
+    text-align: left;
+}
+::ng-deep .selectedSsid .caption{
+    padding: 0 !important;
+}
+::ng-deep .custom-class {
+    color: #ccc;
+}
+::ng-deep .custom-class .c-token{
+    background: #756ed1 !important;
+}
+::ng-deep .custom-class .pure-checkbox label::before {
+    border-color: #756ed1 !important;
+}
+::ng-deep .custom-class .pure-checkbox input[type="checkbox"]:checked + label[_ngcontent-c1]:before {
+    background: #756ed1 !important;
+}
+::ng-deep .m40{
+    margin-top: 40px;
+}
+::ng-deep .btn-behind{
+    width: 52px;
+    display: block;
+    height: 20px;
+    position: absolute;
+}
+::ng-deep .c-btn{
+    min-height: 37px;
+}
+::ng-deep .c-btn span{
+    margin-top: -2px;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+::ng-deep .nav-tabs{
+    margin-bottom: 10px !important;
+}
+
+::ng-deep .panel-open .fa-angle-down:before {
+    content: "\F106" !important;
+}
+
+::ng-deep .full-tabset{
+    width: 100%
+}
+
+.bordered-bottom {
+    border-bottom: 1px solid #eee !important;
+}
+
+
+.img {
+    object-fit: cover;
+}
+
+.previewClass {
+    width: 90% !important;
+    margin: auto;
+    -webkit-box-sizing: border-box !important;
+    box-sizing: border-box !important;
+    margin-top: 20px !important;
+    margin-bottom: 20px !important;
+}

@@ -1,0 +1,13 @@
+.wdgbtn{margin-top:25px;}
+.device-icon{
+    font-size: 30px;
+   
+}
+.notify-icon{
+    padding: 15px;
+    text-align: center;
+
+}
+.notification-dropdown-wrap .notification-tabs{
+    padding: 20px 5px 0 5px !important;
+}

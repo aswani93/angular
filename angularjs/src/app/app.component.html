@@ -1,0 +1,6 @@
+<router-outlet name="header"></router-outlet>
+<router-outlet name="sidebar"></router-outlet>
+<router-outlet></router-outlet>
+<ng4-loading-spinner  [template]="template"> </ng4-loading-spinner>
+<ngx-alerts></ngx-alerts>
+<alert (confirmedDelete)="confirmdelete($event)" (showedDetails)="showdet()"  (removedDetails)="removeDet()" (logOut)="redirectTologin()"></alert>

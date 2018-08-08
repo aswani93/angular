@@ -1,0 +1,44 @@
+
+.modal-dialog {
+  width: 500px;
+}
+
+
+.modal-content {
+  padding-top: 0;
+  padding-bottom:0;
+
+}
+.modal-body {
+  height: 200px;
+  padding:20px;
+}
+
+.modal-header {
+  padding:15px 0px 0px 20px;
+  background-color: #334157;;
+  border-bottom-width: 0px;
+  border-radius: 5px 5px 0px 0px;
+  height: 50px;
+  line-height: 50px;
+  text-align: left;
+}
+
+.modal-title {
+  font-size: 16px;
+  color: white;
+}
+
+.custom-align {
+  padding-top: 30px;
+  text-align: center;
+  width: 100%;
+}
+
+.info{
+  float: right;
+  cursor: pointer;
+  position: absolute;
+  right: 20px;
+  top: 0px;
+}

@@ -1,0 +1,318 @@
+ <!--/======================/WORK AREA/======================/-->
+ <div class="page-content-wrapper">
+    <div class="row">
+        <div class="col-lg-12 col-xs-12 col-sm-12">
+            <form action="" (keydown.enter)="$event.preventDefault()" [formGroup]="sytemBasicForm" (ngSubmit)="onSubmit()">
+                <tabset>
+
+                    <tab heading="General" #GeneralTab (deselect)="onSelect()" >
+                        <div id="tab1" class="upgrade-tab active">
+                            <div class="form-group row ">
+                                <label class="col-md-2 col-form-label text-right">WLC Name</label>
+
+                              <div class="col-lg-2 col-sm-11">
+                                  <input type="text"
+                                           value="BSNL-WLCXXX"
+                                           class="form-control"
+                                           formControlName="wlc_name"
+                                           id="wlc_name"
+                                         #wlcname  maxlength="25">
+
+                                            <div *ngIf="sytemBasicForm.get('wlc_name').invalid && (sytemBasicForm.get('wlc_name').dirty || sytemBasicForm.get('wlc_name').touched)">
+                                            <div class="text-danger pull-left" *ngIf="sytemBasicForm.get('wlc_name').errors.required">
+                                                WLC Name is required.
+                                            </div>
+                                            <div class="text-danger pull-left" *ngIf="sytemBasicForm.get('wlc_name').errors.minlength">
+                                                Minimum 2 character required.
+                                            </div>
+                                            <div class="text-danger pull-left" *ngIf="sytemBasicForm.get('wlc_name').errors.maxlength">
+                                               Maximum 25 characters allowed.
+                                            </div>
+                                           
+                                            <div class="text-danger pull-left" *ngIf="sytemBasicForm.get('wlc_name').errors.pattern && !sytemBasicForm.get('wlc_name').errors.minlength && !sytemBasicForm.get('wlc_name').errors.maxlength">
+                                               Enter a valid name
+                                            </div>
+                                           
+                                    </div>
+                                </div>
+                                <div>
+                                    <app-right-tooltip [toolTipText]="getToolTipText('system_basic_wlc_name')"></app-right-tooltip>
+
+                                  <!-- <span class="char-limit">(max 25 Characters)</span> -->
+                                </div>
+                            </div>
+                            <!-- <div class="form-group row">
+                                <label class="col-md-2 col-form-label text-right">Location</label>
+                                <div class="col-lg-2 col-sm-11">
+                                    <select name="location" class="form-control" formControlName="wlc_country" id="wlc_country"  #wlclocation (change)="setCity($event.target)">
+                                        <option *ngFor="let country of countryData" value="{{country}}">{{country}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label text-right">City</label>
+                                <div class="col-lg-2 col-sm-11">
+                                    <select name="city" class="form-control" formControlName="wlc_city" id="wlc_city"  #wlccity>
+                                        <option *ngFor="let state of stateData" value="{{state}}">{{state}}</option>
+                                    </select>
+                                </div>
+                            </div> -->
+
+
+                            <div class="form-group row">
+                                <div class="col-lg-6 col-sm-11 col-md-offset-4">
+                                    <input type="button" value="Reset" class="btn btn-cancel btn-large" style="margin-right: 15px;" (click)="formReset()">
+                                    <input type="submit" value="Save" class="btn btn-theme btn-large" [disabled]="btnDisabled || !sytemBasicForm.valid">
+                                </div>
+                            </div>
+                        </div>
+                    </tab>
+                    <tab heading="Time" #TimeTab   (deselect)="onSelect()">
+                        <div id="tab2" class="upgrade-tab active">
+                            <div class="form-group row">
+                                    <label class="col-md-2 col-form-label text-right">Time Zone</label>
+                                    <div class="col-lg-2 col-sm-11">
+                                        <select name="city" class="form-control" formControlName="wlc_timezone" id="wlc_timezone"  #wlctimezone (change)="generateClock($event.target)">
+                                            <option  *ngFor="let timeZone of countryData" value="{{timeZone}}" [attr.data-timeZone]="timeZone">{{timeZone}}</option>
+                                        </select>
+                                    </div>
+                              <div>
+                                <app-right-tooltip [toolTipText]="getToolTipText('system_basic_time_zone')"></app-right-tooltip>
+                              </div>
+                            </div>
+                            <div class="form-group row">
+                                    <label class="col-md-2 col-form-label text-right">Date</label>
+                                    <div class="col-lg-1 col-sm-11">
+                                        <span class="char-limit">{{date}}</span>
+                                    </div>
+                            </div>
+                            <div class="form-group row">
+                                    <label class="col-md-2 col-form-label text-right">Time</label>
+                                    <div class="col-lg-2 col-sm-11">
+                                            <span class="char-limit">{{clock}}</span>
+                                    </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label text-right">Date &amp; Time</label>
+                                <div class="col-lg-2 col-sm-11">
+                                    <select name="ap-model" id="select-filter" class="form-control"  formControlName="wlc_date_time_mode" id="wlc_date_time_mode"  #wlcdt (change)="resetdtVals()">
+                                        <option value="0">Auto</option>
+                                        <option value="1">Manual</option>
+                                    </select>
+                                </div>
+                              <div>
+                                <app-right-tooltip [toolTipText]="getToolTipText('system_basic_date_time')"></app-right-tooltip>
+                              </div>
+                            </div>
+                            <div class="date-time-auto filter-content" id="auto" style="display: block;" *ngIf="sytemBasicForm.get('wlc_date_time_mode').value == 0" >
+                                <div class="form-group row">
+                                    <label class="col-md-2 col-form-label text-right">NTP Server 1</label>
+                                    <div class="col-lg-2 col-sm-11">
+                                        <input type="text" class="form-control" formControlName="ntp_server_1" id="ntp_server_1"  #ntpserver1>
+                                        <div *ngIf="sytemBasicForm.get('ntp_server_1').invalid && (sytemBasicForm.get('ntp_server_1').dirty || sytemBasicForm.get('ntp_server_1').touched)">
+                                            <div class="text-danger pull-left" *ngIf="sytemBasicForm.get('ntp_server_1').errors.required">
+                                                NTP Server 1 is required.
+                                            </div>
+                                            <div class="text-danger pull-left" *ngIf="sytemBasicForm.get('ntp_server_1').errors.pattern">
+                                                Enter valid NTP Server 1.
+                                               </div>
+                                        </div>
+                                    </div>
+                                  <div>
+                                    <app-right-tooltip [toolTipText]="getToolTipText('system_basic_ntp_server_1')"></app-right-tooltip>
+                                  </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-2 col-form-label text-right">NTP Server 2</label>
+                                    <div class="col-lg-2 col-sm-11">
+                                        <input type="text" class="form-control" formControlName="ntp_server_2" id="ntp_server_2"  #ntpserver2>
+                                        <div *ngIf="sytemBasicForm.get('ntp_server_2').invalid && (sytemBasicForm.get('ntp_server_2').dirty || sytemBasicForm.get('ntp_server_2').touched)">
+                                            <div class="text-danger pull-left" *ngIf="sytemBasicForm.get('ntp_server_2').errors.required">
+                                                NTP Server 2 is required.
+                                            </div>
+                                            <div class="text-danger pull-left" *ngIf="sytemBasicForm.get('ntp_server_1').errors.pattern">
+                                                Enter valid NTP Server 1.
+                                               </div>
+                                        </div>
+
+                                    </div>
+
+                                  <div>
+                                    <app-right-tooltip [toolTipText]="getToolTipText('system_basic_ntp_server_2')"></app-right-tooltip>
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="date-time-manual" *ngIf="sytemBasicForm.get('wlc_date_time_mode').value == 1">
+                                <div class="row">
+                                    <label class="col-md-2 col-form-label text-right">Set Date</label>
+                                    <div class="col-lg-2 col-sm-11 form-group" >
+                                        <input type="text" class="form-control" placeholder="dd/mm/yyyy"  [minDate]="minDate" [bsConfig]="bsConfig" bsDatepicker formControlName="date" id="wlc_date"   #dp="bsDatepicker" readonly="true">
+                                        <div *ngIf="sytemBasicForm.get('date').invalid && (sytemBasicForm.get('date').dirty || sytemBasicForm.get('date').touched)">
+                                                <div class="text-danger pull-left" *ngIf="sytemBasicForm.get('date').errors.required">
+                                                   Date is required.
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-2 col-form-label text-right">Set Time</label>
+                                    <div class="col-lg-1 col-sm-11">                                                                
+                                     <table class="timePicker"> 
+                                         <tbody> 
+                                             <tr>  
+                                                 <td class="form-group"> <input type="text" class="form-control text-center " minlength="1" [(ngModel)]="hour" [ngModelOptions]="{standalone: true}" maxlength="2" placeholder="HH" id="wlc_hr"  (input)="Hourvalidate()"></td>
+                                                 <td>&nbsp;:&nbsp;</td>
+                                                 <td class="form-group"> <input type="text" class="form-control text-center" minlength="1" maxlength="2"  [(ngModel)]="minutes" [ngModelOptions]="{standalone: true}" placeholder="MM"  id="wlc_min" (input)="Minvalidate()"> </td>
+                                                 
+                                             </tr>
+                                         </tbody> 
+                                     </table>
+                                    </div>
+                                    <div class="text-danger" style="margin: 42px 217px;" *ngIf="hourErrStatus || minErrStatus">
+                                        Enter the valid time.
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-6 col-sm-11 col-md-offset-4">
+                                    <input type="reset" value="Reset" class="btn btn-cancel btn-large" style="margin-right: 15px;"  (click)="formReset()">
+                                    <input type="submit" value="Save" class="btn btn-theme btn-large" [disabled]="btnDisabled || !sytemBasicForm.valid">
+                                </div>
+                            </div>
+                        </div>
+                    </tab>
+                    <tab heading="Syslog" #SyslogTab (deselect)="onSelect()">
+                        <div id="tab3" class="upgrade-tab active">
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label text-right">Syslog</label>
+                                <div class="col-lg-2 col-sm-11">
+                                    <label class="switch">
+                                        <input type="checkbox" checked  formControlName="is_syslog_enabled">
+                                        <span class="slider round"><i class="enable switch-status">Enable</i><i class="disable switch-status">Disable</i></span>
+                                    </label>
+                                </div>
+                                <div>
+                                    <app-right-tooltip [toolTipText]="getToolTipText('system_basic_ntp_server_1')"></app-right-tooltip>
+                                  </div>
+                            </div>
+                            <div *ngIf="this.sytemBasicForm.get('is_syslog_enabled').value">
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label text-right">Server</label>
+                                <div class="col-lg-3 col-sm-11">
+                                    <ul class="radio-out">
+                                        <li>
+                                            <label>
+                                                <input type="radio" checked>
+                                                <i>IPv4</i>
+                                                <span class="check">&nbsp;</span>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="radio" name="syslog-server"  [disabled]="true">
+                                                <i>IPv6</i>
+                                                <span class="check">&nbsp;</span>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="radio" name="syslog-server"  [disabled]="true">
+                                                <i>Hostname</i>
+                                                <span class="check">&nbsp;</span>
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </div>
+                              
+                            </div>
+                            <div class="filter-content" style="display: block;" id="server-ipv4">
+                                <div class="form-group row">
+                                    <label class="col-md-2 col-form-label text-right">IPv4 Address</label>
+                                    <div class="col-lg-2 col-sm-11">
+                                        <input type="text" class="form-control ip_address"  formControlName="syslog_ipv4_addr" (input)="validateIP($event)">
+                                        <!-- <div class="text-danger">This field is required</div> -->
+                                        <div *ngIf="sytemBasicForm.get('syslog_ipv4_addr').invalid && (sytemBasicForm.get('syslog_ipv4_addr').dirty || sytemBasicForm.get('syslog_ipv4_addr').touched)">
+                                            <div class="text-danger pull-left" *ngIf="sytemBasicForm.get('syslog_ipv4_addr').errors.required">
+                                                Ip address is required.
+                                            </div>
+                                            <div class="text-danger pull-left" *ngIf="sytemBasicForm.get('syslog_ipv4_addr').errors.pattern">
+                                               In-Valid IP.
+                                               </div>
+                                                </div>
+                                                <div class="text-danger" *ngIf="IpvalidateStatus && sytemBasicForm.get('syslog_ipv4_addr').valid">In-valid IP</div>
+
+                                    </div>
+                                    <div>
+                                        <app-right-tooltip [toolTipText]="getToolTipText('system_basic_ntp_server_1')"></app-right-tooltip>
+                                      </div>
+                                </div>
+                            </div>
+                            <div class="filter-content" id="server-ipv6">
+                                <div class="form-group row">
+                                    <label class="col-md-2 col-form-label text-right">IPv6 Address</label>
+                                    <div class="col-lg-2 col-sm-11">
+                                        <input type="text" class="form-control ip_address is-invalid"   [disabled]="true">
+                                        <div class="text-danger">This field is required</div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="filter-content" id="hostname">
+                                <div class="form-group row">
+                                    <label class="col-md-2 col-form-label text-right">Host Name</label>
+                                    <div class="col-lg-2 col-sm-11">
+                                        <input type="text" class="form-control ip_address is-invalid"    [disabled]="true">
+                                        <div class="text-danger">This field is required</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label text-right">Port Number</label>
+                                <div class="col-lg-2 col-sm-11">
+                                    <input type="text" value="514" class="form-control"  formControlName="syslog_port" maxlength="5">
+                                    <div *ngIf="sytemBasicForm.get('syslog_port').invalid && (sytemBasicForm.get('syslog_port').dirty || sytemBasicForm.get('syslog_port').touched)">
+                                        <div class="text-danger pull-left" *ngIf="sytemBasicForm.get('syslog_port').errors.required">
+                                            Port is required.
+                                        </div>
+                                        <div class="text-danger pull-left" *ngIf="sytemBasicForm.get('syslog_port').errors.pattern">
+                                           In-Valid Port.
+                                           </div>
+                                           <div class="text-danger pull-left" *ngIf="sytemBasicForm.get('syslog_port').errors.portValidation">
+                                            In-Valid Port.
+                                            </div>
+                                            </div>
+                                </div>
+                                <div>
+                                    <app-right-tooltip [toolTipText]="getToolTipText('system_basic_ntp_server_1')"></app-right-tooltip>
+                                  </div>
+                            </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-6 col-sm-11 col-md-offset-4">
+                                    <input type="button" value="Reset" class="btn btn-cancel btn-large" style="margin-right: 15px;"  (click)="formReset()">
+                                    <input type="submit" value="Save" class="btn btn-theme btn-large" [disabled]=" !sytemBasicForm.valid || btnDisabled">
+                                </div>
+                            </div>
+                        </div>
+                    </tab>
+                </tabset>
+            </form>
+        </div>
+    </div>
+    <div *ngIf="isModalShown" [config]="{ show: true }" (onHidden)="onHidden()" bsModal #autoShownModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+            <div class="modal-body">
+                <i class="fa fa-exclamation-triangle error-icon"></i>
+              <p class="error-modal-p1">{{errorMsg}}</p>
+              <!-- <p class="error-modal-p2">{{errorMsg}}</p> -->
+            </div>
+            <div class="modal-footer">
+                 <button type="button" class="btn btn-blank" (click)="hideModal()">Dismiss</button>
+             </div>
+          </div>
+        </div>
+      </div>
+
+</div>
+<!--/===/WORK AREA END/===/-->

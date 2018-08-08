@@ -1,0 +1,307 @@
+::ng-deep mfdefaultsorter .glyphicon{
+    display: none;
+}
+::ng-deep .activeIcon{
+    font-weight: bold;
+
+    color: #fff !important;
+}
+::ng-deep .nav-tabs {
+    margin-bottom: 0px;
+    padding: 0px;
+    display: inline-block;
+}
+::ng-deep .nav-tabs>li {
+    float: left;
+    list-style: none;
+    width: 200px;
+    max-width: 200px;
+    text-align: center;
+    border-bottom: 1px solid #efeff0;
+}
+::ng-deep .nav-tabs>li>a {
+    padding: 9px 15px;
+    display: inline-block;
+    background: #efefef;
+    color: #838587;
+    -webkit-transition: all linear 0.15s;
+    transition: all linear 0.15s;
+    display: block;
+    border: solid 1px #dedede;
+    text-decoration: none;
+    margin: 0px;
+    border-radius: 0px;
+}
+::ng-deep .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+    color: #838587;
+    background-color: #fff;
+}
+::ng-deep li.nav-item.inner-tab.ng-star-inserted {
+    max-width: 130px;
+}
+::ng-deep .radio-tab .tab-content>.active {
+    display: block;
+    text-align: center !important;
+}
+::ng-deep tabset.radio-tab.tab-container {
+    display: block;
+    text-align: center;
+}
+.tab-pane {
+    text-align: left;
+}
+.detail-area{
+    margin-left: -30px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.detail-area ul li{
+    display: inline-block;
+    margin-right: 30px;
+}
+.btn {
+ margin-top: 4px;
+}
+li.gobackButton {
+    margin-left: -28px;
+    margin-right: 0 !important;
+}
+span.key-label {
+    font-size: 15px;
+    font-weight: 400;
+    color: #999;
+}
+span.key-value {
+    font-size: 15px;
+    font-weight: 500;
+    color: #756dd1;
+}
+.status span {
+    display: inline;
+    position: relative;
+    padding-left: 15px;
+    margin-left: 5px;
+}
+.custom-title{
+    background-color: #334157;
+    border-radius: 8px 8px 0 0;
+  }
+  .custom-title .caption{
+   color: #fff;
+  }
+  .custom-title  .btn-theme-inverse {
+  background-color: #fff;
+    color:  #111;
+    border-color: #111;
+  
+  }
+  .custom-title  .dropdown.btn-theme-inverse ul li a {
+    color: #111 !important;
+  }
+  .custom-title .dropdown.btn-theme-inverse ul li a:hover {
+    background-color: #333;
+    color: #fff !important;
+  }
+  .custom-portlet{
+    border-radius: 8px;
+}
+.side-bar {
+    position: fixed;
+    top: 80px;
+    height: 91.4vh;
+    background-color: #fff;
+    width: 350px;
+    right: 0;
+}
+
+.custom-title {
+    background-color: #334157;
+    border-radius: 0;
+    color: #fff
+}
+
+.caption {
+    color: #fff !important;
+}
+
+body {
+    overflow-x: hidden!important;
+}
+.filter-btn-container{
+    position: absolute;
+    right: 0;
+    top: 50%;
+    margin-top: -27.5px;
+}
+
+.filter-panel{
+    list-style: none;
+    width: 60px;
+    height: 61px;
+    background-color: #756ed1;
+    text-align: center;
+    padding: 6px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 5px 0px 0px 5px;
+    cursor: pointer;
+}
+.close-icon{
+    position: absolute;
+    right: 0;
+    top: 15px;
+    right: 20px;
+    font-size: 22px;
+    cursor: pointer;
+}
+.btn-filter{
+    position: absolute;
+    left: -55px;
+    top: 26px;
+    width: 55px;
+    height: 55px;
+    background-color: #fff;
+    margin-top: -27.5px;
+    border-radius: 5px 0px 0px 5px;
+}
+.mt-15{
+    margin-top:15px
+}
+::ng-deep mfdefaultsorter .glyphicon{
+    display: none;
+}
+::ng-deep .activeIcon{
+    font-weight: bold;
+
+    color: #fff !important;
+}
+/* ::ng-deep table.owl-dt-calendar-table td {
+    padding: 20px !important;
+    font-size: 14px !important;
+}
+::ng-deep table.owl-dt-calendar-table thead th {
+    background: none;
+    color: #111;
+    padding: 19px !important;
+    font-weight: 500;
+    vertical-align: middle !important;
+    line-height: 0.2 !important;
+    font-size: 12px !important;
+}
+
+::ng-deep .owl-dt-calendar-control {
+    font-size: 1.5em;
+    padding: 1.5em;
+    color: #000;
+}
+::ng-deep  .owl-dt-timer {
+    
+    height: 10em;
+
+    font-size: 12px;
+}
+::ng-deep .owl-dt-container-buttons {
+   
+    height: 3em;
+    font-size: 14px;
+}
+.disabled{
+    pointer-events: none;
+} */
+::ng-deep table.owl-dt-calendar-table thead th {
+    background: none;
+    color: #111;
+    padding: 10px !important;
+    font-weight: 500;
+    vertical-align: middle !important;
+    line-height: 0.2 !important;
+    font-size: 12px !important;
+}
+::ng-deep .owl-dt-popup-container {
+    width: 22.1em !important;
+    font-size: 14px !important;
+}
+::ng-deep .owl-dt-calendar-control {
+    font-size: 14px;
+    color: #000;
+}
+::ng-deep  .owl-dt-timer {
+    
+    height: 7em;
+    font-size: 12px;
+}
+::ng-deep .owl-dt-container-buttons {
+   
+    height: 3em;
+    font-size: 14px;
+}
+::ng-deep table.owl-dt-calendar-table td {
+    padding: 20px !important;
+    font-size: 14px !important;
+}
+::ng-deep  .owl-dt-popup-container .owl-dt-calendar {
+    height: 23.25em !important;
+}
+.table>tbody>tr>td, .table>tbody>tr>th, .table>thead>tr>td, .table>thead>tr>th{
+    line-height: 1.1 !important;
+}
+.range-slider {
+    -webkit-appearance: none;
+   
+    height: 8px;
+    border-radius: 5px;   
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+.range-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%; 
+    background: #716aca;
+    cursor: pointer;
+}
+
+.range-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #716aca;
+    cursor: pointer;
+}
+.opt1{
+    float: left;
+    margin-top: 8px;
+}
+.opt2{
+    float: right;
+    margin-top: 8px;
+}
+.ticklabel{
+    display:block;
+}
+.result-tip{
+    position: absolute;
+    top: 30px;
+    font-size: 12px;
+}
+
+::ng-deep .ng5-slider .ng5-slider-pointer { 
+    background-color: #6660b3 !important;
+    outline: none;
+}
+::ng-deep .ng5-slider .ng5-slider-selection {
+    background-color: #6660b3 !important;
+}
+::ng-deep .ng5-slider .ng5-slider-pointer .ng5-slider-active:after{
+    background-color: #6660b3 !important;  
+}
+.portlet.light>.portlet-title {
+    border-radius: 8px 8px 0px 0px;
+}

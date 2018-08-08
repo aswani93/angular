@@ -1,0 +1,22 @@
+.portlet.light .portlet-title .caption {
+  color:#808e96;
+  font-weight: 500;
+  font-size:15px;
+}
+
+/*.portlet-title-single {*/
+  /*border-bottom: 2px solid #eef1f5;*/
+  /*width: 100%;*/
+  /*margin: 10px 0px 50px 0px;*/
+  /*padding: 10px 20px;*/
+/*}*/
+
+
+.section-title{
+  border-bottom: 1px solid #eef1f5;
+  margin: 0px 0px 50px 0px;
+  padding: 10px 20px;
+  color:#808e96;
+  font-weight: 500;
+  font-size:15px;
+}

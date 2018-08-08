@@ -1,0 +1,16 @@
+<div class="searchBar">
+  <i class="icon icon-magnifying-glass"></i>
+  <input type="text" placeholder="{{searchKey}}" (keyup)="onKey($event)" (keydown)="onKey($event)" id="search-input" value="{{this.searchVal}}" [(ngModel)]="searchText">
+  <div class="serach-result-container"  *ngIf="showLoader" >
+    <img src="../../assets/images/ajax-loader.gif" class="loader">
+  </div>
+  <div class="serach-result-container" #resArea  *ngIf="showResArea" >
+      <ul *ngIf="apOption">
+          <li class="liAnchor" (click)="setMac(item.ap_mac,item.ap_name,'ap')" *ngFor="let item of optData" ><a href="javascript:void(0)">{{item.ap_name}}</a></li>
+      </ul>
+      <ul *ngIf="gpOption">
+        <li class="liAnchor" (click)="setMac(item.group_id,item.group_name,'gp')" *ngFor="let item of optData" ><a href="javascript:void(0)">{{item.group_name}}</a></li>
+      </ul>
+  </div>
+</div>
+

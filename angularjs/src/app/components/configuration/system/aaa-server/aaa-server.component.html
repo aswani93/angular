@@ -1,0 +1,835 @@
+<div class="page-content-wrapper">
+  <!--<div class="row">-->
+  <!---->
+  <!--</div>-->
+
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <div class="portlet light bordered">
+        <!--<div class="portlet-title">
+            <div class="caption">
+                <span>Add Profile</span>
+            </div>
+        </div>-->
+        <div class="portlet-body tabulsec">
+          <!--/======================/PAGE TAB/======================/-->
+          <div class="server_name-config-tabs">
+            <div class="row justify-content-md-center ">
+              <div class="col-lg-8 text-center col-lg-offset-2">
+                <ul class="tab-links">
+                  <li class=""><a href="javascript:void(0)">Internal</a></li>
+                  <li class="active"><a href="javascript:void(0)">External</a></li>
+                </ul>
+              </div>
+            </div>
+            <!--<div class="text-center">-->
+            <!--<tabset class="aaa-tab">-->
+            <!--<tab heading="Internal">-->
+
+            <!--</tab>-->
+            <!--<tab heading="External"></tab>-->
+            <!--</tabset>-->
+            <!--</div>-->
+            <div class="tab-content">
+
+              <div id="tab1" class="setting-tab active" style="display: none;">
+                <!--Captive Portal Tab-->
+                Coming Soon
+                <!--Captive Portal Tab END-->
+              </div>
+              <div id="tab2" class="setting-tab" style="display: block;">
+
+                <div class="row tablee">
+                  <div class="col-lg-12 col-sm-12">
+                    <div class="table-function">
+                      <ul>
+                        <li><span class="pageEntry">Show</span></li>
+                        <li>
+                          <select class="form-control caption-select" [(ngModel)]="rowsOnPage">
+                            <option [ngValue]="20">20</option>
+                            <option [ngValue]="100">100</option>
+                            <option [ngValue]="1000">1000</option>
+                            <option [ngValue]="5000">5000</option>
+                          </select>
+                        </li>
+                        <li><span class="pageEntry">entries</span></li>
+                      </ul>
+
+                      <ul class="table-function-right" *ngIf="filterOption">
+                        <li class="posreltive">
+                          <a class="dropdown-toggle"
+                             id="dropdownPopup"
+                             data-toggle="dropdown"
+                             aria-haspopup="true"
+                             aria-expanded="false"
+                             href="#">Filter columns
+                            <i aria-hidden="true" class="fa fa-chevron-down"></i>
+                          </a>
+
+                          <div class="drop-checkbox dropdown-menu"
+                               aria-labelledby="dropdownPopup"
+                               (click)="holdPopup($event)">
+                            <ul>
+                              <li class="dropdown-item"
+                                  *ngFor="let i of columnsAAAObjects;let index = index">
+
+                                <label class="checkbox">
+                                  <input class="register-check"
+                                         type="checkbox"
+                                         [checked]=i.checked
+                                         (change)="selectServerColoums($event,index)"
+                                         [disabled]="serverColCount == 3 && i.checked == true">
+
+                                  <div class="check"></div>
+
+                                  <span class="check-label">{{i.name}}</span>
+                                </label>
+                              </li>
+                            </ul>
+                          </div>
+                        </li>
+                        <!--customize column option ends-->
+                        <li><a id="edit-btn" href="javascript:void(0)" (click)="editAAA()" class="no-anchor"><i
+                          class="icon icon-edit"></i> Edit</a></li>
+                        <li><a id="delete-btn" href="javascript:void(0)" (click)="deleteData()" class="no-anchor"><i
+                          class="icon icon-rubbish-bin"></i> Delete</a></li>
+                      </ul>
+                      <div class="clearfix"></div>
+                    </div>
+
+                    <table
+                      class="display theme record_table table table-striped table-sort"
+                      cellspacing="0"
+                      width="100%"
+                      [mfData]="aaa_data"
+                      #mf="mfDataTable"
+                    >
+                      <thead>
+
+                      <tr class="table-head">
+                        <!--Checkbox for the Table-->
+                        <th>
+                          <label class="checkbox">
+                            <input type="checkbox"
+                                   class="server_name-all-check"
+                                   (click)="selectAllAAA($event)"
+                                   id="selectAllCheck">
+                            <div class="check"></div>
+                          </label>
+                        </th>
+                        <!--Checkbox for the Table-->
+                        <th class="tableHeight" style="text-align:  center;"
+                            *ngIf="(columnsAAAObjects[0].checked) == true">
+                          <mfDefaultSorter by="aaa_server_name">
+                         <span>Server Name
+                           <i class="down icon icon-download-arrow"
+                              [ngClass]="{'activeIcon': _sortBy=='aaa_server_name' && _sortOrder=='asc' }"></i>
+                           <i class="up icon icon-up-arrow-1"
+                              [ngClass]="{'activeIcon': _sortBy=='aaa_server_name' && _sortOrder=='desc' }"></i>
+                         </span>
+                          </mfDefaultSorter>
+                        </th>
+
+                        <th class="tableHeight" style="text-align:  center;"
+                            *ngIf="(columnsAAAObjects[1].checked) == true">
+                          <mfDefaultSorter by="aaa_server_ipv4">
+                         <span>Server IP
+                         <i class="down icon icon-download-arrow"
+                            [ngClass]="{'activeIcon': _sortBy=='aaa_server_ipv4' && _sortOrder=='asc' }"></i>
+                           <i class="up icon icon-up-arrow-1"
+                              [ngClass]="{'activeIcon': _sortBy=='aaa_server_ipv4' && _sortOrder=='desc' }"></i>
+                           </span>
+                          </mfDefaultSorter>
+                        </th>
+
+                        <th class="tableHeight" style="text-align:  center;"
+                            *ngIf="(columnsAAAObjects[2].checked) == true">
+
+                          <mfDefaultSorter by="no_of_ssid">
+                          <span>No. of SSIDs
+                           <i class="down icon icon-download-arrow"
+                              [ngClass]="{'activeIcon': _sortBy=='no_of_ssid' && _sortOrder=='asc' }"></i>
+                           <i class="up icon icon-up-arrow-1"
+                              [ngClass]="{'activeIcon': _sortBy=='no_of_ssid' && _sortOrder=='desc' }"></i>
+
+                            </span>
+                          </mfDefaultSorter>
+                        </th>
+
+                        <th class="tableHeight" style="text-align:  center;"
+                            *ngIf="(columnsAAAObjects[3].checked) == true">
+
+                          <mfDefaultSorter by="no_of_ap">
+                        <span>No. of APs
+                         <i class="down icon icon-download-arrow"
+                            [ngClass]="{'activeIcon': _sortBy=='no_of_ap' && _sortOrder=='asc' }"></i>
+                           <i class="up icon icon-up-arrow-1"
+                              [ngClass]="{'activeIcon': _sortBy=='no_of_ap' && _sortOrder=='desc' }"></i>
+                        </span>
+                          </mfDefaultSorter>
+                        </th>
+
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr class="table-body table-clickable"
+
+                          *ngFor="let item of mf.data | paginate: {itemsPerPage: rowsOnPage , currentPage: page}; let activeIndex = index"
+                          id="{{item.aaa_server_id | noHyphen}}"
+                          (dblclick)="double_click_event(item,activeIndex)">
+
+                        <!--*ngFor="let item of mf.data  | paginate: {itemsPerPage: rowsOnPage , currentPage: page};">-->
+                        <!--(dblclick)="editAAA(item.aaa_server_id)"-->
+                        <td>
+                          <label class="checkbox">
+                            <!--[checked]="(selectAllFlag && !item.default)"-->
+                            <input type="checkbox"
+                                   class="aaa-check"
+                                   [checked]="(selectAllFlag)"
+                                   [value]="item.aaa_server_id"
+                                   (change)="checkboxClick($event,item.aaa_server_id)">
+
+                            <div class="check"></div>
+                          </label>
+                        </td>
+                        <td style="text-align:  center;" *ngIf="(columnsAAAObjects[0].checked) == true">
+                          {{item.aaa_server_name}}
+                        </td>
+                        <td style="text-align:  center;" *ngIf="(columnsAAAObjects[1].checked) == true">
+                          {{item.aaa_server_ipv4}}
+                        </td>
+                        <td style="text-align:  center;" *ngIf="(columnsAAAObjects[2].checked) == true">
+                          {{item.no_of_ssid}}
+                        </td>
+                        <td style="text-align:  center;" *ngIf="(columnsAAAObjects[3].checked) == true">
+                          {{item.no_of_ap}}
+                        </td>
+                      </tr>
+                      <tr class="table-body" *ngIf="mf.data.length == 0">
+                        <!--<tr class="table-body" *ngIf="dataLength === 0 ">-->
+                        <td colspan="8" style="text-align: center">No AAA servers registered to the system.
+                        </td>
+                      </tr>
+
+                      <tr class="page-detail-area" style="background-color: white">
+                        <td colspan="6">
+                          <div class="entry-count text-left" style="float:left;"><span *ngIf="dataLength>0">Showing {{showingfrom}} to {{showingto}} of {{dataLength}} entries</span>
+                          </div>
+                          <div class="cpagination">
+                            <span *ngIf="data  && data.length > rowsOnPage" [class.button-disabled]="firstarrowStatus"
+                                  class="first" (click)="goToPage(1)"><<</span>
+                            <pagination-controls (pageChange)="getNext($event)" maxSize="9"
+                                                 directionLinks="true"
+                                                 autoHide="true"
+                                                 previousLabel=""
+                                                 nextLabel=""
+                                                 screenReaderPaginationLabel="Pagination"
+                                                 screenReaderPageLabel="page"
+                            ></pagination-controls>
+                            <span *ngIf="data && data.length > rowsOnPage" [class.button-disabled]="lastarrowStatus"
+                                  class="last" (click)="goToPage(Math.ceil(data.length/rowsOnPage))">>></span></div>
+
+                        </td>
+                      </tr>
+
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="text-right">
+                  <button class="btn btn-theme" (click)="addAAA()" [disabled]="isChecked"> Add Server</button>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+        <!--TAB END-->
+      </div>
+    </div><!-- /portlet-->
+
+    <!-- AAA Config Form Starts-->
+
+    <div class="main detailArea" *ngIf="editFlag || addAAAServerFlag">
+      <div class="col-lg-12 col-sm-12">
+        <div class="portlet light bordered">
+          <div class="portlet-title">
+            <div class="caption">
+              <span>{{ selectedAAAName }}</span>
+            </div>
+          </div>
+
+
+          <div class="portlet-body">
+
+            <form [formGroup]="aaaServerForm" (ngSubmit)="onSubmit()" autocomplete="nope">
+
+              <div class="row">
+                <div class="form-group row">
+                  <label class="col-md-2 col-form-label text-right">AAA Server Name</label>
+                  <div class="col-lg-2 col-sm-11">
+                    <input
+                      type="text"
+                      id="server_name"
+                      formControlName="server_name"
+                      class="form-control detailArea">
+                    <!--<span-->
+                    <!--*ngIf="!aaaServerForm.get('server_name').valid && aaaServerForm.get('server_name').touched"-->
+                    <!--class="help-block">-->
+                    <!--<span *ngIf="aaaServerForm.get('server_name').errors['required']">This field is required!</span>-->
+                    <!--</span>-->
+
+                    <div
+                      *ngIf="aaaServerForm.get('server_name').invalid && (aaaServerForm.get('server_name').dirty || aaaServerForm.get('server_name').touched)">
+                      <div class="text-danger pull-left" *ngIf="aaaServerForm.get('server_name').errors.required">
+                        Name is required.
+                      </div>
+                      <div class="text-danger pull-left"
+                           *ngIf="aaaServerForm.get('server_name').errors.minlength && !aaaServerForm.get('server_name').errors.spaceatstart && !aaaServerForm.get('server_name').errors.spaceatend && !aaaServerForm.get('server_name').errors.specialatstart && !aaaServerForm.get('server_name').errors.specialatend && !aaaServerForm.get('server_name').errors.twospace">
+                        Minimum 2 character
+                      </div>
+                      <div class="text-danger pull-left"
+                           *ngIf="aaaServerForm.get('server_name').errors.maxlength && !isDuplicate">
+                        Maximum 32 characters allowed!
+                      </div>
+                      <div class="text-danger pull-left"
+                           *ngIf="aaaServerForm.get('server_name').errors.spaceatstart && !aaaServerForm.get('server_name').errors.spaceatend">
+                        Should not start with a space!
+                      </div>
+                      <div class="text-danger pull-left"
+                           *ngIf="aaaServerForm.get('server_name').errors.spaceatend && !aaaServerForm.get('server_name').errors.spaceatstart && !isDuplicate">
+                        Should not end with a space!
+                      </div>
+                      <div class="text-danger pull-left"
+                           *ngIf="aaaServerForm.get('server_name').errors.spaceatend && aaaServerForm.get('server_name').errors.spaceatstart && !isDuplicate">
+                        Should not start & end with a space!
+                      </div>
+                      <div class="text-danger pull-left"
+                           *ngIf="aaaServerForm.get('server_name').errors.specialatstart && !aaaServerForm.get('server_name').errors.specialatend">
+                        Should not start with a special character!
+                      </div>
+                      <div class="text-danger pull-left"
+                           *ngIf="aaaServerForm.get('server_name').errors.specialatend && !aaaServerForm.get('server_name').errors.specialatstart && !aaaServerForm.get('server_name').errors.spaceatstart && !isDuplicate">
+                        Should not end with a special character!
+                      </div>
+                      <div class="text-danger pull-left"
+                           *ngIf="aaaServerForm.get('server_name').errors.specialatend && aaaServerForm.get('server_name').errors.specialatstart && !isDuplicate">
+                        Should not start & end with a special character!
+                      </div>
+                      <div class="text-danger pull-left"
+                           *ngIf="aaaServerForm.get('server_name').errors.twospaces && !aaaServerForm.get('server_name').errors.spaceatstart && !aaaServerForm.get('server_name').errors.spaceatend">
+                        Consecutive spaces not allowed
+                      </div>
+                      <div class="text-danger pull-left"
+                           *ngIf="aaaServerForm.get('server_name').errors.emoji && !aaaServerForm.get('server_name').errors.spaceatstart && !aaaServerForm.get('server_name').errors.spaceatend && !aaaServerForm.get('server_name').errors.specialatend && !aaaServerForm.get('server_name').errors.specialatstart">
+                        Should not allow symbols.
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div class="col-lg-2 col-sm-11">
+                    <div>
+                      <app-right-tooltip
+                        [toolTipText]="getToolTipText('system_aaa_server_server_name')"></app-right-tooltip>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="section-title">
+                Primary AAA Server
+              </div>
+
+              <div class="row one">
+
+                <div formGroupName="primary_aaa">
+
+                  <div class="form-group row">
+                    <label class="col-md-2 col-form-label text-right">AAA Server IP</label>
+                    <div class="col-lg-2 col-sm-11">
+                      <ul class="radio-out">
+                        <li>
+                          <label>
+                            <input
+                              type="radio"
+                              id="primaryIPV4"
+                              formControlName="p_ip_type"
+                              value="1">
+
+                            <i>IPv4</i>
+                            <span class="check">&nbsp;</span>
+                          </label>
+                        </li>
+                        <li>
+                          <label>
+                            <input
+                              type="radio"
+                              id="primaryIPV6"
+                              [disabled]="true" value="2">
+                            <i>IPv6</i>
+                            <span class="check">&nbsp;</span>
+                          </label>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div class="col-lg-2 col-sm-11">
+                      <div>
+                        <app-right-tooltip
+                          [toolTipText]="getToolTipText('system_aaa_server_p_aaa_ip_type')"></app-right-tooltip>
+                      </div>
+                    </div>
+
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-md-2 col-form-label text-right">IP Address</label>
+                    <div class="col-lg-2 col-sm-11">
+                      <input
+                        type="text"
+                        id="primaryIP"
+                        #primaryIP
+                        formControlName="p_server_ip"
+                        class="form-control"
+                        (input)="checkIPPrimary(primaryIP.value)">
+                      <!--aaaaaaaa-->
+                      <div
+                        *ngIf="aaaServerForm.get('primary_aaa.p_server_ip').invalid && (aaaServerForm.get('primary_aaa.p_server_ip').dirty || aaaServerForm.get('primary_aaa.p_server_ip').touched)">
+                        <div class="text-danger pull-left"
+                             *ngIf="aaaServerForm.get('primary_aaa.p_server_ip').errors.required ">IP address is
+                          required.
+                        </div>
+                        <div class="text-danger" *ngIf="aaaServerForm.get('primary_aaa.p_server_ip').errors.pattern">
+                          Enter valid IP address
+                        </div>
+                        <div class="text-danger"
+                             *ngIf="aaaServerForm.get('primary_aaa.p_server_ip').errors.restrictedIP && !aaaServerForm.get('primary_aaa.p_server_ip').errors.pattern && !aaaServerForm.get('primary_aaa.p_server_ip').errors.required">
+                          Enter valid IP address
+                        </div>
+                      </div>
+                      <div class="text-danger" *ngIf="samePrimaryIP">Primary & Secondary IP can't be same</div>
+                    </div>
+
+                    <div class="col-lg-2 col-sm-11">
+                      <div>
+                        <app-right-tooltip
+                          [toolTipText]="getToolTipText('system_aaa_server_p_aaa_ip')"></app-right-tooltip>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="based-on-select">
+                    <div class="form-group row">
+                      <label class="col-md-2 col-form-label text-right">&nbsp;</label>
+
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-md-2 col-form-label text-right">AAA Server Port</label>
+                    <div class="col-lg-2 col-sm-11">
+                      <input
+                        type="number"
+                        autocomplete="off"
+                        id="primaryIPServerPort"
+                        #primaryPort
+                        formControlName="p_port_number"
+                        min="1"
+                        max="65535"
+                        maxlength="5"
+                        class="form-control"
+                        onKeyDown="if(this.value.length===5 && event.keyCode!==8)
+                                return false;"
+                        (input)="checkPrimaryPort(primaryPort.value)"
+                        (keydown)="blockAllChar($event)">
+
+                      <!--oninput="this.value = this.value.replace(/^[+ -]/g, '');"-->
+                      <!--max="100" min="1"  maxlength="3"  #RSSI (keydown)="blockAllChar($event)"-->
+                      <div
+                        *ngIf="aaaServerForm.get('primary_aaa.p_port_number').invalid && (aaaServerForm.get('primary_aaa.p_port_number').dirty || aaaServerForm.get('primary_aaa.p_port_number').touched)">
+                        <div class="text-danger pull-left"
+                             *ngIf="aaaServerForm.get('primary_aaa.p_port_number').errors.required"> Port number is
+                          required.
+                        </div>
+                        <div class="text-danger pull-left"
+                             *ngIf="aaaServerForm.get('primary_aaa.p_port_number').errors.min"> Enter a valid port
+                          number.
+                        </div>
+                        <div class="text-danger pull-left"
+                             *ngIf="aaaServerForm.get('primary_aaa.p_port_number').errors.max"> Enter a valid port
+                          number.
+                        </div>
+                      </div>
+                      <div class="text-danger" *ngIf="samePrimaryPort">Primary & Secondary Port can't be same</div>
+
+
+                    </div>
+                    <div class="col-lg-2 col-sm-11">
+                      <div>
+                        <app-right-tooltip
+                          [toolTipText]="getToolTipText('system_aaa_server_p_aaa_port')"></app-right-tooltip>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <label class="col-md-2 col-form-label text-right">AAA Server Passphrase</label>
+                    <div class="col-lg-2 col-sm-11">
+                      <div class="input-group">
+                        <input
+                          type="{{ isTextPrimary ? 'text' : 'password' }}"
+                          id="p_passphrase"
+                          autocomplete="off" readonly
+                          onfocus="this.removeAttribute('readonly');"
+                          formControlName="p_passphrase"
+                          class="form-control" maxlength="32">
+                        <div class="input-group-btn">
+                          <button type="button" class="btn btn-default btn-eye"
+                                  (click)="showpasswordofPrimaryPassphrase()">
+                            <!-- <i class="icon icon-hide icon-right eye-icon"></i> -->
+                            <i class="fa fa-eye"
+                               [ngClass]="{'fa-eye': isTextPrimary,'fa-eye-slash':!isTextPrimary}"></i>
+                          </button>
+                        </div>
+                      </div>
+
+                      <div
+                        *ngIf="aaaServerForm.get('primary_aaa.p_passphrase').invalid && (aaaServerForm.get('primary_aaa.p_passphrase').dirty || aaaServerForm.get('primary_aaa.p_passphrase').touched)">
+
+                        <div class="text-danger pull-left"
+                             *ngIf="aaaServerForm.get('primary_aaa.p_passphrase').errors.required">Passphrase is
+                          required.
+                        </div>
+                        <div class="text-danger pull-left"
+                             *ngIf="aaaServerForm.get('primary_aaa.p_passphrase').errors.spaceatstart ">Space at start
+                          not allowed
+                        </div>
+                        <div class="text-danger pull-left"
+                             *ngIf="aaaServerForm.get('primary_aaa.p_passphrase').errors.minlength && !aaaServerForm.get('primary_aaa.p_passphrase').errors.spaceatstart">
+                          Minimum required
+                          length is 8
+                        </div>
+                        <div class="text-danger pull-left"
+                             *ngIf="aaaServerForm.get('primary_aaa.p_passphrase').errors.maxlength  && !aaaServerForm.get('primary_aaa.p_passphrase').errors.spaceatstart">
+                          Maximum length
+                          allowed is 32
+                        </div>
+
+                      </div>
+
+
+                    </div>
+                    <div class="col-lg-3 col-sm-11">
+                      <div>
+                        <app-right-tooltip
+                          [toolTipText]="getToolTipText('system_aaa_server_p_aaa_passphrase')"></app-right-tooltip>
+                      </div>
+                      <!--<span class="char-limit">(8-32 Characters)</span>-->
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="section-title" (click)="showInfo()">
+                Secondary AAA Server
+                <label style="margin-left: 10px">
+                  <label class="checkbox" style="float: none;">
+                    <input
+                      title="Can't be clicked until the Primary IP details are valid!"
+                      id="secondaryIPToggle"
+                      type="checkbox"
+                      #secondaryServerCheckbox
+                      (change)="toggleState(secondaryServerCheckbox.checked)"
+                      [disabled]="aaaServerForm.get('primary_aaa').invalid || aaaServerForm.get('server_name').invalid">
+
+                    <div class="check"></div>
+                  </label></label>
+                <span class="text-danger"> {{ showInfoText }}</span>
+
+              </div>
+
+
+              <div class="row two" *ngIf="secondaryServerCheckbox.checked">
+                <!--<div class="row two">-->
+                <div
+                  id="secondary_form"
+                  formGroupName="secondary_aaa"
+                  [ngClass]="{'disabled': toggleDisableofSecondaryForm}">
+                  <!--[ngClass]="{'disabled': !aaaServerForm.controls['primary_aaa'].valid || toggleSwitch}"-->
+
+                  <div class="form-group row">
+                    <label class="col-md-2 col-form-label text-right">AAA Server IP</label>
+                    <div class="col-lg-2 col-sm-11">
+                      <ul class="radio-out">
+                        <li>
+                          <label>
+
+                            <input
+                              type="radio"
+                              id="secondaryIPV4"
+                              formControlName="s_ip_type"
+                              value="1">
+                            <i>IPv4</i>
+                            <span class="check">&nbsp;</span>
+                          </label>
+                        </li>
+                        <li>
+                          <label>
+
+                            <input
+                              type="radio"
+                              id="secondaryIPV6"
+                              [disabled]="true">
+
+                            <i>IPv6</i>
+                            <span class="check">&nbsp;</span>
+                          </label>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div class="col-lg-2 col-sm-11">
+                      <div>
+                        <app-right-tooltip
+                          [toolTipText]="getToolTipText('system_aaa_server_s_aaa_ip_type')"></app-right-tooltip>
+                      </div>
+                    </div>
+
+
+                  </div>
+
+                  <!--aaaaaaa-->
+                  <div class="form-group row">
+                    <label class="col-md-2 col-form-label text-right">IP Address</label>
+                    <div class="col-lg-2 col-sm-11">
+                      <input
+                        type="text"
+                        id="secondaryIP"
+                        formControlName="s_server_ip"
+                        class="form-control"
+                        #secondaryIP
+                        (input)="checkIPSecondary(secondaryIP.value)">
+
+                      <div
+                        *ngIf="aaaServerForm.get('secondary_aaa.s_server_ip').invalid && (aaaServerForm.get('secondary_aaa.s_server_ip').dirty || aaaServerForm.get('secondary_aaa.s_server_ip').touched)">
+                        <div class="text-danger pull-left"
+                             *ngIf="aaaServerForm.get('secondary_aaa.s_server_ip').errors.required ">
+                          IP address is required.
+                        </div>
+                        <div class="text-danger" *ngIf="aaaServerForm.get('secondary_aaa.s_server_ip').errors.pattern">
+                          Enter valid IP address
+                        </div>
+                        <div class="text-danger"
+                             *ngIf="aaaServerForm.get('secondary_aaa.s_server_ip').errors.restrictedIP && !aaaServerForm.get('secondary_aaa.s_server_ip').errors.pattern && !aaaServerForm.get('secondary_aaa.s_server_ip').errors.required">
+                          Enter valid IP address
+                        </div>
+                      </div>
+                      <div class="text-danger" *ngIf="sameSecondaryIP">Primary & Secondary IP can't be same</div>
+
+                    </div>
+                    <div class="col-lg-2 col-sm-11">
+                      <div>
+                        <app-right-tooltip
+                          [toolTipText]="getToolTipText('system_aaa_server_s_aaa_ip')"></app-right-tooltip>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class="based-on-select">
+                    <div class="form-group row">
+                      <label class="col-md-2 col-form-label text-right">&nbsp;</label>
+
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <label class="col-md-2 col-form-label text-right">AAA Server Port</label>
+                    <div class="col-lg-2 col-sm-11">
+
+                      <input
+                        type="number"
+                        id="secondaryIPServerPort"
+                        class="form-control"
+                        #secondaryPort
+                        formControlName="s_port_number"
+                        min="1"
+                        max="65535"
+                        (keydown)="blockAllChar($event)"
+                        onKeyDown="if(this.value.length===5 && event.keyCode!==8)
+                                return false;"
+                        (input)="checkSecondaryPort(secondaryPort.value)">
+                      <div
+                        *ngIf="aaaServerForm.get('secondary_aaa.s_port_number').invalid && (aaaServerForm.get('secondary_aaa.s_port_number').dirty || aaaServerForm.get('secondary_aaa.s_port_number').touched)">
+                        <div class="text-danger pull-left"
+                             *ngIf="aaaServerForm.get('secondary_aaa.s_port_number').errors.required"> Port number is
+                          required.
+                        </div>
+                        <div class="text-danger pull-left"
+                             *ngIf="aaaServerForm.get('secondary_aaa.s_port_number').errors.min"> Enter a valid port
+                          number.
+                        </div>
+                        <div class="text-danger pull-left"
+                             *ngIf="aaaServerForm.get('secondary_aaa.s_port_number').errors.max"> Enter a valid port
+                          number.
+                        </div>
+                        <div class="text-danger pull-left"
+                             *ngIf="aaaServerForm.get('secondary_aaa.s_port_number').errors['pattern']"> ++number.
+                        </div>
+                      </div>
+                      <div class="text-danger" *ngIf="sameSecondaryPort">Primary & Secondary Port can't be same</div>
+
+
+                      <!--<div-->
+                      <!--*ngIf="aaaServerForm.get('secondary_aaa.s_port_number').invalid && (aaaServerForm.get('secondary_aaa.s_port_number').dirty || aaaServerForm.get('secondary_aaa.s_port_number').touched)">-->
+                      <!--<div class="text-danger pull-left"-->
+                      <!--*ngIf="aaaServerForm.get('secondary_aaa.s_port_number').errors.required">-->
+                      <!--Port number is required.-->
+                      <!--</div>-->
+                      <!--</div>-->
+
+                    </div>
+
+
+                    <div class="col-lg-3 col-sm-11">
+                      <div>
+                        <app-right-tooltip
+                          [toolTipText]="getToolTipText('system_aaa_server_s_aaa_port')"></app-right-tooltip>
+                      </div>
+
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-md-2 col-form-label text-right">AAA Server Passphrase</label>
+                    <div class="col-lg-2 col-sm-11">
+                      <div class="input-group">
+                        <input
+                          type="{{ isTextSecondary ? 'text' : 'password' }}"
+                          id="secondaryPassphrase"
+                          autocomplete="off" readonly
+                          onfocus="this.removeAttribute('readonly');"
+                          formControlName="s_passphrase"
+                          class="form-control"
+                          maxlength="32">
+                        <div class="input-group-btn">
+                          <button type="button" class="btn btn-default btn-eye"
+                                  (click)="showpasswordofSecondaryPassphrase()">
+
+                            <i class="fa fa-eye"
+                               [ngClass]="{'fa-eye': isTextSecondary,'fa-eye-slash':!isTextSecondary}"></i>
+                          </button>
+                        </div>
+
+                      </div>
+
+
+                      <div
+                        *ngIf="aaaServerForm.get('secondary_aaa.s_passphrase').invalid && (aaaServerForm.get('secondary_aaa.s_passphrase').dirty || aaaServerForm.get('secondary_aaa.s_passphrase').touched)">
+
+                        <div class="text-danger pull-left"
+                             *ngIf="aaaServerForm.get('secondary_aaa.s_passphrase').errors.required">Passphrase is
+                          required.
+                        </div>
+                        <div class="text-danger pull-left"
+                             *ngIf="aaaServerForm.get('secondary_aaa.s_passphrase').errors.spaceatstart ">Space at start
+                          not allowed
+                        </div>
+                        <div class="text-danger pull-left"
+                             *ngIf="aaaServerForm.get('secondary_aaa.s_passphrase').errors.minlength && !aaaServerForm.get('secondary_aaa.s_passphrase').errors.spaceatstart">
+                          Minimum required
+                          length is 8
+                        </div>
+                        <div class="text-danger pull-left"
+                             *ngIf="aaaServerForm.get('secondary_aaa.s_passphrase').errors.maxlength  && !aaaServerForm.get('secondary_aaa.s_passphrase').errors.spaceatstart">
+                          Maximum length
+                          allowed is 32
+                        </div>
+
+                      </div>
+
+                    </div>
+                    <div class="col-lg-3 col-sm-11">
+
+                      <div>
+                        <app-right-tooltip
+                          [toolTipText]="getToolTipText('system_aaa_server_s_aaa_passphrase')"></app-right-tooltip>
+                      </div>
+                      <!--<span class="char-limit">(8-32 Characters)</span>-->
+                    </div>
+                  </div>
+                </div>
+                <!--FORMGROUP for Secondary server, ended here.-->
+              </div>
+
+              <div class="form-group row">
+                <div class="col-lg-6 col-sm-11 col-md-offset-4">
+
+                  <input type="button"
+                         style="margin-right: 15px;"
+                         value="Cancel"
+                         class="btn btn-theme btn-large"
+                         (click)="onCancel()">
+
+                  <div *ngIf="editFlag; then editServer else addServer"></div>
+
+                  <ng-template #editServer>
+                    <div *ngIf="submitButtonCondition; then SubmitFullEditedForm else SubmitHalfEditedForm"></div>
+                  </ng-template>
+
+
+                  <ng-template #addServer>
+                    <div *ngIf="submitButtonCondition; then SubmitFullForm else SubmitHalfForm"></div>
+                  </ng-template>
+
+
+                  <ng-template #SubmitHalfForm>
+                    <input type="button"
+                           value="Save"
+                           class="btn btn-theme btn-large"
+                           (click)="onSubmit()"
+                           [disabled]="aaaServerForm.get('primary_aaa').invalid || aaaServerForm.get('server_name').invalid || btnDisable || btnDisablex"
+                           *ngIf="!editFlag">
+                  </ng-template>
+
+                  <ng-template #SubmitFullForm>
+                    <input type="button"
+                           value="Save"
+                           class="btn btn-theme btn-large"
+                           (click)="onSubmit()"
+                           [disabled]="aaaServerForm.invalid || btnDisable || btnDisablex"
+                           *ngIf="!editFlag">
+                  </ng-template>
+
+
+                  <ng-template #SubmitFullEditedForm>
+                    <input type="button"
+                           [disabled]="aaaServerForm.invalid || btnDisable || btnDisablex"
+                           value="Update"
+                           class="btn btn-theme btn-large"
+                           (click)="updateAAA()"
+                           *ngIf="editFlag">
+                  </ng-template>
+
+                  <ng-template #SubmitHalfEditedForm>
+                    <input type="button"
+                           [disabled]="aaaServerForm.get('primary_aaa').invalid || aaaServerForm.get('server_name').invalid || btnDisable || btnDisablex"
+                           value="Update"
+                           class="btn btn-theme btn-large"
+                           (click)="updateAAA()"
+                           *ngIf="editFlag">
+                  </ng-template>
+
+
+                </div>
+              </div>
+            </form>
+          </div>
+        </div><!-- /portlet-->
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!--/===/WORK AREA END/===/-->

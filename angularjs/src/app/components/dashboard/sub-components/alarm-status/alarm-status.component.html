@@ -1,0 +1,156 @@
+  <div>  
+                <div class="portlet light bordered stats custom-portlet">
+                    <div class="portlet-title custom-title">
+                        <div class="caption">
+                            <span>Alarms</span>
+                        </div>
+                        <div class="text-right pull-right top-btns-right">
+                            <ul>
+                                <!-- <li>
+                                    <div class="dropdown scrollableList graph btn btn-theme-inverse rounded">
+                                        <a href="#" class="dropdown-toggle selectedOption disabled" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Live Data <i class="icon icon-arrow-point-to-down"></i></a>
+                                        <div class="dropdown-menu this-list" aria-labelledby="dropdownMenuButton">
+                                            <ul>
+                                                <li><a class="dropdown-item" href="#">Last 2 hrs</a></li>
+                                                <li><a class="dropdown-item" href="#">Last 1 day</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li> -->
+                                <li>
+                                    <div class="dropdown disabled">
+                                        <a href="#" class="dropdown-toggle selectedOption disabled" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="icon icon-settings"></i></a>
+                                        <div class="dropdown-menu this-list" aria-labelledby="dropdownMenuButton">
+                                            <ul>
+                                                <li><a class="dropdown-item" href="#">Setting 1</a></li>
+                                                <li><a class="dropdown-item" href="#">Setting 2</a></li>
+                                            </ul>
+                                      </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)" (click)="gotoAlaramPage()"><i class="fa fa-arrows-alt icon"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="icon icon-cancel"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div style="height: 250px;">
+                            <!-- <span>test</span> -->
+                            <div class="row">
+                                <div class="col-md-3 col-lg-2">
+                                    <!-- <ul class="alarm-notification">
+                                overflow-y        <li class="critical">
+                                            <span class="noti-count">236</span> Critical
+                                        </li>
+                                        <li class="major">
+                                            <span class="noti-count">25</span> Major
+                                        </li>
+                                        <li class="minor">
+                                            <span class="noti-count">36</span> Minor
+                                        </li>
+                                    </ul> -->
+                                    <div class="tab noselect">
+                                        <div class="tabDiv" [ngClass]="{'tab-active': criticalTabActive,'tab-inactive': !criticalTabActive}" (dblclick)="gotoAlaramPage('Critical')">
+                                            <button class="tablinks s1" (click)="openTab($event, 'critical')">{{alramStat.highest}}</button>
+                                            <p (click)="openTab($event, 'critical')" class="s1p">Critical</p>
+                                        </div>
+                                        <div class="tabDiv" [ngClass]="{'tab-active': majorTabActive,'tab-inactive': !majorTabActive}" (dblclick)="gotoAlaramPage('Major')">
+                                        <button class="tablinks s2"  (click)="openTab($event, 'major')">{{alramStat.medium}}</button>
+                                        <p  (click)="openTab($event, 'major')" class="s2p">Major</p>
+                                        </div>
+                                        <div class="tabDiv" [ngClass]="{'tab-active': minorTabActive,'tab-inactive': !minorTabActive}" (dblclick)="gotoAlaramPage('Minor')">
+                                        <button class="tablinks s3"  (click)="openTab($event, 'minor')">{{alramStat.lowest}}</button>
+                                        <p (click)="openTab($event, 'minor')" class="s3p" >Minor</p>
+                                    </div>
+                                    </div>
+                                      
+                                      
+                                </div>
+                                <div class="col-md-9  noti-list">
+                                    <!-- <div class="row">
+                                        <div class="col-md-6">
+                                            <h5>Top 5 Alarms</h5>                                            
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h5 class="total-noti">Total - 324</h5>                                            
+                                        </div>
+                                    </div> -->
+                                    <!-- <ol class="top-alarms">
+                                        <li>Some Text Here</li>
+                                        <li>Some Text Here</li>
+                                        <li>Some Text Here</li>
+                                        <li>Some Text Here</li>
+                                        <li>Some Text Here</li>
+                                    </ol> -->
+                                    <div id="Critical"  *ngIf="criticalTabActive" class="ovr-flw-200">
+                                        <div class="row">
+                                            
+                                                <div class="col-sm-12"><h5>Top 5 Critical Alarms </h5></div>                                            
+                                           
+                                           
+                                        </div> 
+                                         <!-- <ol class="top-alarms">
+                                            <li *ngFor="let i of tabContent">{{i.msg}} | {{i.time}} </li>
+                                            
+                                        </ol> -->
+                                        <div class="row no-margin" *ngFor="let i of tabContent">
+                                            <div class="col-md-2 col-lg-1"><i class="icon icon-router1 list-icon"></i></div>
+                                            <div class="col-md-9 col-lg-10 alignLeft">
+                                                <p class="alram-p">{{i.msg}}</p>
+                                                <small title="{{i.date}}">{{i.time}}</small>
+                                            </div>
+                                        </div>
+                                        <span *ngIf="tabContent.length==0">No recent alarms</span>
+                                      </div>
+                                      
+                                      <div id="Major"  *ngIf="majorTabActive" class="ovr-flw-200">
+                                        
+                                        <div class="row">
+                                            
+                                                <div class="col-sm-12"><h5>Top 5 Major Alarms</h5></div>                                            
+                                            
+                                           
+                                        </div> 
+                                         <!-- <ol class="top-alarms">
+                                                <li *ngFor="let i of tabContent">{{i.msg}} | {{i.time}}</li>
+
+                                        </ol> -->
+                                        <div class="row no-margin" *ngFor="let i of tabContent">
+                                                <div class="col-md-2 col-lg-1"><i class="icon icon-router1 list-icon"></i></div>
+                                                <div class="col-md-9 col-lg-10 alignLeft">
+                                                    <p class="alram-p">{{i.msg}}</p>
+                                                    <small title="{{i.date}}">{{i.time}}</small>
+                                                </div>
+                                            </div>
+                                        <span *ngIf="tabContent.length==0">No recent alarms</span>
+                                    </div>
+                                    <div  *ngIf="minorTabActive" class="ovr-flw-200">
+                                        
+                                        <div class="row">
+                                           
+                                               <div class="col-sm-12"> <h5>Top 5 Minor Alarms</h5></div>                                            
+                                            
+                                           
+                                        </div> 
+                                         <!-- <ol class="top-alarms">
+                                                <li *ngFor="let i of tabContent">{{i.msg}} | {{i.time}}</li>
+                                        </ol> -->
+                                        <div class="row no-margin" *ngFor="let i of tabContent">
+                                            <div class="col-md-2 col-lg-1"><i class="icon icon-router1 list-icon"></i></div>
+                                            <div class="col-md-9 col-lg-10 alignLeft">
+                                                    <p class="alram-p">{{i.msg}}</p>
+                                                    <small title="{{i.date}}">{{i.time}}</small>
+                                                </div>
+                                            </div>
+                                        <span *ngIf="tabContent.length==0">No recent alarms</span>
+                                      </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>

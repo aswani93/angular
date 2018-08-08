@@ -1,0 +1,178 @@
+.side-bar {
+    position: fixed;
+    top: 80px;
+    height: 91.4vh;
+    background-color: #fff;
+    width: 350px;
+    right: 0;
+}
+
+.custom-title {
+    background-color: #334157;
+    border-radius: 0;
+    color: #fff
+}
+
+.caption {
+    color: #fff !important;
+}
+
+body {
+    overflow-x: hidden!important;
+}
+.filter-btn-container{
+    position: absolute;
+    right: 0;
+    top: 50%;
+    margin-top: -27.5px;
+}
+
+.filter-panel{
+    list-style: none;
+    width: 60px;
+    height: 61px;
+    background-color: #756ed1;
+    text-align: center;
+    padding: 6px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 5px 0px 0px 5px;
+    cursor: pointer;
+}
+.close-icon{
+    position: absolute;
+    right: 0;
+    top: 15px;
+    right: 20px;
+    font-size: 22px;
+    cursor: pointer;
+}
+.btn-filter{
+    position: absolute;
+    left: -55px;
+    top: 26px;
+    width: 55px;
+    height: 55px;
+    background-color: #fff;
+    margin-top: -27.5px;
+    border-radius: 5px 0px 0px 5px;
+}
+.mt-15{
+    margin-top:15px
+}
+::ng-deep mfdefaultsorter .glyphicon{
+    display: none;
+}
+::ng-deep .activeIcon{
+    font-weight: bold;
+
+    color: #fff !important;
+}
+/* ::ng-deep table.owl-dt-calendar-table td {
+    padding: 20px !important;
+    font-size: 14px !important;
+}
+::ng-deep table.owl-dt-calendar-table thead th {
+    background: none;
+    color: #111;
+    padding: 19px !important;
+    font-weight: 500;
+    vertical-align: middle !important;
+    line-height: 0.2 !important;
+    font-size: 12px !important;
+}
+
+::ng-deep .owl-dt-calendar-control {
+    font-size: 1.5em;
+    padding: 1.5em;
+    color: #000;
+}
+::ng-deep  .owl-dt-timer {
+    
+    height: 10em;
+
+    font-size: 12px;
+}
+::ng-deep .owl-dt-container-buttons {
+   
+    height: 3em;
+    font-size: 14px;
+}
+.disabled{
+    pointer-events: none;
+} */
+::ng-deep table.owl-dt-calendar-table thead th {
+    background: none;
+    color: #111;
+    padding: 10px !important;
+    font-weight: 500;
+    vertical-align: middle !important;
+    line-height: 0.2 !important;
+    font-size: 12px !important;
+}
+::ng-deep .owl-dt-popup-container {
+    width: 22.1em !important;
+    font-size: 14px !important;
+}
+::ng-deep .owl-dt-calendar-control {
+    font-size: 14px;
+    color: #000;
+}
+::ng-deep  .owl-dt-timer {
+    
+    height: 7em;
+    font-size: 12px;
+}
+::ng-deep .owl-dt-container-buttons {
+   
+    height: 3em;
+    font-size: 14px;
+}
+::ng-deep table.owl-dt-calendar-table td {
+    padding: 20px !important;
+    font-size: 14px !important;
+}
+::ng-deep  .owl-dt-popup-container .owl-dt-calendar {
+    height: 23.25em !important;
+}
+.table>tbody>tr>td, .table>tbody>tr>th, .table>thead>tr>td, .table>thead>tr>th{
+    line-height: 1.1 !important;
+}
+.altype{
+    min-width:130px !important;
+    width:130px !important;
+    max-width: 130px !important;
+    word-wrap: break-word !important;
+}
+.aldtype{
+    min-width:300px !important;
+    width:300 !important;
+    max-width: 240px !important;
+    word-wrap: break-word !important;
+    
+}
+.font{
+    font-weight: 700 !important ;
+}
+.rightd{
+    right:5px !important;
+}
+.rightu{
+    right:-5px !important;
+}
+/* .atype{
+    max-width: 100px !important;
+    word-wrap: break-word !important;
+}
+.adtype{
+    max-width: 350px !important;
+    word-wrap: break-word !important;
+} */
+
+::ng-deep .page-detail-area td{
+    background-color: #fff !important;
+}
+.list-pagination{
+    float: right;
+}

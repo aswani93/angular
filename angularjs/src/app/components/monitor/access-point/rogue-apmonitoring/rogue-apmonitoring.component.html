@@ -1,0 +1,648 @@
+<!--/======================/WORK AREA/======================/-->
+<div class="page-content-wrapper">
+  <!-- <div class="row">
+    <div class="col-lg-5 col-sm-12">
+      <div class="searchBar">
+        <i class="icon icon-magnifying-glass"></i>
+        <input type="text" placeholder="Search">
+      </div>
+    </div>
+  </div> -->
+  <div class="row">
+    <div class="col-lg-12 col-xs-12 col-sm-12">
+      <div class="portlet portlet-body tabcontent table-responsive">
+        <div class="text-right" style="padding-right: 20px;">
+          <div class="dropdown scrollableList graph btn btn-theme rounded">
+            <a href="#" class="dropdown-toggle selectedOption" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export
+              <i class="icon icon-export icon-before icon-export"></i>
+            </a>
+            <div class="dropdown-menu this-list" aria-labelledby="dropdownMenuButton">
+              <ul>
+                <li>
+                  <a class="dropdown-item" href="#">CSV</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#">PDF</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="row">
+    <div class="col-md-12">
+      <div class="portlet light head">
+        <div class="portlet-title">
+          <div class="caption">
+            <i class="icon icon-router-signal"></i>
+            <span class="text-bold">AP 5</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <div class="portlet">
+        <div class="portlet-body">
+          <!--/======================/PAGE TAB/======================/-->
+          <div class="group-config-tabs">
+            <!-- <div class="row justify-content-md-center">
+              <div class="col-lg-12 col-md-12 text-center">
+                <div style="background: #fff; padding-top: 40px;">
+                  <ul class="tab-links">
+                    <li class="active">
+                      <a href="#tab1">Known AP</a>
+                    </li>
+                    <li>
+                      <a href="#tab2">Unknown AP</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div> -->
+
+            <!-- <div class="tab-content" style="padding: 0; background: transparent;" class="tab-content"> -->
+            <tabset>
+
+              <tab heading="KnownAP" #knownAPtab (deselect)="reset()">
+                <div id="tab1" class="upgrade-tab active">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="portlet light table-responsive">
+                        <div class="portlet">
+                          <div class="row">
+                            <div class="col-md-5">
+                              <ul class="ap-reading">
+                                <li>2.4 GHz :
+                                  <span>{{RadioCount_2}}</span>
+                                </li>
+                                <li>5 GHz :
+                                  <span>{{RadioCount_5}}</span>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <div class="table-function ">
+                            <div class="row">
+                              <!-- <div class="col-md-3">
+                              <div class="searchBar">
+                                <i class="icon icon-magnifying-glass"></i>
+                                <input type="text" placeholder="Search">
+                              </div>
+                            </div> -->
+                              <div class="col-md-2 pull-right">
+                              <ul class="table-function-right" style="margin-top: 20px;">
+                                <li>
+                                  <a style="cursor: pointer;" (click)="callDelete()" id="deletebtn">
+                                    <i class="icon icon-rubbish-bin" ></i> Delete</a>
+                                </li>
+                              </ul>
+                            </div>
+                            </div>
+                          </div>
+                          <table id="example" class="display theme table record_table table-striped table-sort text-center" cellspacing="0" width="100%"
+                            [mfData]="data" #mf="mfDataTable" [mfRowsOnPage]="rowsOnPage" >
+                            <thead>
+                              <tr class="table-head">
+                                <th>
+                                  <label class="checkbox">
+                                    <input type="checkbox" (change)="knownselectAll($event)" id="selectAllCheck">
+                                    <div class="check"></div>
+                                  </label>
+                                </th>
+                                <th style="text-align:  center;" class="tableHeight" *ngIf="(coloumsObjects[0].checked) == true">
+                                  <mfDefaultSorter by="ap_name">
+                                     
+                                    <span>SSID Name
+                                      <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='ap_name' && _sortOrder=='asc' }"></i>
+                                      <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ap_name' && _sortOrder=='desc' }"></i>
+                                    </span>
+                                  </mfDefaultSorter>
+                                </th>
+                                <th style="text-align:  center;"  class="tableHeight" *ngIf="(coloumsObjects[1].checked) == true">
+                                  <mfDefaultSorter by="ap_ip">
+                                    <span>MAC Address
+                                      <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='ap_ip' && _sortOrder=='asc' }"></i>
+                                      <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ap_ip' && _sortOrder=='desc' }"></i>
+                                    </span>
+                                  </mfDefaultSorter>
+                                </th>
+                                <th style="text-align:  center;" class="tableHeight" *ngIf="(coloumsObjects[5].checked) == true">
+                                  <mfDefaultSorter by="ap_first">
+                                    <span>First Seen
+                                      <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='ap_first' && _sortOrder=='asc' }"></i>
+                                      <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ap_first' && _sortOrder=='desc' }"></i>
+                                    </span>
+                                  </mfDefaultSorter>
+                                </th>
+                                <th style="text-align:  center;" class="tableHeight" *ngIf="(coloumsObjects[5].checked) == true">
+                                  <mfDefaultSorter by="ap_last">
+                                    <span>Last Seen
+                                      <i class="down icon icon-download-arrow"  [ngClass]="{'activeIcon': _sortBy=='ap_last' && _sortOrder=='asc' }"></i>
+                                      <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ap_last' && _sortOrder=='desc' }"></i>
+                                    </span>
+                                  </mfDefaultSorter>
+                                </th>
+                                <th style="text-align:  center;"class="tableHeight"  *ngIf="(coloumsObjects[5].checked) == true">
+                                  <mfDefaultSorter by="ap_model">
+                                    <span>Detected info
+                                      <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='ap_model' && _sortOrder=='asc' }"></i>
+                                      <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ap_model' && _sortOrder=='desc' }"></i>
+                                    </span>
+                                  </mfDefaultSorter>
+                                </th>
+                                <th style="text-align:  center;"class="tableHeight"  *ngIf="(coloumsObjects[4].checked) == true">
+                                  <mfDefaultSorter by="active_clients">
+                                    <span>Radio
+                                      <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='active_clients' && _sortOrder=='asc' }"></i>
+                                      <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='active_clients' && _sortOrder=='desc' }"></i>
+                                    </span>
+                                  </mfDefaultSorter>
+                                </th>
+                               
+                                <th style="text-align:  center;" class="tableHeight" *ngIf="(coloumsObjects[2].checked) == true">
+                                  <mfDefaultSorter by="ap_mac">
+                                    <span>Channel
+                                      <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='ap_mac' && _sortOrder=='asc' }"></i>
+                                      <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ap_mac' && _sortOrder=='desc' }"></i>
+                                    </span>
+                                  </mfDefaultSorter>
+                                </th>
+                                <th style="text-align:  left;" class="tableHeight" *ngIf="(coloumsObjects[3].checked) == true">
+                                  <mfDefaultSorter by="ap_group">
+                                    <span>Auth Type
+                                      <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='ap_group' && _sortOrder=='asc' }"></i>
+                                      <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ap_group' && _sortOrder=='desc' }"></i>
+                                    </span>
+                                  </mfDefaultSorter>
+                                </th>
+                             
+                              
+
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <!-- <tr class="table-body">
+                <td><label class="checkbox"><input type="checkbox"><div class="check"></div></label></td>
+                <td class="text-left">DHCP 1</td>
+                <td>1</td>
+                <td>SERVER</td>
+            </tr>  -->
+                              <tr class="table-body" *ngFor="let item of mf.data;" [ngSwitch]="item.radio_mode" [ngSwitch]="item.auth_type">
+
+                                <td>
+                                  <label class="checkbox">
+
+                                    <input type="checkbox" class="register-table-check"  [checked]="(selectAllFlag)" value="{{item.known_ssid_mac}}" name="{{item.known_ssid_mac | noColon}}"
+                                      (change)="knowncheckboxClick(item.known_ssid_mac,$event)">
+
+                                    <div class="check"></div>
+                                  </label>
+                                </td>
+                                <td style="text-align:  center;" *ngIf="(coloumsObjects[0].checked) == true"><span>{{item.known_ssid_name}}</span></td>
+                                <td style="text-align:  center;" *ngIf="(coloumsObjects[1].checked) == true">{{item.known_ssid_mac}}</td>
+                                <td style="text-align:  center;" >{{item.first_detected_at}}</td>
+                                <td style="text-align:  center;" >{{item.last_detected_at}}</td>
+                                <td style="text-align:  center;cursor: pointer;" *ngIf="(coloumsObjects[5].checked) == true">{{item.detected_by_info[0].ap_name}} (<span>{{item.detected_by_info[0].rssi}}</span>)
+                                  <label *ngIf="item.detected_by_info.length != 1" href="javascript:void(0)" class="stat-btn" (click)="getDetectedValue(item.known_ssid_mac)" data-toggle="modal" data-target="#upload">
+                                    More >>
+                                  </label>
+                                </td>
+                                <td style="text-align:  center;" *ngSwitchCase="0">2.4GHz</td>
+                                <td style="text-align:  center;" *ngSwitchCase="1">5GHz</td>
+                                <td style="text-align:  center;" *ngIf="(coloumsObjects[2].checked) == true">{{item.channel}}</td>
+                                <td *ngIf="(coloumsObjects[4].checked) == true && item.auth_type == 0">Open</td>
+                                <td *ngIf="(coloumsObjects[3].checked) == true  && item.auth_type == 2">WPA-PSK</td>
+                                <td *ngIf="(coloumsObjects[3].checked) == true  && item.auth_type == 3">WPA2-PSK</td>
+                                <td *ngIf="(coloumsObjects[3].checked) == true  && item.auth_type == 4">WPA2-PSK_Mixed_mode</td>
+                                <td *ngIf="(coloumsObjects[3].checked) == true  && item.auth_type == 5">WPA_EAP</td>
+                               
+                              
+                               
+                                <!-- <button  value="{{item.known_ssid_mac}}" (click)="getDetectedValue($event)"  data-toggle="modal" data-target="#upload">More</button> </td> -->
+
+                              </tr>
+
+                              <!-- Default row to be shown where there is no data to show -->
+                              <tr class="table-body" *ngIf="mf.data.length == 0">
+                                <td colspan="8">No data found</td>
+                              </tr>
+
+                              <!-- The showing 10 of 10 items text-->
+                              <tr class="page-detail-area" *ngIf="mf.data.length !== 0">
+                                <td colspan="8">
+                                  <div class="entry-count text-left" style="float:left;">
+                                    <span>Showing {{showingfrom}} to {{showingto}} of {{dataLength}} entries</span>
+                                  </div>
+                                  <div class="list-pagination" style="float:right;">
+
+                                    <mfBootstrapPaginator></mfBootstrapPaginator>
+                                  </div>
+                                </td>
+                              </tr>
+
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- <div class="row">
+                  <div class="col-md-12">
+                    <div class="portlet">
+                      <div class="portlet-body">
+                        <div class="row">
+                          <div class="col-lg-6 col-sm-6">
+                            <div class="entry-count text-left">
+                              <span>Showing 1 to 6 of 6 entries</span>
+                            </div>
+                          </div>
+                          <div class="col-lg-6 col-sm-6">
+                            <div class="text-right">
+                              <nav aria-label="Page navigation example">
+                                <ul class="pagination">
+                                  <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Previous">
+                                      <span aria-hidden="true">«</span>
+                                      <span class="sr-only">Previous</span>
+                                    </a>
+                                  </li>
+                                  <li class="page-item">
+                                    <a class="page-link" href="#">1</a>
+                                  </li>
+                                  <li class="page-item active">
+                                    <a class="page-link" href="#">2</a>
+                                  </li>
+                                  <li class="page-item">
+                                    <a class="page-link" href="#">3</a>
+                                  </li>
+                                  <li class="page-item">
+                                    <a class="page-link" href="#">4</a>
+                                  </li>
+                                  <li class="page-item">
+                                    <a class="page-link" href="#">5</a>
+                                  </li>
+                                  <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Next">
+                                      <span aria-hidden="true">»</span>
+                                      <span class="sr-only">Next</span>
+                                    </a>
+                                  </li>
+                                </ul>
+                              </nav>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div> -->
+                  <div class="modal fade text-center" id="upload" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <!-- <h5 class="modal-title" id="exampleModalLongTitle">
+                                                <label class="checkbox checkbox-theme" style="float: none;">
+                                                    <input type="checkbox" formControlName="uploadStatus" checked>
+                                                    <div class="check"></div>
+                                                </label>Click here to upgrade along with upload
+                                            </h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button> -->
+                          <!-- <table id="example" class="display theme table record_table table-striped table-sort text-center" cellspacing="0" width="100%"> -->
+                          <table id="example" class="display theme table record_table table-striped table-sort text-center" cellspacing="0" width="100%"
+                            [mfData]="detectedValuesArray" #mf3="mfDataTable" [mfRowsOnPage]="rowsOnPage">
+                            <thead>
+                              <tr class="table-head">
+
+                                <th class="text-center">
+                                  <span>AP Name
+                                    <!-- <i class="down icon icon-download-arrow"></i>
+                                                            <i class="up icon icon-up-arrow-1"></i> -->
+                                  </span>
+                                </th>
+                                <th class="text-center">
+                                  <span>MAC
+                                    <!-- <i class="down icon icon-download-arrow"></i>
+                                                            <i class="up icon icon-up-arrow-1"></i> -->
+                                  </span>
+                                </th>
+                                <th class="text-center">
+                                  <span>RSSI
+                                    <!-- <i class="down icon icon-download-arrow"></i>
+                                                            <i class="up icon icon-up-arrow-1"></i> -->
+                                  </span>
+                                </th>
+                                <th class="text-center">
+                                  <span>Last Seen
+                                    <!-- <i class="down icon icon-download-arrow"></i>
+                                                            <i class="up icon icon-up-arrow-1"></i> -->
+                                  </span>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr class="table-body" *ngFor="let item3 of mf3.data;">
+                                <!-- <td>
+                                                            <label class="radio-out">
+                                                                <input type="radio" (click)="valuechanges($event,Firmwaredata.firmware_name,Firmwaredata.uploaded_by)" formControlName="upgradecheckbox" class="register-check" value={{Firmwaredata.firmware_name}},{{Firmwaredata.uploaded_by}}>
+                                                                <div class="check"></div>
+                                                            </label>
+                                                        </td> -->
+
+                                <td class="text-center">{{item3.ap_name}}</td>
+                                <td class="text-center">{{item3.mac}}</td>
+                                <td class="text-center">{{item3.rssi}}</td>
+                                <td class="text-center">{{item3.last_scanned_at}}</td>
+
+
+
+
+                              </tr>
+
+                            </tbody>
+                          </table>
+
+                        </div>
+
+                        <div class="modal-footer">
+                          <button type="button" id="uploadButton" class="btn btn-theme" data-dismiss="modal">Ok</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </tab>
+              <tab heading="UnKnownAP" #UnKnownAPTab (deselect)="reset()">
+                <div id="tab2" class="setting-tab active">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="portlet light table-responsive">
+                        <div class="portlet">
+                          <div class="row">
+                            <div class="col-md-5">
+                              <ul class="ap-reading">
+                                <li>2.4 GHz :
+                                  <span>{{UnknownRadioCount_2}}</span>
+                                </li>
+                                <li>5 GHz :
+                                  <span>{{UnknownRadioCount_5}}</span>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <div class="table-function">
+                            <div class="row ">
+                              <!-- <div class="col-md-3">
+                              <div class="searchBar">
+                                <i class="icon icon-magnifying-glass"></i>
+                                <input type="text" placeholder="Search">
+                              </div>
+                            </div> -->
+                              <div class="col-md-2 pull-right text-right ">
+                                <a class="btn btn-theme rounded btn-large disabled" (click)="callMovetoKnownAPI()" id="movebutton">Trust</a>
+                              </div>
+                            </div>
+                          </div>
+                          <table id="example" class="display theme table record_table table-striped table-sort text-center " cellspacing="0" width="100%"
+                            [mfData]="unknownData" #mf2="mfDataTable" [mfRowsOnPage]="rowsOnPage" >
+                            <thead>
+                              <tr class="table-head">
+                                <th>
+                                  <label class="checkbox">
+                                    <input type="checkbox" (change)="selectAll($event)" id="selectAllCheck">
+                                    <div class="check"></div>
+                                  </label>
+                                </th>
+                                <th style="text-align:  center;" class="tableHeight" *ngIf="(coloumsObjects[0].checked) == true">
+                                  <mfDefaultSorter by="ap_name">
+                                    <span>SSID Name
+                                      <i class="down icon icon-download-arrow"  [ngClass]="{'activeIcon': _sortBy=='ap_name' && _sortOrder=='asc' }"></i>
+                                      <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ap_name' && _sortOrder=='desc' }"></i>
+                                    </span>
+                                  </mfDefaultSorter>
+                                </th>
+                                <th style="text-align:  center;" class="tableHeight" *ngIf="(coloumsObjects[1].checked) == true">
+                                  <mfDefaultSorter by="ap_ip">
+                                    <span>MAC Address
+                                      <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='ap_ip' && _sortOrder=='asc' }"></i>
+                                      <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ap_ip' && _sortOrder=='desc' }"></i>
+                                    </span>
+                                  </mfDefaultSorter>
+                                </th>
+                                <th style="text-align:  center;" class="tableHeight" *ngIf="(coloumsObjects[5].checked) == true">
+                                  <mfDefaultSorter by="ap_first">
+                                    <span>First Seen
+                                      <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='ap_first' && _sortOrder=='asc' }"></i>
+                                      <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ap_first' && _sortOrder=='desc' }"></i>
+                                    </span>
+                                  </mfDefaultSorter>
+                                </th>
+                                <th style="text-align:  center;" *ngIf="(coloumsObjects[5].checked) == true">
+                                  <mfDefaultSorter by="ap_last">
+                                    <span>Last Seen
+                                      <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='ap_last' && _sortOrder=='asc' }"></i>
+                                      <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ap_last' && _sortOrder=='desc' }"></i>
+                                    </span>
+                                  </mfDefaultSorter>
+                                </th>
+                                <th style="text-align:  center;"  class="tableHeight" *ngIf="(coloumsObjects[5].checked) == true">
+                                  <mfDefaultSorter by="ap_model">
+                                    <span>Detected info
+                                      <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='ap_model' && _sortOrder=='asc' }"></i>
+                                      <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ap_model' && _sortOrder=='desc' }"></i>
+                                    </span>
+                                  </mfDefaultSorter>
+                                </th>
+                                <th style="text-align:  center;" class="tableHeight" *ngIf="(coloumsObjects[4].checked) == true">
+                                  <mfDefaultSorter by="active_clients">
+                                    <span>Radio
+                                      <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='active_clients' && _sortOrder=='asc' }"></i>
+                                      <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='active_clients' && _sortOrder=='desc' }"></i>
+                                    </span>
+                                  </mfDefaultSorter>
+                                </th>
+                               
+                                <th style="text-align:  center;" class="tableHeight" *ngIf="(coloumsObjects[2].checked) == true">
+                                  <mfDefaultSorter by="ap_mac">
+                                    <span>Channel
+                                      <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='ap_mac' && _sortOrder=='asc' }"></i>
+                                      <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ap_mac' && _sortOrder=='desc' }"></i>
+                                    </span>
+                                  </mfDefaultSorter>
+                                </th>
+                                <th style="text-align:  left;" *ngIf="(coloumsObjects[3].checked) == true">
+                                  <mfDefaultSorter by="ap_group">
+                                    <span>Auth Type
+                                      <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='ap_group' && _sortOrder=='asc' }"></i>
+                                      <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ap_group' && _sortOrder=='desc' }"></i>
+                                    </span>
+                                  </mfDefaultSorter>
+                                </th>
+                             
+                              
+
+                              </tr>
+                            </thead>
+                            <tbody>
+
+                              <tr class="table-body" *ngFor="let item2 of mf2.data;" [ngSwitch]="item2.radio_mode" [ngSwitch]="item2.auth_type">
+
+                                <td >
+                                  <label class="checkbox">
+
+                                    <input type="checkbox" class="register-table-check" [checked]="(selectAllFlag)" value="{{item2.unknown_ssid_mac}}" name="{{item2.unknown_ssid_mac | noColon}}"
+                                      (change)="checkboxClick($event,item2.unknown_ssid_mac)">
+
+                                    <div class="check"></div>
+                                  </label>
+                                </td>
+                                <td style="text-align:  center;" class="tableHeight" *ngIf="(coloumsObjects[0].checked) == true">{{item2.unknown_ssid_name}}</td>
+                                <td style="text-align:  center;" class="tableHeight" *ngIf="(coloumsObjects[1].checked) == true">{{item2.unknown_ssid_mac}}</td>
+                                <td style="text-align:  center;"  class="tableHeight" >{{item2.first_detected_at}}</td>
+                                <td style="text-align:  center;width: 100%;" class="tableHeight">{{item2.last_detected_at}}</td>
+                                <td style="text-align:  center;cursor: pointer;" class="tableHeight" *ngIf="(coloumsObjects[5].checked) == true">{{item2.detected_by_info[0].ap_name}} (<span>{{item2.detected_by_info[0].rssi}}</span>)
+                                  <label  *ngIf="item2.detected_by_info.length != 1" href="javascript:void(0)" style="padding-top: 10px;" class="stat-btn" (click)="getDetectedUnknowAPValue(item2.unknown_ssid_mac)" data-toggle="modal"
+                                    data-target="#unknownModel">
+                                   More >>
+                                  </label>
+                                </td>
+                                <td style="text-align:  center;" *ngSwitchCase="0" class="tableHeight">2.4GHz</td>
+                                <td style="text-align:  center;" *ngSwitchCase="1" class="tableHeight">5GHz</td>
+                                <td style="text-align:  center;" *ngIf="(coloumsObjects[2].checked) == true" class="tableHeight">{{item2.channel}} </td>
+                                <td class="tableHeight">
+                                    <span *ngIf="(coloumsObjects[4].checked) == true && item2.auth_type == 0">Open</span>
+                                    <span *ngIf="(coloumsObjects[3].checked) == true  && item2.auth_type == 2">WPA-PSK</span>
+                                    <span *ngIf="(coloumsObjects[3].checked) == true  && item2.auth_type == 3">WPA2-PSK</span>
+                                    <span *ngIf="(coloumsObjects[3].checked) == true  && item2.auth_type == 4">WPA2-PSK_Mixed_mode</span>
+                                    <span *ngIf="(coloumsObjects[3].checked) == true  && item2.auth_type == 5">WPA_EAP</span>
+                                </td>
+                                <!--<td *ngIf="(coloumsObjects[4].checked) == true && item2.auth_type == 0" class="tableHeight">Open</td>
+                                <td *ngIf="(coloumsObjects[3].checked) == true  && item2.auth_type == 2" class="tableHeight">WPA-PSK</td>
+                                <td *ngIf="(coloumsObjects[3].checked) == true  && item2.auth_type == 3" class="tableHeight">WPA2-PSK</td>
+                                <td *ngIf="(coloumsObjects[3].checked) == true  && item2.auth_type == 4" class="tableHeight">WPA2-PSK_Mixed_mode</td>
+                                <td *ngIf="(coloumsObjects[3].checked) == true  && item2.auth_type == 5" class="tableHeight">WPA_EAP</td>-->
+                               
+                               
+                               
+                                <!-- <button  value="{{item.known_ssid_mac}}" (click)="getDetectedValue($event)"  data-toggle="modal" data-target="#upload">More</button> </td> -->
+
+                              </tr>
+
+                              <!-- Default row to be shown where there is no data to show -->
+                              <tr class="table-body" *ngIf="mf2.data.length == 0">
+                                <td colspan="8">No data found</td>
+                              </tr>
+
+                              <!-- The showing 10 of 10 items text-->
+                              <tr class="page-detail-area" *ngIf="mf2.data.length !== 0">
+                                <td colspan="8">
+                                  <div class="entry-count text-left" style="float:left;">
+                                    <span>Showing {{showingfrom1}} to {{showingto1}} of {{dataLength1}} entries</span>
+                                  </div>
+                                  <div class="list-pagination" style="float:right;">
+
+                                    <mfBootstrapPaginator></mfBootstrapPaginator>
+                                  </div>
+                                </td>
+                              </tr>
+
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal fade text-center" id="unknownModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <!-- <h5 class="modal-title" id="exampleModalLongTitle">
+                                  <label class="checkbox checkbox-theme" style="float: none;">
+                                      <input type="checkbox" formControlName="uploadStatus" checked>
+                                      <div class="check"></div>
+                                  </label>Click here to upgrade along with upload
+                              </h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                              </button> -->
+                          <!-- <table id="example" class="display theme table record_table table-striped table-sort text-center" cellspacing="0" width="100%"> -->
+                          <table id="example" class="display theme table record_table table-striped table-sort text-center" cellspacing="0" width="100%"
+                            [mfData]="UnknowndetectedValuesArray" #mf4="mfDataTable" [mfRowsOnPage]="rowsOnPage">
+                            <thead>
+                              <tr class="table-head">
+
+                                <th class="text-center">
+                                  <span>AP Name
+                                    <!-- <i class="down icon icon-download-arrow"></i>
+                                              <i class="up icon icon-up-arrow-1"></i> -->
+                                  </span>
+                                </th>
+                                <th class="text-center">
+                                  <span>MAC
+                                    <!-- <i class="down icon icon-download-arrow"></i>
+                                              <i class="up icon icon-up-arrow-1"></i> -->
+                                  </span>
+                                </th>
+                                <th class="text-center">
+                                  <span>RSSI
+                                    <!-- <i class="down icon icon-download-arrow"></i>
+                                              <i class="up icon icon-up-arrow-1"></i> -->
+                                  </span>
+                                </th>
+                                <th class="text-center">
+                                  <span>Last Scan
+                                    <!-- <i class="down icon icon-download-arrow"></i>
+                                              <i class="up icon icon-up-arrow-1"></i> -->
+                                  </span>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr class="table-body" *ngFor="let item4 of mf4.data;">
+                                <!-- <td>
+                                              <label class="radio-out">
+                                                  <input type="radio" (click)="valuechanges($event,Firmwaredata.firmware_name,Firmwaredata.uploaded_by)" formControlName="upgradecheckbox" class="register-check" value={{Firmwaredata.firmware_name}},{{Firmwaredata.uploaded_by}}>
+                                                  <div class="check"></div>
+                                              </label>
+                                          </td> -->
+
+                                <td class="text-center">{{item4.ap_name}}</td>
+                                <td class="text-center">{{item4.mac}}</td>
+                                <td class="text-center">{{item4.rssi}}</td>
+                                <td class="text-center">{{item4.last_scanned_at}}</td>
+
+
+
+
+                              </tr>
+
+                            </tbody>
+                          </table>
+
+                        </div>
+
+                        <div class="modal-footer">
+                          <button type="button" id="uploadButton" class="btn btn-theme" data-dismiss="modal">Ok</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </tab>
+            </tabset>
+            <!-- </div> -->
+          </div>
+        </div>
+      </div>
+      <!--TAB END-->
+    </div>
+  </div>
+  <!-- /portlet-->
+</div>

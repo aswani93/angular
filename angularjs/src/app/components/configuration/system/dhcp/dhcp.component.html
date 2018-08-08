@@ -1,0 +1,511 @@
+<!--/======================/WORK AREA/======================/-->
+<div class="page-content-wrapper">
+    <div class="row">
+        <div class="col-lg-12 col-sm-12">
+            <div class="portlet light bordered">
+                <div class="portlet-body">
+                    <div class="tabcontent table-responsive" style="display: block;">
+                        <div class="table-function">
+                            <ul class="table-function-right">
+                                <li>
+                                        <a  href="javascript:void(0);"  class="no-anchor" (click)="editDHCP()"><i class="icon icon-edit"></i> Edit</a></li>
+                                <li>
+                                    <a  href="javascript:void(0);"  class="no-anchor" (click)="deleteData()">
+                                       <i class="icon icon-rubbish-bin"></i> Delete</a>
+                                </li> 
+                            </ul>
+                        </div>
+                        <table id="example" class="display theme table record_table table-striped table-sort text-center" cellspacing="0" width="100%"
+                            [mfData]="data" #mf="mfDataTable" >
+                            <thead>
+                                <tr class="table-head">
+                                    <th>
+                                        <label class="checkbox">
+                                            <input type="checkbox" (change)="selectAll($event)" id="selectAllCheck" >
+                                            <div class="check"></div>
+                                        </label>
+                                    </th>
+                                    <th class="text-left">
+                                        <mfDefaultSorter by="profile_name">
+                                            <span>Profile Name
+                                                <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='profile_name' && _sortOrder=='asc' }"></i>
+                                                <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='profile_name' && _sortOrder=='desc' }"></i>
+                                            </span>
+                                        </mfDefaultSorter>
+                                    </th>
+                                    <th class="text-left">
+                                        <mfDefaultSorter by="vlan_id">
+                                            <span>VLAN ID
+                                                <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='vlan_id' && _sortOrder=='asc' }"></i>
+                                                <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='vlan_id' && _sortOrder=='desc' }"></i>
+                                            </span>
+                                        </mfDefaultSorter>
+                                    </th>
+                                    <th class="text-center">
+                                        <mfDefaultSorter by="dhcp_ipv4_type">
+                                            <span>DHCP Type
+                                                <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='dhcp_ipv4_type' && _sortOrder=='asc' }"></i>
+                                                <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='dhcp_ipv4_type' && _sortOrder=='desc' }"></i>
+                                            </span>
+                                        </mfDefaultSorter>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- <tr class="table-body">
+                                      <td><label class="checkbox"><input type="checkbox"><div class="check"></div></label></td>
+                                      <td class="text-left">DHCP 1</td>
+                                      <td>1</td>
+                                      <td>SERVER</td>
+                                  </tr>  -->
+                                <tr class="table-body" *ngFor="let dhcpValue of mf.data  | paginate: {itemsPerPage: rowsOnPage , currentPage: page};let activeIndex = index;"  (dblclick)="double_click_event($event,dhcpValue.vlan_id,activeIndex)" [ngSwitch]="dhcpValue.dhcp_ipv4_type">
+
+                                    <td>
+                                        <label class="checkbox" >
+                                            <input type="checkbox" class="ssid-check" [value]="dhcpValue.vlan_id" [checked]="(selectAllFlag)" (change)="checkboxClick($event,dhcpValue)" >
+                                            <div class="check"></div>
+                                        </label>
+                                    </td>
+                                    <td class="text-left">{{dhcpValue.profile_name}} <span *ngIf="dhcpValue.vlan_id == 1"> (default)</span></td>
+                                    <td class="text-left">{{dhcpValue.vlan_id}}</td>
+                                    <!-- <td>{{dhcpValue.dhcp_ipv4_type}}</td> -->
+                                    <td *ngSwitchCase="0" style="text-align: center">Disable</td>
+                                    <td *ngSwitchCase="1" style="text-align: center">Server</td>
+                                    <td *ngSwitchCase="2" style="text-align: center">Relay</td>
+                                </tr>
+                                <!-- <tr class="table-body">
+                                      <td><label class="checkbox"><input type="checkbox"><div class="check"></div></label></td>
+                                      <td class="text-left">DHCP 2</td>
+                                      <td>2</td>
+                                      <td>SERVER</td>
+                                  </tr> 
+                                  <tr class="table-body">
+                                      <td><label class="checkbox"><input type="checkbox"><div class="check"></div></label></td>
+                                      <td class="text-left">DHCP 3</td>
+                                      <td>3</td>
+                                      <td>SERVER</td>
+                                  </tr>       -->
+                                <tr class="table-body" *ngIf="mf.data.length == 0">
+                                    <td colspan="6" style="text-align: center;">No data found</td>
+                                </tr>
+                                <tr class="page-detail-area">
+                                    <td colspan="6">
+                                        <div class="entry-count text-left" style="float:left;">
+                                            <span *ngIf="dataLength>0">Showing {{showingfrom}} to {{showingto}} of {{dataLength}} entries</span>
+                                        </div>
+                                        <div class="cpagination">
+                                      <span *ngIf="data  && data.length > rowsOnPage" [class.button-disabled]="firstarrowStatus" class="first" (click)="goToPage(1)"><<</span>
+                                      <pagination-controls (pageChange)="getNext($event)" maxSize="9"
+                                    directionLinks="true"
+                                    autoHide="true"
+                                    previousLabel=""
+                                    nextLabel=""
+                                    screenReaderPaginationLabel="Pagination"
+                                    screenReaderPageLabel="page"
+                      ></pagination-controls>
+                      <span *ngIf="data && data.length > rowsOnPage" [class.button-disabled]="lastarrowStatus" class="last" (click)="goToPage(Math.ceil(data.length/rowsOnPage))">>></span></div>
+                      
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="text-right" *ngIf="addButtonDisable">
+                            <a (click)="callAddEdit()" class="btn btn-theme">Add DHCP</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /portlet-->
+        </div>
+    </div>
+    <div class="row">
+        <!-- <div class="col-lg-6 col-sm-6">
+            <div class="entry-count text-left">
+                <span>Showing 1 to 6 of 6 entries</span>
+            </div>
+        </div> -->
+        <!-- <div class="col-lg-6 col-sm-6">
+            <div class="text-right">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true">«</span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item active">
+                            <a class="page-link" href="#">2</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">3</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">4</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">5</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true">»</span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div> -->
+        <div class="row detailArea" *ngIf="addDHCPStatus">
+            <div class="col-lg-12 col-sm-12">
+                <div class="portlet light bordered">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <span>Add DHCP</span>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <!--/======================/PAGE TAB/======================/-->
+                        <div class="ssid-config-tabs">
+                            <form action="" (keydown.enter)="$event.preventDefault()" [formGroup]="DHCPForm">
+                                <div class="row">
+                                    <div class="form-group row">
+                                        <label class="col-md-2 col-form-label text-right">Profile Name</label>
+                                        <div class="col-lg-2 col-sm-11">
+                                            <input type="text" class="form-control" value="" formControlName="profile_name" minlength="8" maxlength="32">
+                                            <div *ngIf="DHCPForm.get('profile_name').invalid && (DHCPForm.get('profile_name').dirty || DHCPForm.get('profile_name').touched)">
+                                                <div class="text-danger pull-left" *ngIf="DHCPForm.get('profile_name').errors.required">
+                                                    Profile Name is required.
+                                                </div>
+                                                <div class="text-danger pull-left" *ngIf="DHCPForm.get('profile_name').errors.minlength">
+                                                    Minimum 8 character required.
+                                                </div>
+                                                <div class="text-danger pull-left" *ngIf="DHCPForm.get('profile_name').errors.maxlength">
+                                                    Maximum 32 characters allowed.
+                                                </div>
+
+                                                <div class="text-danger pull-left" *ngIf="DHCPForm.get('profile_name').errors.pattern && !DHCPForm.get('profile_name').errors.minlength && !DHCPForm.get('profile_name').errors.maxlength">
+                                                    Enter a valid name
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-md-2 col-form-label text-right">VLAN ID</label>
+                                        <div class="col-lg-2 col-sm-11">
+                                            <input type="text" class="form-control" formControlName="vlan_id" maxlength="4">
+                                            <div *ngIf="DHCPForm.get('vlan_id').invalid && (DHCPForm.get('vlan_id').dirty || DHCPForm.get('vlan_id').touched)">
+                                                <div class="text-danger pull-left" *ngIf="DHCPForm.get('vlan_id').errors.required">
+                                                    VLAN is required.
+                                                </div>
+                                                <div class="text-danger pull-left" *ngIf="DHCPForm.get('vlan_id').errors.invalidRange && !DHCPForm.get('vlan_id').errors.pattern && !DHCPForm.get('vlan_id').errors.required">
+                                                    Invalid VLAN range.
+                                                </div>
+                                                <div class="text-danger pull-left" *ngIf="DHCPForm.get('vlan_id').errors.pattern && !DHCPForm.get('vlan_id').errors.required">
+                                                    Enter a valid VLAN
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-sm-11">
+                                            <span class="char-limit">(2-4094)</span>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-md-2 col-form-label text-right">IP Type</label>
+                                        <div class="col-lg-5 col-sm-11">
+                                            <ul class="radio-out">
+                                                <li>
+                                                    <label>
+                                                        <input type="radio" formControlName="ip_type" value="1" [checked]='true'>
+                                                        <i>IPv4</i>
+                                                        <span class="check">&nbsp;</span>
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label>
+                                                        <input type="radio" name="syslog-server" disabled>
+                                                        <i>IPv6</i>
+                                                        <span class="check">&nbsp;</span>
+                                                    </label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row" style="display: none">
+                                        <label class="col-md-2 col-form-label text-right">Prefix</label>
+                                        <div class="col-lg-5 col-sm-11">
+                                            <ul class="radio-out">
+                                                <li>
+                                                    <label>
+                                                        <input type="radio" name="syslog-server" checked="">
+                                                        <i>fec0:1</i>
+                                                        <span class="check">&nbsp;</span>
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label>
+                                                        <input type="radio" name="syslog-server">
+                                                        <i>Prefix from DHCP-PD</i>
+                                                        <span class="check">&nbsp;</span>
+                                                    </label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row" style="display: none">
+                                        <div class="form-group row">
+                                            <label class="col-md-2 col-form-label text-right">IPv6 Suffix</label>
+                                            <div class="col-lg-2 col-sm-11">
+                                                <input type="text" class="form-control" placeholder="Please enter valid IPv6 suffix">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-2 col-form-label text-right">Prefix Length</label>
+                                            <div class="col-lg-1 col-sm-11">
+                                                <input type="number" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-2 col-form-label text-right">Preview</label>
+                                            <div class="col-lg-2 col-sm-11">
+                                                <input type="text" class="form-control" value="fec0:1::6a9c:e2ff:fea0:5a71">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-2 col-form-label text-right">Interface Identifier</label>
+                                            <div class="col-lg-2 col-sm-11">
+                                                <select name="status" class="form-control">
+                                                    <option value="enable">EUI-64</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="form-group row">
+                                        <label class="col-md-2 col-form-label text-right">IPv4 Address</label>
+                                        <div class="col-lg-2 col-sm-11">
+                                            <input type="text" class="form-control" formControlName="ipv4_addr" (input)="  validateIP($event)">
+                                            <div *ngIf="DHCPForm.get('ipv4_addr').invalid && (DHCPForm.get('ipv4_addr').dirty || DHCPForm.get('ipv4_addr').touched)">
+                                                <div class="text-danger pull-left" *ngIf="DHCPForm.get('ipv4_addr').errors.required">
+                                                    IP address is required.
+                                                </div>
+
+                                              
+
+                                                <div class="text-danger pull-left" *ngIf="DHCPForm.get('ipv4_addr').errors.pattern && !DHCPForm.get('ipv4_addr').errors.required ">
+                                                    Invalid IP
+                                                </div>
+
+                                            </div>
+                                            <div class="text-danger" *ngIf="IpvalidateStatus && DHCPForm.get('ipv4_addr').valid">Enter the valid IPaddress</div>
+                                        </div>
+                                        <div class="col-lg-1 col-sm-11">
+                                            <input type="text" class="form-control"  (input)="netmaskValidation()" formControlName="netmask" maxlength="2">
+                                            <div *ngIf="DHCPForm.get('netmask').invalid && (DHCPForm.get('netmask').dirty || DHCPForm.get('netmask').touched)">
+                                                <div class="text-danger pull-left" *ngIf="DHCPForm.get('netmask').errors.required">
+                                                    Prefix Required.
+                                                </div>
+                                                <div class="text-danger pull-left" *ngIf="DHCPForm.get('netmask').errors.prefixrange">
+                                                    Invalid Prefix.
+                                                </div>
+
+                                                <div class="text-danger pull-left" *ngIf="DHCPForm.get('netmask').errors.pattern && !DHCPForm.get('netmask').errors.required">
+                                                    Invalid Prefix
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-md-2 col-form-label text-right">Subnet Mask</label>
+                                        <div class="col-lg-2 col-sm-11">
+                                            <input type="text" class="form-control"  (input)="prefixvalidation()" formControlName="subnetmask" maxlength="15">
+                                            <div *ngIf="DHCPForm.get('subnetmask').invalid && (DHCPForm.get('subnetmask').dirty || DHCPForm.get('subnetmask').touched)">
+                                                <div class="text-danger pull-left" *ngIf="DHCPForm.get('subnetmask').errors.required">
+                                                    Subnetmask is required.
+                                                </div>
+
+                                                <div class="text-danger pull-left" *ngIf="DHCPForm.get('subnetmask').errors.pattern && !DHCPForm.get('subnetmask').errors.required">
+                                                    Enter a valid subnetmask
+                                                </div>
+
+                                            </div>
+                                            <div class="text-danger pull-left" *ngIf="subnetMaskStatus && DHCPForm.get('subnetmask').valid">
+                                                Enter a valid Subnetamsk
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                    <div class="form-group row">
+                                        <label class="col-md-2 col-form-label text-right">DHCP Type</label>
+                                        <div class="col-lg-2 col-sm-11">
+                                            <select name="status" class="form-control" formControlName="dhcp_type" (change)="changeDHCPtype($event)">
+                                                <option value="0" selected>Disable</option>
+                                                <!-- <option value="1">Server</option> -->
+                                                <option value="2">Relay</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- <div id="dhcpserver" *ngIf="dhcptypeStatus">
+                                        <div class="form-group row">
+                                            <label class="col-md-2 col-form-label text-right">Lease Time</label>
+                                            <div class="col-lg-2 col-sm-11">
+                                                <input type="number" class="form-control" value="" formControlName="lease_time">
+                                                <div *ngIf="DHCPForm.get('lease_time').invalid && (DHCPForm.get('lease_time').dirty || DHCPForm.get('lease_time').touched)">
+                                                    <div class="text-danger pull-left" *ngIf="DHCPForm.get('lease_time').errors.required">
+                                                        Lease time is required.
+                                                    </div>
+                                                    <div class="text-danger pull-left" *ngIf="DHCPForm.get('lease_time').errors.invalidLease && !DHCPForm.get('lease_time').errors.required">
+                                                        Invalid Lease time.
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-sm-11">
+                                                <span class="char-limit">(5-43200)</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-2 col-form-label text-right">Range Start</label>
+                                            <div class="col-lg-2 col-sm-11">
+                                                <input type="text" class="form-control" formControlName="start_ip" (input)="validateIP($event)">
+                                                <div *ngIf="DHCPForm.get('start_ip').invalid && (DHCPForm.get('start_ip').dirty || DHCPForm.get('start_ip').touched)">
+                                                    <div class="text-danger pull-left" *ngIf="DHCPForm.get('start_ip').errors.required">
+                                                        Start IP is required.
+                                                    </div>
+
+                                                    <div class="text-danger pull-left" *ngIf="DHCPForm.get('start_ip').errors.pattern && !DHCPForm.get('start_ip').errors.required">
+                                                        Enter the valid IP address.
+                                                    </div>
+
+                                                </div>
+                                                <div class="text-danger" *ngIf="IpvalidateStatus && DHCPForm.get('start_ip').valid ">Enter the valid IPaddress</div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-2 col-form-label text-right">Range End</label>
+                                            <div class="col-lg-2 col-sm-11">
+                                                <input type="text" class="form-control" formControlName="end_ip" (input)="validateIP($event)">
+                                                <div *ngIf="DHCPForm.get('end_ip').invalid && (DHCPForm.get('end_ip').dirty || DHCPForm.get('end_ip').touched)">
+                                                    <div class="text-danger pull-left" *ngIf="DHCPForm.get('end_ip').errors.required">
+                                                        End IP is required.
+                                                    </div>
+
+                                                    <div class="text-danger pull-left" *ngIf="DHCPForm.get('end_ip').errors.pattern && !DHCPForm.get('end_ip').errors.required">
+                                                        Enter the valid IP address.
+                                                    </div>
+
+                                                </div>
+                                                <div class="text-danger" *ngIf="IpvalidateStatus && DHCPForm.get('end_ip').valid ">Enter the valid IPaddress</div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-2 col-form-label text-right">Gateway</label>
+                                            <div class="col-lg-2 col-sm-11">
+                                                <input type="text" class="form-control" formControlName="gateway"  (input)="validateIP($event)">
+                                                <div *ngIf="DHCPForm.get('gateway').invalid && (DHCPForm.get('gateway').dirty || DHCPForm.get('gateway').touched)">
+                                                    <div class="text-danger pull-left" *ngIf="DHCPForm.get('gateway').errors.required">
+                                                        Gateway is required.
+                                                    </div>
+
+                                                    <div class="text-danger pull-left" *ngIf="DHCPForm.get('gateway').errors.pattern && !DHCPForm.get('gateway').errors.required">
+                                                        Enter the valid Gateway address.
+                                                    </div>
+
+                                                </div>
+                                                <div class="text-danger" *ngIf="IpvalidateStatus && DHCPForm.get('gateway').valid ">Enter the valid Gateway address.</div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-2 col-form-label text-right">DNS Server 1</label>
+                                            <div class="col-lg-2 col-sm-11">
+                                                <input type="number" class="form-control" formControlName="dns_server1"  (input)="validateIP($event)"> 
+                                                <div *ngIf="DHCPForm.get('dns_server1').invalid && (DHCPForm.get('dns_server1').dirty || DHCPForm.get('dns_server1').touched)">
+                                                    <!-- <div class="text-danger pull-left" *ngIf="DHCPForm.get('dns_server1').errors.required">
+                                                        DNS server is required.
+                                                    </div> -->
+
+                                                    <!-- <div class="text-danger pull-left" *ngIf="DHCPForm.get('dns_server1').errors.pattern">
+                                                        Enter the valid DNS server.
+                                                    </div>
+
+                                                </div>
+                                                <div class="text-danger" *ngIf="IpvalidateStatus && DHCPForm.get('dns_server1').valid ">Enter a valid DNS server.</div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-2 col-form-label text-right">DNS Server 2</label>
+                                            <div class="col-lg-2 col-sm-11">
+                                                <input type="text" class="form-control" formControlName="dns_server2"  (input)="validateIP($event)">
+                                                <div *ngIf="DHCPForm.get('dns_server2').invalid && (DHCPForm.get('dns_server2').dirty || DHCPForm.get('dns_server2').touched)">
+                                                    <div class="text-danger pull-left" *ngIf="DHCPForm.get('dns_server2').errors.required">
+                                                        DNS server is required.
+                                                    </div>
+
+                                                    <div class="text-danger pull-left" *ngIf="DHCPForm.get('dns_server2').errors.pattern && !DHCPForm.get('dns_server2').errors.required">
+                                                        Enter a valid DNS server.
+                                                    </div>
+
+                                                </div>
+                                                <div class="text-danger" *ngIf="IpvalidateStatus && DHCPForm.get('dns_server2').valid ">Enter a valid DNS server.</div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-2 col-form-label text-right">WINS Server</label>
+                                            <div class="col-lg-2 col-sm-11">
+                                                <input type="text" class="form-control" formControlName="wins_server"  (input)="validateIP($event)">
+                                                <div *ngIf="DHCPForm.get('wins_server').invalid && (DHCPForm.get('wins_server').dirty || DHCPForm.get('wins_server').touched)">
+                                                    <div class="text-danger pull-left" *ngIf="DHCPForm.get('wins_server').errors.required">
+                                                        WINS Server is required.
+                                                    </div>
+
+                                                    <div class="text-danger pull-left" *ngIf="DHCPForm.get('wins_server').errors.pattern && !DHCPForm.get('wins_server').errors.required">
+                                                        Enter the valid WINS Server.
+                                                    </div>
+
+                                                </div>
+                                                <div class="text-danger" *ngIf="IpvalidateStatus && DHCPForm.get('wins_server').valid ">Enter the valid WINS Server.</div>
+                                            </div>
+                                        </div>
+                                    </div> --> 
+                                    <div class="form-group row" *ngIf="dhcpRelayStatus">
+                                        <label class="col-md-2 col-form-label text-right">Remote Server Address</label>
+                                        <div class="col-lg-2 col-sm-11">
+                                            <input type="text" class="form-control" formControlName="remote_server"  (input)="validateIP($event)">
+                                            <div *ngIf="DHCPForm.get('remote_server').invalid && (DHCPForm.get('remote_server').dirty || DHCPForm.get('remote_server').touched)">
+                                                <div class="text-danger pull-left" *ngIf="DHCPForm.get('remote_server').errors.required">
+                                                    Remote Server is required.
+                                                </div>
+
+                                                <div class="text-danger pull-left" *ngIf="DHCPForm.get('remote_server').errors.pattern && !DHCPForm.get('remote_server').errors.required">
+                                                    Enter the valid Remote Server.
+                                                </div>
+
+                                            </div>
+                                            <div class="text-danger" *ngIf="IpvalidateStatus && DHCPForm.get('remote_server').valid ">Enter the valid Remote Server.</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div class="col-lg-6 col-sm-11 col-md-offset-4">
+                                            <input type="submit" value="Cancel" class="btn btn-cancel btn-large" style="margin-right: 15px;" (click)="reset()">
+                                            <input type="submit" value="Save" class="btn btn-theme btn-large" [disabled]="btnDisable || !DHCPForm.valid" (click)="onSubmit()" *ngIf="saveButton">
+                                            <input type="submit" value="Update" class="btn btn-theme btn-large" [disabled]="btnDisable || !DHCPForm.valid" (click)="updateDHCP()" *ngIf="updateButton">
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <!--TAB END-->
+                    </div>
+                </div>
+                <!-- /portlet-->
+            </div>
+        </div>
+    </div>
+    <!--/===/WORK AREA END/===/-->

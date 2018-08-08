@@ -1,0 +1,923 @@
+<!--/======================/WORK AREA/======================/-->
+<div class="page-content-wrapper">
+  <!--<div class="row">
+      <div class="col-lg-12 col-sm-12">
+          <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="javascript:void(0);">Configuration</a></li>
+              <li class="breadcrumb-item"><a href="javascript:void(0);">Group</a></li>
+              <li class="breadcrumb-item"><a href="javascript:void(0);">SSID Configuration</a></li>
+              <li class="breadcrumb-item active">SSID List</li>
+          </ol>
+      </div>
+  </div>-->
+  <div class="row">
+    <div class="col-lg-5 col-sm-12">
+      <div class="searchBar">
+        <i class="icon icon-magnifying-glass"></i>
+        <input type="text" placeholder="Search" id="search-text" (keyup)="search($event)">
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <div class="portlet light bordered">
+        <div class="portlet-body">
+          <div class="tabcontent table-responsive" style="display: block;">
+            <div class="table-function">
+              <ul>
+                <li><span class="pageEntry">Show</span></li>
+                <li>
+                  <select class="form-control caption-select" [(ngModel)]="rowsOnPage">
+                    <option [ngValue]="20">20</option>
+                    <option [ngValue]="100">100</option>
+                    <option [ngValue]="1000">1000</option>
+                    <option [ngValue]="5000">5000</option>
+                  </select>
+                </li>
+                <li><span class="pageEntry">entries</span></li>
+              </ul>
+              <ul class="table-function-right">
+                <li class="posreltive">
+                  <a class="dropdown-toggle" id="dropdownUnRegPopup" data-toggle="dropdown" aria-haspopup="true"  aria-expanded="false"  href="#" >Filter columns <i aria-hidden="true" class="fa fa-chevron-down"></i></a>
+                  <div class="drop-checkbox dropdown-menu" aria-labelledby="dropdownUnRegPopup" (click)="holdPopup($event)">
+                    <ul>
+                      <li class="dropdown-item"
+                          *ngFor="let i of coloumsObjects;let index = index">
+
+                        <label class="checkbox">
+                          <input class="register-check" type="checkbox"  checked="i.checked" (change)="selectColoums($event,index)"  [disabled]= "count == 3 && i.checked == true">
+                          <div class="check"></div>
+                          <span class="check-label">{{i.name}}</span>
+                        </label>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+                <li ><a id="edit-btn" href="javascript:void(0)" (click)="editSSID()"  class="no-anchor"><i class="icon icon-edit"></i> Edit</a></li>
+                <li><a id="delete-btn" href="javascript:void(0)" (click)="deleteData()" class="no-anchor"><i class="icon icon-rubbish-bin" ></i> Delete</a></li>
+              </ul>
+              <div class="clearfix"></div>
+            </div>
+            <table
+              id="example"
+              class="display theme table record_table table-striped table-sort text-center"
+              cellspacing="0"
+              width="100%"
+              [mfData]="data"
+              #mf="mfDataTable"
+              >
+              <thead>
+              <tr class="table-head">
+                <th>
+                  <label class="checkbox">
+                    <input type="checkbox" class="ssid-all-check" (click)="selectAllSSID($event)" id="selectAllCheck">
+                    <div class="check"></div>
+                  </label>
+                </th>
+                <th class="text-center" *ngIf="(coloumsObjects[0].checked) == true">
+                  <mfDefaultSorter by="ssid">
+                                        <span>SSID Name
+                                        <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='ssid' && _sortOrder=='asc' }"></i>
+                                        <i class="up icon icon-up-arrow-1"  [ngClass]="{'activeIcon': _sortBy=='ssid' && _sortOrder=='desc' }"></i>
+                                        </span>
+                  </mfDefaultSorter>
+                </th>
+                <th class="text-center" *ngIf="(coloumsObjects[1].checked) == true">
+                  <mfDefaultSorter by="no_of_groups">
+                                        <span>No. of Group
+                                        <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='no_of_groups' && _sortOrder=='asc' }"></i>
+                                        <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='no_of_groups' && _sortOrder=='desc' }"></i>
+                                        </span>
+                  </mfDefaultSorter>
+                </th>
+                <th class="text-center" *ngIf="(coloumsObjects[2].checked) == true">
+                  <mfDefaultSorter by="ap_count">
+                                        <span>No. of Associated AP
+                                        <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='group_ap_countname' && _sortOrder=='asc' }"></i>
+                                        <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ap_count' && _sortOrder=='desc' }"></i>
+                                        </span>
+                  </mfDefaultSorter>
+                </th>
+                <th class="text-center" *ngIf="(coloumsObjects[3].checked) == true">
+                  <mfDefaultSorter by="client_count">
+                                        <span>No. of Connected Clients
+                                        <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='client_count' && _sortOrder=='asc' }"></i>
+                                        <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='client_count' && _sortOrder=='desc' }"></i>
+                                        </span>
+                  </mfDefaultSorter>
+                </th>
+                <th class="text-center" *ngIf="(coloumsObjects[4].checked) == true">
+                  <mfDefaultSorter by="security">
+                                        <span>Security
+                                        <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='group_securityname' && _sortOrder=='asc' }"></i>
+                                        <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='security' && _sortOrder=='desc' }"></i>
+                                        </span>
+                  </mfDefaultSorter>
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr class="table-body unreg-tbl" *ngFor="let item of mf.data | paginate: {itemsPerPage: rowsOnPage , currentPage: page};let activeIndex = index" [ngSwitch]="item.security" id="{{item.vap_id | noHyphen}}" (dblclick)="double_click_event($event,item,activeIndex)">
+                <td>
+                  <label class="checkbox">
+                    <input type="checkbox" class="ssid-check" [checked]="(selectAllFlag && !item.default)" [value]="item.vap_id" (change)="checkboxClick($event,item)">
+                    <div class="check"></div>
+                  </label>
+                </td>
+                <td *ngIf="(coloumsObjects[0].checked) == true">{{item.ssid}}</td>
+                <td *ngIf="(coloumsObjects[1].checked) == true">{{item.no_of_groups}}</td>
+                <td *ngIf="(coloumsObjects[2].checked) == true">{{item.ap_count}}</td>
+                <td *ngIf="(coloumsObjects[3].checked) == true">{{item.client_count}}</td>
+                <td  *ngIf="(coloumsObjects[4].checked) == true && item.security == 0">Open</td>
+                <td  *ngIf="(coloumsObjects[4].checked) == true  && item.security == 2">WPA-PSK</td>
+                <td  *ngIf="(coloumsObjects[4].checked) == true  && item.security == 3">WPA2-PSK</td>
+                <td  *ngIf="(coloumsObjects[4].checked) == true  && item.security == 4">WPA2-PSK_Mixed_mode</td>
+                <td  *ngIf="(coloumsObjects[4].checked) == true  && item.security == 5">WPA_EAP</td>
+              </tr>
+              <!-- <td><label class="checkbox"><input type="checkbox"><div class="check"></div></label></td>
+                  <td class="text-left">BSNL 1</td>
+                  <td>5</td>
+                  <td>10</td>
+                  <td><span class="text-theme">250</span></td>
+                  <td>WPA-PSK</td>
+                  </tr>
+                  <tr class="table-body">
+                  <td><label class="checkbox"><input type="checkbox"><div class="check"></div></label></td>
+                  <td class="text-left">BSNL 2</td>
+                  <td>5</td>
+                  <td>10</td>
+                  <td><span class="text-theme">250</span></td>
+                  <td>WPA-PSK</td>
+                  </tr>
+                  <tr class="table-body">
+                  <td><label class="checkbox"><input type="checkbox"><div class="check"></div></label></td>
+                  <td class="text-left">BSNL 3</td>
+                  <td>5</td>
+                  <td>10</td>
+                  <td><span class="text-theme">250</span></td>
+                  <td>WPA-PSK</td>
+                  </tr>         -->
+              <tr class="table-body" *ngIf="mf.data.length == 0">
+                <td colspan="6" style="text-align: center;">No data found</td>
+              </tr>
+              <tr class="page-detail-area" *ngIf="mf.data.length != 0">
+                <td colspan="10">
+                  <div class="entry-count text-left" style="float:left;"><span  *ngIf="dataLength>0">Showing {{showingfrom}} to {{showingto}} of {{dataLength}} entries</span></div>
+                      <div class="cpagination">
+                    <span *ngIf="data  && data.length > rowsOnPage" [class.button-disabled]="firstarrowStatus" class="first" (click)="goToPage(1)"><<</span>
+                    <pagination-controls (pageChange)="getNext($event)" maxSize="9"
+                        directionLinks="true"
+                        autoHide="true"
+                        previousLabel=""
+                        nextLabel=""
+                        screenReaderPaginationLabel="Pagination"
+                        screenReaderPageLabel="page"
+                      ></pagination-controls>
+                      <span *ngIf="data && data.length > rowsOnPage" [class.button-disabled]="lastarrowStatus" class="last" (click)="goToPage(Math.ceil(data.length/rowsOnPage))">>></span></div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+            <div class="text-right"><button  (click)="addSSID()" class="btn btn-theme" [disabled]="isChecked">Add SSID</button></div>
+          </div>
+        </div>
+      </div><!-- /portlet-->
+    </div>
+  </div>
+  <!-- <div class="row">
+      <div class="col-lg-6 col-sm-6"><div class="entry-count text-left"><span>Showing 1 to 6 of 6 entries</span></div></div>
+      <div class="col-lg-6 col-sm-6">
+          <div class="text-right">
+              <nav aria-label="Page navigation example">
+                  <ul class="pagination">
+                      <li class="page-item">
+                      <a class="page-link" href="#" aria-label="Previous">
+                          <span aria-hidden="true">«</span>
+                          <span class="sr-only">Previous</span>
+                      </a>
+                      </li>
+                      <li class="page-item"><a class="page-link" href="#">1</a></li>
+                      <li class="page-item active"><a class="page-link" href="#">2</a></li>
+                      <li class="page-item"><a class="page-link" href="#">3</a></li>
+                      <li class="page-item"><a class="page-link" href="#">4</a></li>
+                      <li class="page-item"><a class="page-link" href="#">5</a></li>
+                      <li class="page-item">
+                      <a class="page-link" href="#" aria-label="Next">
+                          <span aria-hidden="true">»</span>
+                          <span class="sr-only">Next</span>
+                      </a>
+                      </li>
+                  </ul>
+              </nav>
+          </div>
+      </div>
+  </div> -->
+  <div class="row detailArea" *ngIf="addFlag || editFlag">
+    <div class="col-lg-12 col-sm-12">
+      <form action="" (keydown.enter)="$event.preventDefault()" [formGroup]="ssidForm" (ngSubmit)="onSubmit()">
+        <div class="portlet light bordered">
+          <div class="portlet-title">
+            <div class="caption">
+              <span>{{addFlag?'Add SSID':editArray.ssid}}</span>
+            </div>
+            <div class="text-right pull-right" *ngIf="addFlag">
+              <div class="dropdown scrollableList btn btn-theme rounded">
+                <a href="#" class="dropdown-toggle selectedOption" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Duplicate from SSID <i class="icon icon-arrow-point-to-down"></i></a>
+                <div class="dropdown-menu this-list" aria-labelledby="dropdownMenuButton">
+                  <ul>
+                    <li *ngFor="let options of data"><a class="dropdown-item" href="javascript:void(0)" (click)="duplicateSSIDD(options.vap_id)">{{options.ssid}}</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="portlet-body text-center">
+            <!--/======================/PAGE TAB/======================/-->
+
+            <tabset class class="ssid-tab">
+              <tab heading="Basic" #BasicTab>
+                <div id="tab1" class="setting-tab active">
+
+                  <!--Basic Tab-->
+
+                  <div class="row">
+                    <div class="clearfix"></div>
+                    <div>
+                      <div class="tab-pane active">
+                        <div class="form-group row">
+                          <label class="col-md-2 col-form-label text-right">SSID Name</label>
+                          <div class="col-lg-2 col-sm-11">
+                            <input type="text" class="form-control" formControlName="ssid" id="ssid" maxlength="25" minlength="2" #ssidname>
+                            <div *ngIf="ssidForm.get('ssid').invalid && (ssidForm.get('ssid').dirty || ssidForm.get('ssid').touched)">
+                              <div class="text-danger pull-left" *ngIf="ssidForm.get('ssid').errors.required">
+                                SSID Name is required.
+                              </div>
+                              <div class="text-danger pull-left" *ngIf="ssidForm.get('ssid').errors.minlength && !ssidForm.get('ssid').errors.spaceatstart && !ssidForm.get('ssid').errors.spaceatend && !ssidForm.get('ssid').errors.specialatstart && !ssidForm.get('ssid').errors.specialatend && !ssidForm.get('ssid').errors.twospace">
+                                Minimum 2 character
+                              </div>
+                              <div class="text-danger pull-left" *ngIf="ssidForm.get('ssid').errors.maxlength && !isDuplicate">
+                                Maximum 25 character allowed
+                              </div>
+                              <div class="text-danger pull-left" *ngIf="ssidForm.get('ssid').errors.spaceatstart && !ssidForm.get('ssid').errors.spaceatend">
+                                Should not start with a space!
+                              </div>
+                              <div class="text-danger pull-left" *ngIf="ssidForm.get('ssid').errors.spaceatend && !ssidForm.get('ssid').errors.spaceatstart && !isDuplicate">
+                                Should not end with a space!
+                              </div>
+                              <div class="text-danger pull-left" *ngIf="ssidForm.get('ssid').errors.spaceatend && ssidForm.get('ssid').errors.spaceatstart && !isDuplicate">
+                                Should not start & end with a space!
+                              </div>
+                              <div class="text-danger pull-left" *ngIf="ssidForm.get('ssid').errors.specialatstart && !ssidForm.get('ssid').errors.specialatend">
+                                Should not start with a special character!
+                              </div>
+                              <div class="text-danger pull-left" *ngIf="ssidForm.get('ssid').errors.specialatend && !ssidForm.get('ssid').errors.specialatstart && !ssidForm.get('ssid').errors.spaceatstart && !isDuplicate">
+                                Should not end with a special character!
+                              </div>
+                              <div class="text-danger pull-left" *ngIf="ssidForm.get('ssid').errors.specialatend && ssidForm.get('ssid').errors.specialatstart && !isDuplicate">
+                                Should not start & end with a special character!
+                              </div>
+                              <div class="text-danger pull-left" *ngIf="ssidForm.get('ssid').errors.twospaces && !ssidForm.get('ssid').errors.spaceatstart && !ssidForm.get('ssid').errors.spaceatend">
+                                Consecutive spaces not allowed
+                              </div>
+                              <div class="text-danger pull-left" *ngIf="ssidForm.get('ssid').errors.emoji && !ssidForm.get('ssid').errors.spaceatstart && !ssidForm.get('ssid').errors.spaceatend && !ssidForm.get('ssid').errors.specialatend && !ssidForm.get('ssid').errors.specialatstart">
+                                Should not allow symbols.
+                              </div>
+                            </div>
+                            <div *ngIf="ssidForm.get('ssid').invalid && isDuplicate">
+                              <div class="text-danger pull-left" *ngIf="ssidForm.get('ssid').errors.maxlength">
+                                Maximum 25 character allowed
+                              </div>
+                              <div class="text-danger pull-left" *ngIf="ssidForm.get('ssid').errors.specialatend">
+                                Should not end with a special character!
+                              </div>
+                            </div>
+
+                          </div>
+                          <div>
+                            <app-right-tooltip [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_ssid_name')"></app-right-tooltip>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label class="col-md-2 col-form-label text-right">VAP</label>
+                          <div class="col-lg-1 col-sm-11">
+                            <label class="switch">
+                              <input type="checkbox" class="form-control" formControlName="vap_enable" id="vap_enable" #Vap>
+                              <span class="slider round"><i class="enable switch-status">Enable</i><i class="disable switch-status">Disable</i></span>
+                            </label>
+                          </div>
+                          <div style="margin-left: 126px; display: inline-block" class="pull-left">
+                            <app-right-tooltip  [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_vap')"></app-right-tooltip>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label class="col-md-2 col-form-label text-right">Broadcast SSID</label>
+                          <div class="col-lg-1 col-sm-11">
+                            <label class="switch">
+                              <input type="checkbox" formControlName="broadcastssid" id="broadcastssid" #droadcastSSID>
+                              <span class="slider round"><i class="enable switch-status">Enable</i><i class="disable switch-status">Disable</i></span>
+                            </label>
+                          </div>
+                          <div style="margin-left: 126px; display: inline-block" class="pull-left">
+                            <app-right-tooltip  class="align" [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_broadcast_ssid')"></app-right-tooltip>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label class="col-md-2 col-form-label text-right">Network Authentication</label>
+                          <div class="col-lg-2 col-sm-11">
+                            <select class="form-control" formControlName="authtype" id="authtype" #netAuth (change)="selectedAuthType($event)">
+                              <option value="0">Open</option>
+                              <option value="2">WPA-PSK</option>
+                              <option value="3" >WPA2-PSK</option>
+                              <option value="4">WPA2-PSK_Mixed_mode</option>
+                              <option value="5">WPA_EAP</option>
+                            </select>
+                          </div>
+                          <div>
+                            <app-right-tooltip  class="align" [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_network_auth')"></app-right-tooltip>
+                          </div>
+                        </div>
+                        <div class="wpa-enterprise" *ngIf="ssidForm.get('authtype').value==5">
+                          <div class="form-group row">
+                              <label class="col-md-2 col-form-label text-right">AAA Server Type</label>
+                              <div class="col-lg-5 col-sm-11">
+                                  <ul class="w100 radio-out">
+                                      <li>
+                                          <label>
+                                              <input type="radio" name="aaa_type" formControlName="aaa_type" value="1" disabled>
+                                              <i>Internal</i>
+                                              <span class="check">&nbsp;</span>
+                                          </label>
+                                      </li>
+                                      <li>
+                                          <label>
+                                              <input type="radio" name="aaa_type" formControlName="aaa_type" value="2">
+                                              <i>External</i>
+                                              <span class="check">&nbsp;</span>
+                                          </label>
+                                      </li>
+                                  </ul>
+                              </div>
+                          </div>
+                         
+                      </div>
+                      <div class="form-group row" *ngIf="ssidForm.get('aaa_type').value=='2' && ssidForm.get('authtype').value==5">
+                        <label class="col-md-2 col-form-label text-right">External Server List</label>
+                        <div class="col-lg-2 col-sm-11">
+                          <div *ngIf="aaaserverDetails!=undefined">
+                              <select class="form-control" formControlName="aaa_id" id="aaa_id" >
+                                  <option value="-1" >Please select </option>
+                                  <option *ngFor="let item of aaaserverDetails;let idx = index" value="{{idx}}">{{item.aaa_server_name}}</option>
+                                 
+                                </select>
+                          </div>
+                          <div  *ngIf="aaaserverDetails==undefined">
+                              <select class="form-control" formControlName="aaa_id" id="aaa_id" >
+                                <option value="-1" >Please select </option>
+                                 
+                                </select>
+                          </div>
+
+                        <div *ngIf="ssidForm.get('aaa_id').invalid && (ssidForm.get('aaa_id').dirty || ssidForm.get('aaa_id').touched)">
+                            <div class="text-danger pull-left" *ngIf="ssidForm.get('aaa_id').errors.nooption">
+                            Please select one option.
+                            </div>
+                        </div>
+                        </div>
+                        <div>
+                          <app-right-tooltip  class="align" [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_network_auth')"></app-right-tooltip>
+                        </div>
+                      </div>
+                        <div class="wpa-psk" *ngIf="ssidForm.get('authtype').value!=0 && ssidForm.get('authtype').value!=5">
+                          <div class="form-group row">
+                            <label class="col-md-2 col-form-label text-right">Passphrase</label>
+                            <div class="col-lg-2 col-sm-11">
+                              <div class="input-group">
+                                <input type="{{ isText ? 'text' : 'password' }}" class="form-control"  maxlength="64"  minlength="8" name="passphrase" formControlName="passphrase">
+                                <div class="input-group-btn">
+                                  <button type="button" class="btn btn-default btn-eye" (click)="showpassword()">
+                                    <!-- <i class="icon icon-hide icon-right eye-icon"></i> -->
+                                    <i class="fa fa-eye" [ngClass]="{'fa-eye': isText,'fa-eye-slash':!isText}"></i>
+                                  </button>
+                                </div>
+                              </div>
+                              <div *ngIf="ssidForm.get('passphrase').invalid && (ssidForm.get('passphrase').dirty || ssidForm.get('passphrase').touched)" class="row" style="clear: both;">
+                                <div class="text-danger pull-left pull-custom1" *ngIf="ssidForm.get('passphrase').errors.required && !ssidForm.get('passphrase').errors.spaceatstart">Please enter the Passphrase</div>
+                                <div class="text-danger pull-left pull-custom1" *ngIf="ssidForm.get('passphrase').errors.maxlength ">Maximum length allowed is 64</div>
+                                <div class="text-danger pull-left pull-custom1" *ngIf="ssidForm.get('passphrase').errors.spaceatstart">Should not start with space</div>
+                                <div class="text-danger pull-left pull-custom1" *ngIf="ssidForm.get('passphrase').errors.emoji && !ssidForm.get('passphrase').errors.spaceatstart"> Should not allow symbols.</div>
+                                <div class="text-danger pull-left pull-custom1" *ngIf="ssidForm.get('passphrase').errors.minlength && !ssidForm.get('passphrase').errors.spaceatstart && !ssidForm.get('passphrase').errors.emoji">Minimum length should be 8</div>
+                              </div>
+                            </div>
+                            <!--<div class="col-lg-3 col-sm-11">-->
+                            <!--<span class="char-limit">(8-64 Characters)</span>-->
+                            <!--</div>-->
+                            <div>
+                              <app-right-tooltip  class="align" [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_passphrase')"></app-right-tooltip>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- <div class="wpa-enterprise based-on-select" id="2">
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label text-right">AAA Server</label>
+                                <div class="col-lg-5 col-sm-11">
+                                    <ul class="w100 radio-out">
+                                        <li>
+                                            <label>
+                                                <input type="radio" name="aaa-server-basic" checked>
+                                                <i>IPv4</i>
+                                                <span class="check">&nbsp;</span>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="radio" name="aaa-server-basic">
+                                                <i>IPv6</i>
+                                                <span class="check">&nbsp;</span>
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label text-right">IP Address</label>
+                                <div class="col-lg-2 col-sm-11">
+                                    <input type="text" class="form-control ip_address is-invalid" required>
+                                    <div class="text-danger">This field is required</div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label text-right">AAA Server Port</label>
+                                <div class="col-lg-1 col-sm-11">
+                                    <input type="number" class="form-control">
+                                </div>
+                                <div class="col-lg-3 col-sm-11">
+                                    <span class="char-limit">(1-65535)</span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label text-right">AAA Passphrase</label>
+                                <div class="col-lg-2 col-sm-11">
+                                    <div class="input-field">
+                                        <input type="password" class="form-control is-invalid">
+                                        <i class="icon icon-hide icon-right"></i>
+                                    </div>
+                                    <div class="text-danger">This field is required</div>
+                                </div>
+                                <div class="col-lg-3 col-sm-11">
+                                    <span class="char-limit">(8-32 Characters)</span>
+                                </div>
+                            </div>
+                        </div> -->
+
+
+                        <div class="form-group row">
+                          <label class="col-md-2 col-form-label text-right">VLAN</label>
+                          <div class="col-lg-2 col-sm-11">
+                            <!-- <input type="text"
+                                   class="form-control"
+                                   formControlName="vlan_id"
+                                   id="vlan_id"
+                                   max="4094"
+                                   min="1"
+                                   maxlength="4"
+                                   #vLan
+                                   (keydown)="blockAllChar($event)"> -->
+                                   <select class="form-control" formControlName="vlan_id" id="vlan_id" #vLan>
+                                    <option *ngFor="let i of vlanArr" value="{{i}}">{{i}}</option>
+        
+                                  </select>
+
+                         
+                            <div *ngIf="ssidForm.get('vlan_id').invalid && (ssidForm.get('vlan_id').dirty || ssidForm.get('vlan_id').touched)">
+                              <div class="text-danger pull-left" *ngIf="ssidForm.get('vlan_id').errors.required">
+                                VLAN is required.
+                              </div>
+                              <div class="text-danger pull-left" *ngIf="ssidForm.get('vlan_id').errors.min || ssidForm.get('vlan_id').errors.max">
+                                Please enter a valid VLAN.
+                              </div>
+                            </div>
+                          </div>
+
+                          <div>
+                            <app-right-tooltip [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_vlan')"></app-right-tooltip>
+                          </div>
+
+                        </div>
+
+                        <div class="form-group row">
+                          <label class="col-md-2 col-form-label text-right">L3 Roaming</label>
+                          <div class="col-lg-1 col-sm-11">
+                            <label class="switch">
+                              <input type="checkbox" formControlName="l3_roaming" id="l3_roaming" #l3Roaming>
+                              <span class="slider round"><i class="enable switch-status">Enable</i><i class="disable switch-status">Disable</i></span>
+                            </label>
+                          </div>
+                          <div style="margin-left: 126px; display: inline-block" class="pull-left">
+                            <app-right-tooltip  [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_l3_roaming')"></app-right-tooltip>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label class="col-md-2 col-form-label text-right">Band Steering</label>
+                          <div class="col-lg-1 col-sm-11">
+                            <label class="switch">
+                              <input type="checkbox" formControlName="band_steering" id="band_steering" #bandsteering>
+                              <span class="slider round"><i class="enable switch-status">Enable</i><i class="disable switch-status">Disable</i></span>
+                            </label>
+                          </div>
+                          <div style="margin-left: 126px; display: inline-block" class="pull-left">
+                            <app-right-tooltip  [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_band_steering')"></app-right-tooltip>
+                          </div>
+                        </div>
+
+
+                        <div class="form-group row">
+                          <label class="col-md-2 col-form-label text-right">RSSI Threshold</label>
+                          <div class="col-lg-2 col-sm-11">
+                                   <div class="input-group">
+                                      <span class="input-group-addon" id="basic-addon1">-</span>
+                                      <input type="text" class="form-control" placeholder="RSSI Threshold" aria-describedby="basic-addon1" formControlName="rssi_threshold" id="rssi_threshold" max="100" min="1"  maxlength="3"  #RSSI (keydown)="blockAllChar($event)">
+                                    </div>
+
+                            <!--<div class="col-lg-3 col-sm-11">-->
+                            <!--<span class="char-limit">(-10 to -100 dBm)</span>-->
+                            <!--</div>-->
+                            <div *ngIf="ssidForm.get('rssi_threshold').invalid && (ssidForm.get('rssi_threshold').dirty || ssidForm.get('rssi_threshold').touched)">
+                              <div class="text-danger pull-left" *ngIf="ssidForm.get('rssi_threshold').errors.required">
+                                RSSI Threshold is required.
+                              </div>
+                              <div class="text-danger pull-left" *ngIf="(ssidForm.get('rssi_threshold').errors.min || ssidForm.get('rssi_threshold').errors.max || ssidForm.get('rssi_threshold').errors.minlength ) && !ssidForm.get('rssi_threshold').errors.required">
+                                Enter valid RSSI Threshold value.
+                              </div>
+                              
+                            </div>
+                          </div>
+                          <div>
+                            <app-right-tooltip [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_rssi_threshold')"></app-right-tooltip>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <div class="col-lg-6 col-sm-11 col-md-offset-4">
+                            <input type="button" (click)="formReset()" value="Cancel" class="btn btn-cancel btn-large" style="margin-right: 15px;">
+                            <input type="submit" [disabled]="!ssidForm.valid || btnDisable" value="Save" class="btn btn-theme btn-large" *ngIf="addFlag">
+                            <input type="button" [disabled]="!ssidForm.valid || btnDisable" value="Update" class="btn btn-theme btn-large" (click)="updateSSID()" *ngIf="editFlag">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!--Basic Tab END-->
+                </div>
+
+              </tab>
+              <tab heading="Advanced" #AdvancedTab >
+                <div id="tab2" class="">
+
+                  <!--Advanced Tab-->
+                  <div class="row">
+                    <div class="clearfix"></div>
+                    <div>
+                      <div class="tab-pane active">
+                        <div class="form-group row">
+                          <label class="col-md-2 col-form-label text-right">MAC ACL</label>
+                          <div class="col-lg-2 col-sm-11">
+                            <ul class="radio-out">
+                              <li>
+                                <label>
+                                  <input type="radio" name="mac_acl_type" formControlName="mac_acl_type" value="0">
+                                  <i>Disable</i>
+                                  <span class="check">&nbsp;</span>
+                                </label>
+                              </li>
+                              <li>
+                                <label>
+                                  <input type="radio" name="mac_acl_type" value="1"  formControlName="mac_acl_type" checked>
+                                  <i>Local MAC ACL</i>
+                                  <span class="check">&nbsp;</span>
+                                </label>
+                              </li>
+                              <li>
+                                <label>
+                                  <input type="radio" name="mac_acl_type" value="2" formControlName="mac_acl_type" disabled>
+                                  <i>Radius MAC ACL</i>
+                                  <span class="check">&nbsp;</span>
+                                </label>
+                              </li>
+                            </ul>
+                          </div>
+                          <div style="display: inline-block" class="pull-left">
+                            <app-right-tooltip  [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_vap')"></app-right-tooltip>
+                          </div>
+                        </div>
+                        <div class="local-mac-acl" *ngIf="ssidForm.get('mac_acl_type').value == 1">
+                          <div class="form-group row">
+                            <label class="col-md-2 col-form-label text-right">MAC ACL Profile</label>
+                            <div class="col-lg-2 col-sm-11">
+                              <select class="form-control" name="mac_acl_id" formControlName="mac_acl_id">
+                                <option value="{{option.mac_acl_profile_id}}" *ngFor="let option of macAclArr;let idx = index;" >{{option.mac_acl_profile_name}}</option>
+                              </select>
+                            </div>
+                            <div style="display: inline-block" class="pull-left">
+                              <app-right-tooltip  [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_vap')"></app-right-tooltip>
+                            </div>
+                          </div>
+                         
+                        </div>
+                        <!-- <div class="form-group row">
+                          <label class="col-md-2 col-form-label text-right">Radius MAC ACL</label>
+                          <div class="col-lg-1 col-sm-11">
+                            <label class="switch">
+                              <input type="checkbox" checked>
+                              <span class="slider round"><i class="enable switch-status">Enable</i><i class="disable switch-status">Disable</i></span>
+                            </label>
+                          </div>
+                          <div style="margin-left: 126px; display: inline-block" class="pull-left">
+                            <app-right-tooltip  [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_vap')"></app-right-tooltip>
+                          </div>
+                        </div> -->
+                        <div class="form-group row">
+                          <label class="col-md-2 col-form-label text-right">MAC ACL Policy</label>
+                          <div class="col-lg-1 col-sm-11">
+                            <label class="switch">
+                              <input type="checkbox" formControlName="mac_acl_policy" name="mac_acl_policy">
+                              <span class="slider round"><i class="enable switch-status">Allow</i><i class="disable switch-status">Deny</i></span>
+                            </label>
+                          </div>
+                          <div style="margin-left: 126px; display: inline-block" class="pull-left">
+                            <app-right-tooltip  [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_vap')"></app-right-tooltip>
+                          </div>
+                        </div>
+                        <div class="radius-mac-acl" *ngIf="ssidForm.get('mac_acl_type').value == 2">
+                          <div class="form-group row">
+                            <label class="col-md-2 col-form-label text-right">AAA Server</label>
+                            <div class="col-lg-2 col-sm-11">
+                              <ul class="w100 radio-out">
+                                <li>
+                                  <label>
+                                    <input type="radio" name="aaa-server-advanced" checked>
+                                    <i>IPv4</i>
+                                    <span class="check">&nbsp;</span>
+                                  </label>
+                                </li>
+                                <li>
+                                  <label>
+                                    <input type="radio" name="aaa-server-advanced">
+                                    <i>IPv6</i>
+                                    <span class="check">&nbsp;</span>
+                                  </label>
+                                </li>
+                              </ul>
+                              
+                            </div>
+                            <div style="display: inline-block" class="pull-left">
+                              <app-right-tooltip  [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_vap')"></app-right-tooltip>
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <label class="col-md-2 col-form-label text-right">IP Address</label>
+                            <div class="col-lg-2 col-sm-11">
+                              <input type="text" class="ip_address form-control is-invalid" required>
+                              <div class="text-danger">This field is required</div>
+                            </div>
+                            <div style="display: inline-block" class="pull-left">
+                              <app-right-tooltip  [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_vap')"></app-right-tooltip>
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <label class="col-md-2 col-form-label text-right">AAA Server Port</label>
+                            <div class="col-lg-2 col-sm-11">
+                              <input type="number" class="form-control">
+                            </div>
+                            <div style="display: inline-block" class="pull-left">
+                              <app-right-tooltip  [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_vap')"></app-right-tooltip>
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <label class="col-md-2 col-form-label text-right">AAA Passphrase</label>
+                            <div class="col-lg-2 col-sm-11">
+                              <div class="input-field">
+                                <input type="password" placeholder="OTP" class="form-control is-invalid" required>
+                                <i class="icon icon-hide icon-right"></i>
+                              </div>
+                              <div class="text-danger">This field is required</div>
+                            </div>
+                            <!-- <div class="col-lg-1 col-sm-11">
+                              <span class="char-limit">(8-32 Characters)</span>
+                            </div> -->
+                            <div>
+                              <app-right-tooltip  class="align" [toolTipText]="getToolTipText('group_ssid_configuration_aaa_pass')"></app-right-tooltip>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label class="col-md-2 col-form-label text-right">Captive Portal</label>
+                          <div class="col-lg-1 col-sm-11">
+                            <label class="switch">
+                              <input type="checkbox" disabled>
+                              <span class="slider round"><i class="enable switch-status">Enable</i><i class="disable switch-status">Disable</i></span>
+                            </label>
+                          </div>
+                          <div style="margin-left: 126px; display: inline-block" class="pull-left">
+                            <app-right-tooltip  [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_vap')"></app-right-tooltip>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 col-form-label text-right">PMF</label>
+                            <div class="col-lg-1 col-sm-11">
+                              <label class="switch">
+                                <input type="checkbox" formControlName="is_pmf_enabled" name="is_pmf_enabled">
+                                <span class="slider round"><i class="enable switch-status">Enable</i><i class="disable switch-status">Disable</i></span>
+                              </label>
+                            </div>
+                            <div style="margin-left: 126px; display: inline-block" class="pull-left">
+                              <app-right-tooltip  [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_vap')"></app-right-tooltip>
+                            </div>
+                          </div>
+                        <div class="captive-portal">
+                          <div class="form-group row">
+                            <label class="col-md-2 col-form-label text-right">Captive Portal Server</label>
+                            <div class="col-lg-2 col-sm-11">
+                              <select class="form-control" disabled>
+                                <option value="external">External</option>
+                                <option value="internal">Internel</option>
+                              </select>
+                            </div>
+                            <div style="display: inline-block" class="pull-left">
+                              <app-right-tooltip  [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_vap')"></app-right-tooltip>
+                            </div>
+                          </div>
+                          <div id="external">
+                            <div class="form-group row">
+                              <label class="col-md-2 col-form-label text-right">External Server</label>
+                              <div class="col-lg-2 col-sm-11">
+                                <ul class="radio-out">
+                                  <li>
+                                    <label>
+                                      <input type="radio" name="external-server" checked disabled>
+                                      <i>IPv4</i>
+                                      <span class="check">&nbsp;</span>
+                                    </label>
+                                  </li>
+                                  <li>
+                                    <label>
+                                      <input type="radio" name="external-server" disabled>
+                                      <i>IPv6</i>
+                                      <span class="check">&nbsp;</span>
+                                    </label>
+                                  </li>
+                                </ul>
+                              </div>
+                              <div style="display: inline-block" class="pull-left">
+                                <app-right-tooltip  [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_vap')"></app-right-tooltip>
+                              </div>
+                            </div>
+                            <div class="form-group row">
+                              <label class="col-md-2 col-form-label text-right">IP Address</label>
+                              <div class="col-lg-2 col-sm-11">
+                                <input type="text" class="ip_address form-control" disabled>
+                                <!-- <div class="text-danger">This field is required</div> -->
+                              </div>
+                              <div style="display: inline-block" class="pull-left">
+                                <app-right-tooltip  [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_vap')"></app-right-tooltip>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- <div id="internal">
+                              <div class="form-group row">
+                                  <label class="col-md-2 col-form-label text-right">Captive Portal Group</label>
+                                  <div class="col-lg-2 col-sm-11">
+                                      <select class="form-control">
+                                          <option value="select">Select</option>
+                                      </select>
+                                  </div>
+                              </div>
+                          </div> -->
+                        </div>
+                        <div class="form-group row">
+                          <label class="col-md-2 col-form-label text-right">Rate Limit Upload</label>
+                          <div class="col-lg-2 col-sm-11">
+                            <input type="text" class="form-control" placeholder="64 Mbps" disabled>
+                          </div>
+                          <div style="display: inline-block" class="pull-left">
+                            <app-right-tooltip  [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_vap')"></app-right-tooltip>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label class="col-md-2 col-form-label text-right">Rate Limit Download</label>
+                          <div class="col-lg-2 col-sm-11">
+                            <input type="text" class="form-control" placeholder="64 Mbps" disabled>
+                          </div>
+                          <div style="display: inline-block" class="pull-left">
+                            <app-right-tooltip  [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_vap')"></app-right-tooltip>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label class="col-md-2 col-form-label text-right">Client Separation</label>
+                          <div class="col-lg-1 col-sm-11">
+                            <label class="switch">
+                              <input type="checkbox" disabled>
+                              <span class="slider round"><i class="enable switch-status">Enable</i><i class="disable switch-status">Disable</i></span>
+                            </label>
+                          </div>
+                          <div style="margin-left: 126px; display: inline-block" class="pull-left">
+                            <app-right-tooltip  [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_vap')"></app-right-tooltip>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label class="col-md-2 col-form-label text-right">Client Isolation</label>
+                          <div class="col-lg-1 col-sm-11">
+                            <label class="switch">
+                              <input type="checkbox" disabled>
+                              <span class="slider round"><i class="enable switch-status">Enable</i><i class="disable switch-status">Disable</i></span>
+                            </label>
+                          </div>
+                          <div style="margin-left: 126px; display: inline-block" class="pull-left">
+                            <app-right-tooltip  [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_vap')"></app-right-tooltip>
+                          </div>
+                        </div>
+                       
+                        <div class="form-group row">
+                          <div class="col-lg-6 col-sm-11 col-md-offset-4">
+                            <input type="button" (click)="formReset()" value="Cancel" class="btn btn-cancel btn-large" style="margin-right: 15px;">
+                            <input type="submit" [disabled]="!ssidForm.valid || btnDisable" value="Save" class="btn btn-theme btn-large" *ngIf="addFlag">
+                            <input type="button" [disabled]="!ssidForm.valid || btnDisable" value="Update" class="btn btn-theme btn-large" (click)="updateSSID()" *ngIf="editFlag">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!--Advanced Tab END-->
+
+                </div>
+              </tab>
+              <tab heading="QoS" #QoSTab>
+                <div id="tab3" class="">
+
+                  <!--QoS Tab-->
+                  <div class="row">
+                    <div class="clearfix"></div>
+                    <div>
+                      <div class="tab-pane">
+                        <div class="form-group row">
+                          <label class="col-md-2 col-form-label text-right">Wi-Fi Multimedia</label>
+                          <div class="col-lg-1 col-sm-11">
+                            <label class="switch">
+                              <input type="checkbox" formControlName="is_wmm_enabled" id="is_wmm_enabled" (change)="changeMultimedia($event.target.checked)">
+                              <span class="slider round"><i class="enable switch-status">Enable</i><i class="disable switch-status">Disable</i></span>
+                            </label>
+                          </div>
+                          <div style="margin-left: 126px; display: inline-block" class="pull-left">
+                            <app-right-tooltip  [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_wifi_multimedia')"></app-right-tooltip>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label class="col-md-2 col-form-label text-right">Wi-Fi Multimedia Power Save</label>
+                          <div class="col-lg-1 col-sm-11">
+                            <label class="switch" [ngClass]="{'disabled': !isMultimediaChecked}">
+                              <input type="checkbox" formControlName="is_wmm_power_save_enabled" id="wifi_multiis_wmm_power_save_enabledmedia_power">
+                              <span class="slider round"><i class="enable switch-status">Enable</i><i class="disable switch-status">Disable</i></span>
+                            </label>
+                          </div>
+                          <div style="margin-left: 126px; display: inline-block" class="pull-left">
+                            <app-right-tooltip  [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_wifi_multimedia_power')"></app-right-tooltip>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <div class="col-lg-6 col-sm-11 col-md-offset-4">
+                            <input type="button" (click)="formReset()" value="Cancel" class="btn btn-cancel btn-large" style="margin-right: 15px;">
+                            <input type="submit" [disabled]="!ssidForm.valid || btnDisable" value="Save" class="btn btn-theme btn-large" *ngIf="addFlag">
+                            <input type="button" [disabled]="!ssidForm.valid || btnDisable" value="Update" class="btn btn-theme btn-large" (click)="updateSSID()" *ngIf="editFlag">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!--QoS Tab END-->
+
+                </div>
+              </tab>
+
+            </tabset>
+
+            <!--TAB END-->
+          </div>
+        </div><!-- /portlet-->
+      </form>
+    </div>
+  </div>
+  <div *ngIf="isModalShown" [config]="{ show: true }" (onHidden)="onHidden()" bsModal #autoShownModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-body">
+          <i class="fa fa-exclamation-triangle error-icon"></i>
+          <p class="error-modal-p1">{{errorMsg}}</p>
+          <!-- <p class="error-modal-p2">{{errorMsg}}</p> -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-blank" (click)="hideModal()">Dismiss</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--/===/WORK AREA END/===/-->

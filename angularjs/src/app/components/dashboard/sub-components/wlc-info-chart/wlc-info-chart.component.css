@@ -1,0 +1,231 @@
+/*======================================/DASHBOARD/======================================*/
+.portlet.light.stats>.portlet-title {
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-right: 10px;
+}
+.top-btns-right ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+.top-btns-right>ul>li {
+    display: inline-block;
+    border-right: 1px solid #eef1f5;
+    float: left;
+    padding: 0 10px;
+}
+.top-btns-right>ul>li:last-child {
+    border: 0;
+    padding-right: 0;
+}
+.top-btns-right .scrollableList.graph {
+    width: 110px;
+}
+.top-btns-right .scrollableList .selectedOption {
+    height: 30px;
+    line-height: 30px;
+    font-size: 12px;
+}
+.top-btns-right>ul>li a {
+    padding: 0 4px;
+    display: block;
+}
+.top-btns-right>ul>li .icon {
+    color: #808e96;
+}
+
+.group-item{
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    margin-bottom: 6px;
+    text-align: left;
+}
+.group-item li{
+    flex: 1;
+}
+
+
+.wlc-info{
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    position: relative;
+    top: 50%;
+    display: flex;
+    transform: translateY(-50%);
+}
+.wlc-info li{
+    flex: 1;
+    text-align: center;
+    
+}
+.wlc-info li .icon-wrap{
+    position: relative;
+}
+.wlc-info li .icon-wrap::before{
+    content: '';
+    border-top: 1px dashed #22ce0b;
+    position: absolute;
+    width: 51%;
+    top: calc(50% - 1px);
+    right: 75%;
+    transform: translateY(-50%);
+}
+.wlc-info li.disconnected .icon-wrap::before{
+    border-top: 1px dashed #f4516c;
+}
+.wlc-info li.notconnected .icon-wrap::before{
+    border-top: 1px dashed #f4516c;
+}
+.wlc-info li.disconnected .icon-wrap::after{
+    content: '/';
+    color: #f4516c;
+    position: absolute;
+    top: calc(50% - 1px);
+    left: 1px;
+    background: #fff;
+    width: 11px;
+    transform: translateY(-50%);
+}
+
+.wlc-info li.notconnected .icon-wrap::after{
+    content: '';
+    color: #f4516c;
+    position: absolute;
+    top: calc(50% - 1px);
+    left: 1px;
+    background: #fff;
+    width: 11px;
+    transform: translateY(-50%);
+}
+.wlc-info li:first-child .icon-wrap::before{
+    content: none;
+}
+.wlc-info li .icon{
+    font-size: 5em;
+    line-height: normal;
+}
+.wlc-info li h5{
+    margin: 5px 0;
+}
+.wlc-info li h5.wlc-type{
+    margin-top: 0;
+}
+.wlc-info li h5.wlc-name, .wlc-info li h5.wlc-ip{
+    color: #7e8e9f;
+}
+
+.portlet.light>.portlet-title {
+    padding: 5px 20px 2px 0;
+  }
+  
+  .custom-title{
+    background-color: #334157;
+    border-radius: 8px 8px 0 0;
+  }
+  .custom-title .caption{
+   color: #fff;
+  }
+  .custom-title  .btn-theme-inverse {
+  background-color: #fff; 
+    color:  #111;
+    border-color: #111;
+   
+  }
+  .custom-title  .dropdown.btn-theme-inverse ul li a {
+    color: #111 !important;
+  }
+  .custom-title .dropdown.btn-theme-inverse ul li a:hover {
+    background-color: #333;
+    color: #fff !important;
+  }
+  ::ng-deep p.no-data {
+    font-size: 16px;
+    color: #111;
+    margin-left: 18px !important;
+    margin-top: 10px !important;
+    padding-top: 10px  !important;
+  }
+  .custom-portlet{
+    border-radius: 8px;
+  }
+.top-btns-right > ul > li {
+    border-right: solid 1px #526074 !important;
+}
+.top-btns-right > ul > li:last-child {
+    border:0 !important;
+}
+.top-btns-right > ul > li .icon {
+   color:#ffffff !important;
+}
+
+::ng-deep .custom-portlet text.highcharts-title {
+    display: none !important;
+}
+::ng-deep .custom-portlet.forSemi text.highcharts-title {
+    display: block !important;
+}
+
+::ng-deep .highcharts-container{
+    width: 1000px;
+} 
+::ng-deep i.icon.icon-router1.title-icon {
+    font-size: 2.2em;
+    text-align: center;
+    display: block;
+}
+
+/*****************tab****************/
+
+.tab {
+    float: left;
+   
+}
+.tabDiv{
+    margin-bottom: 15px;
+}
+
+::ng-deep p.innerText {
+  
+    text-align: center;
+}
+
+::ng-deep i.icon.icon-router1.list-icon {
+    font-size: 2em;
+   
+    display: block;
+}
+
+.alignLeft {
+    margin-left: -55px;
+}
+.alignLeft small{
+    font-style: italic;
+    color: #999;
+}
+.noti-list{
+    margin-top: -10px
+}
+.tab.noselect{
+    margin-top: -10px
+}
+::ng-deep .disconnected-device{
+    font-size: 13px;
+    margin-left: -6px;
+}
+::ng-deep .connected-device{
+    font-size: 13px;
+}
+.apChart ul.devices-status {
+    width: 125px !important;
+}
+ li.disconnected-device {
+    margin-left: -8px;
+}
+
+
+
+  

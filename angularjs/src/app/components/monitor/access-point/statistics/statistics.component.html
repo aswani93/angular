@@ -1,0 +1,1173 @@
+ <!--/======================/WORK AREA/======================/-->
+ <div class="page-content-wrapper page-content-stats">
+        <!-- <div class="row">
+            <div class="col-lg-12 col-sm-12">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="javascript:void(0);">Monitor</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:void(0);">Access Point</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:void(0);">Statistics</a></li>
+                     <li class="breadcrumb-item" [ngClass]="{'active': !drawn }"><a href="javascript:void(0);" (click)="goback(selectedtab)">{{breadcrumbVal}}</a></li>
+                    <li class="breadcrumb-item" [ngClass]="{'active': drawn }" *ngIf="drawn">{{selectedVal}}</li>
+                </ol>
+            </div>
+        </div> -->
+
+
+        <div class="row" *ngIf="!drawn">
+            <div class="col-lg-5 col-sm-12">
+               <app-serachbar [apiVal]="apiVal"  [searchKey]="searchKey"  [searchVal]="searchVal" (emitResult)="emitResult($event)"></app-serachbar>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-xs-12 col-sm-12">
+                <div class="upgrade-tabs">
+                    <div class="tabs-top">
+                        <ul class="tab-links" style="float: left;">
+                            <li class="active"><a href="#tab1" (click)="setView('group','')">Group</a></li>
+                            <li><a href="#tab2" (click)="setView('ap','')">Access Point</a></li>
+                            <li><a href="#tab3" (click)="setView('ssid','');goback('ssid')">SSID</a></li>
+                            <li><a href="#tab4" (click)="setView('client','')">Client</a></li>
+                        </ul>
+                        <div class="text-right pull-right" style="padding-right: 20px; margin-top: -5px;">
+                            <div class="dropdown scrollableList graph btn btn-theme rounded" disabled="disabled">
+                                <a href="#" class="dropdown-toggle selectedOption " id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export <i class="icon icon-export icon-before icon-export"></i></a>
+                                <div class="dropdown-menu this-list" aria-labelledby="dropdownMenuButton">
+                                    <ul>
+                                        <li><a class="dropdown-item" href="#">CSV</a></li>
+                                        <li><a class="dropdown-item" href="#">PDF</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="tab-content">
+                        <div id="tab1" class="group upgrade-tab active" *ngIf="isGroup">
+                            <div class="stats-head">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="portlet light head" [ngClass]="{'no-padd-bottom': isGroupSelected==true}">
+                                            <div class="portlet-title" *ngIf="isGroupSelected">
+                                                <div class="pull-left back-btn">
+                                                    <a href="javascript:void(0)" class="btn" (click)="goback('gp')">
+                                                        <i class="icon icon-left-arrow-1"></i>
+                                                    </a>
+                                                </div>
+                                                <div class="caption">
+                                                    <i class="icon icon-four-squares"></i> <span class="text-bold">{{selectedGpname==''?'Please select the Group': selectedGpname}}</span>
+                                                </div>
+                                                <div class="text-right pull-right">
+                                                    <div class="dropdown scrollableList graph btn btn-theme-inverse rounded">
+                                                        <a href="#" class="dropdown-toggle selectedOption" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{     this.ifGraphforGroup == true? 'Graphical View':'Table View'}} <i class="icon icon-arrow-point-to-down"></i></a>
+                                                        <div class="dropdown-menu this-list" aria-labelledby="dropdownMenuButton">
+                                                            <ul>
+                                                                <li><a class="dropdown-item"  href="javascript:void(0)" (click)="changeView('graph','group')">Graphical View</a></li>
+                                                                <li><a class="dropdown-item"  href="javascript:void(0)" (click)="changeView('table','group')">Table View</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+<!--aaaa-->
+                                          <div class="table-function" *ngIf="filterOption">
+                                            <ul>
+                                              <li>
+                                                <span class="pageEntry">Show</span>
+                                              </li>
+                                              <li>
+                                                <select class="form-control caption-select" [(ngModel)]="rowsOnPage">
+
+                                                <option [ngValue]="20">20</option>
+                                                <option [ngValue]="100">100</option>
+                                                <option [ngValue]="1000">1000</option>
+                                                <option [ngValue]="5000">5000</option>
+                                                </select>
+                                              </li>
+                                              <li>
+                                                <span class="pageEntry">entries</span>
+                                              </li>
+                                            </ul>
+
+
+                                            <!--Customize column options for Group Table -->
+                                            <ul class="table-function-right" >
+                                              <li class="posreltive">
+                                                <a class="dropdown-toggle"
+                                                   id="dropdownPopup"
+                                                   data-toggle="dropdown"
+                                                   aria-haspopup="true"
+                                                   aria-expanded="false"
+                                                   href="#" >Filter columns
+                                                  <i aria-hidden="true" class="fa fa-chevron-down"></i>
+                                                </a>
+
+                                                <div class="drop-checkbox dropdown-menu"
+                                                     aria-labelledby="dropdownPopup"
+                                                     (click)="holdPopup($event)">
+                                                  <ul>
+                                                    <li class="dropdown-item" *ngFor="let i of coloumsGroupObjects;let index = index">
+                                                      <label class="checkbox">
+                                                        <input class="register-check"
+                                                               type="checkbox"
+                                                               checked="i.checked"
+                                                               (change)="selectGroupColoums($event,index)"
+                                                               [disabled]= "gpCount == 1 && i.checked == true">
+
+                                                        <div class="check"></div>
+
+                                                        <span class="check-label">{{i.name}}</span>
+                                                      </label>
+                                                    </li>
+
+                                                  </ul>
+                                                </div>
+                                              </li>
+                                              <!--customize column option ends-->
+                                            </ul>
+                                          </div>
+                                            <table
+                                              id="example"
+                                              class="display theme table record_table table-striped table-sort text-center"
+                                              cellspacing="0"
+                                              width="100%"
+                                              [mfData]="grp_data"
+                                              #mf="mfDataTable"
+                                              *ngIf="!isGroupSelected"
+                                              [mfRowsOnPage]=rowsOnPage>
+                                                    <thead>
+                                                        <tr class="table-head" >
+
+                                                            <th class="text-left tableHeight"   *ngIf="(coloumsGroupObjects[0].checked) == true">
+                                                                <mfDefaultSorter by="group_name" >
+                                                                    <span>Group Name
+                                                                        <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='group_name' && _sortOrder=='asc' }"></i>
+                                                                        <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='group_name' && _sortOrder=='desc' }"></i>
+                                                                    </span>
+                                                                </mfDefaultSorter>
+                                                            </th>
+
+                                                            <th class="text-center tableHeight" *ngIf="(coloumsGroupObjects[1].checked) == true">
+                                                                <mfDefaultSorter by="vap_count">
+                                                                    <span>No. of SSID
+                                                                        <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='vap_count' && _sortOrder=='asc' }"></i>
+                                                                        <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='vap_count' && _sortOrder=='desc' }"></i>
+                                                                    </span>
+                                                                </mfDefaultSorter>
+                                                            </th>
+
+                                                            <th class="text-center tableHeight" *ngIf="(coloumsGroupObjects[2].checked) == true">
+                                                                <mfDefaultSorter by="no_of_ap">
+                                                                    <span>No. of Associated AP
+                                                                        <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='no_of_ap' && _sortOrder=='asc' }"></i>
+                                                                        <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='no_of_ap' && _sortOrder=='desc' }"></i>
+                                                                    </span>
+                                                                </mfDefaultSorter>
+                                                            </th>
+
+                                                            <th class="text-center tableHeight" *ngIf="(coloumsGroupObjects[3].checked) == true">
+                                                                <mfDefaultSorter by="clients">
+                                                                    <span>No. of Connected Clients
+                                                                        <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='clients' && _sortOrder=='asc' }"></i>
+                                                                        <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='clients' && _sortOrder=='desc' }"></i>
+                                                                    </span>
+                                                                </mfDefaultSorter>
+                                                            </th>
+
+                                                            <th class="text-center tableHeight">
+                                                              <span>Statistics</span>
+                                                            </th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr
+                                                          class="table-body table-clickable"
+                                                          (dblclick)="drawgraphs(item.group_id,item.group_name,'gp')"
+                                                          *ngFor="let item of mf.data">
+
+                                                            <td *ngIf="(coloumsGroupObjects[0].checked) == true">{{item.group_name}}</td>
+                                                            <td *ngIf="(coloumsGroupObjects[1].checked) == true">{{item.vap_count}}</td>
+                                                            <td *ngIf="(coloumsGroupObjects[2].checked) == true">{{item.no_of_ap}}</td>
+                                                            <td *ngIf="(coloumsGroupObjects[3].checked) == true"><span class="text-theme">{{item.clients}}</span></td>
+                                                            <td>
+                                                                <a href="javascript:void(0)" class="stat-btn" (click)="drawgraphs(item.group_id,item.group_name,'gp')"><i class="icon icon-bar-chart btn-icon"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div><!-- /stats-head-->
+                            <div class="stats-body table-view" *ngIf="!ifGraphforGroup && isGroupSelected">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="portlet light custom-portlet">
+                                            <div class="portlet-body">
+                                                <table class="display theme record_table table table-striped table-sort table-param text-center" cellspacing="0" width="70%" style="margin-bottom: 0; width: 70%;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-center border-bottom border-right">Parameters</th>
+                                                            <th class="text-center border-right">Uplink</th>
+                                                            <th class="text-center border-right">Downlink</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody *ngIf="tabularData">
+                                                        <tr>
+                                                            <th class="border-bottom">Total ({{tabularData_unit}})</th>
+                                                            <td>{{tabularData.tx}}</td>
+                                                            <td>{{tabularData.rx}}</td>
+                                                        </tr>
+                                                        <!-- <tr>
+                                                            <th class="border-bottom">Total Packets</th>
+                                                            <td>-</td>
+                                                            <td>-</td>
+                                                        </tr> -->
+                                                    </tbody>
+                                                    <tbody *ngIf="!tabularData">
+                                                        <td colspan="3">No data available</td>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="portlet light custom-portlet">
+                                            <div class="portlet-body">
+                                                <table class="display theme record_table table table-striped table-sort text-center" cellspacing="0" width="100%" style="margin-bottom: 0; width: 70%;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-center">No. of Connected Clients</th>
+                                                            <th class="text-center">No. of AP</th>
+                                                            <th class="text-center">No. of Online AP</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody *ngIf="tabularData">
+                                                        <tr>
+                                                            <td>{{tabularData.client_count}}</td>
+                                                            <td>{{tabularData.total_ap}}</td>
+                                                            <td class="status">
+                                                                <!-- <span class="online">10</span> -->
+                                                                {{tabularData.ap_count}}
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                    <tbody *ngIf="!tabularData">
+                                                        <td colspan="3">No data available</td>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div><!-- /stats-body/table-view-->
+                            <div class="stats-body graphical-view" *ngIf="ifGraphforGroup && isGroupSelected">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="portlet light custom-portlet">
+                                            <div class="portlet-title custom-title">
+                                                <div class="caption">
+                                                    <span>Traffic Usage</span>
+                                                </div>
+                                                <div class="text-right pull-right">
+
+                                                    <div class="dropdown scrollableList graph btn btn-theme-inverse rounded ">
+                                                        <li class="selectedOption"  (click)="openOptions('downlink',$event)">{{scaleText_downlink}}<i class="icon icon-arrow-point-to-down"></i></li>
+
+                                                        <div class="dropdown-menu this-list downlink_options">
+                                                            <ul>
+                                                                <!-- <li><a class="dropdown-item"  (click)="setScale('downlink','live')">Live Data</a></li> -->
+                                                                <li><a class="dropdown-item"  (click)="setScale('downlink','hour')">Last 1 hour</a></li>
+                                                                <li><a class="dropdown-item"  (click)="setScale('downlink','day')">Last 1 day</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <div class="dropdown scrollableList graph btn btn-theme-inverse rounded ">
+                                                            <li class="selectedOption" (click)="openOptions('down_group_range',$event)">{{rangeText_down_group}}<i class="icon icon-arrow-point-to-down"></i></li>
+                                                            <div class="dropdown-menu this-list down_group_options_range" aria-labelledby="dropdownMenuButton">
+                                                                <ul>
+                                                                    <li><a class="dropdown-item"  (click)="setRange('down_group','total')">Total</a></li>
+                                                                    <li><a class="dropdown-item"  (click)="setRange('down_group','avg')">Average</a></li>
+                                                                    <li><a class="dropdown-item"  (click)="setRange('down_group','min')">Minimum</a></li>
+                                                                    <li><a class="dropdown-item"  (click)="setRange('down_group','max')">Maximum</a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                </div>
+                                            </div>
+                                            <div class="portlet-body portlet-body-graph">
+                                                <!-- <div id="groupDownLinkTraffic"></div> -->
+                                                <app-downlink-taffic [apMac]="apMac" [scale]="scaleVal_downlink" [range]="rangeVal_down_group" ></app-downlink-taffic>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="portlet light custom-portlet">
+                                            <div class="portlet-title custom-title">
+                                                <div class="caption">
+                                                    <span>Online Access Points</span>
+                                                </div>
+                                                <div class="text-right pull-right">
+                                                    <div class="dropdown scrollableList graph btn btn-theme-inverse rounded">
+                                                        <li class="selectedOption"  (click)="openOptions('open_ap',$event)">{{scaleText_open_ap}}<i class="icon icon-arrow-point-to-down"></i></li>
+
+                                                        <div class="dropdown-menu this-list open_ap_options">
+                                                            <ul>
+                                                                <!-- <li><a class="dropdown-item"  (click)="setScale('downlink','live')">Live Data</a></li> -->
+                                                                <li><a class="dropdown-item"  (click)="setScale('open_ap','hour')">Last 1 hour</a></li>
+                                                                <li><a class="dropdown-item"  (click)="setScale('open_ap','day')">Last 1 day</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <div class="dropdown scrollableList graph btn btn-theme-inverse rounded ">
+                                                            <li class="selectedOption" (click)="openOptions('open_ap_range',$event)">{{rangeText_open_ap}}<i class="icon icon-arrow-point-to-down"></i></li>
+                                                            <div class="dropdown-menu this-list open_ap_options_range" aria-labelledby="dropdownMenuButton">
+                                                                <ul>
+                                                                    <li><a class="dropdown-item"  (click)="setRange('open_ap','total')">Total</a></li>
+                                                                    <li><a class="dropdown-item"  (click)="setRange('open_ap','avg')">Average</a></li>
+                                                                    <li><a class="dropdown-item"  (click)="setRange('open_ap','min')">Minimum</a></li>
+                                                                    <li><a class="dropdown-item"  (click)="setRange('open_ap','max')">Maximum</a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                </div>
+                                            </div>
+                                            <div class="portlet-body portlet-body-graph">
+                                                <!-- <div id="onlineAccessPoints" style="height: 350px;"></div> -->
+                                                <app-online-ap [apMac]="apMac"  [scale]="scaleVal_open_ap" [range]="rangeVal_open_ap"></app-online-ap>
+                                            </div>
+                                        </div>
+                                    </div>
+                                   
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="portlet light custom-portlet">
+                                            <div class="portlet-title custom-title">
+                                                <div class="caption">
+                                                    <span>Access Points (Top 5)</span>
+                                                </div>
+                                                <div class="text-right pull-right">
+                                                    <div class="dropdown scrollableList graph btn btn-theme-inverse rounded">
+                                                        <a href="#" class="dropdown-toggle selectedOption" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled>Live Data <i class="icon icon-arrow-point-to-down"></i></a>
+                                                        <div class="dropdown-menu this-list" aria-labelledby="dropdownMenuButton">
+                                                            <ul>
+                                                                <li><a class="dropdown-item" href="#">Last 2 hrs</a></li>
+                                                                <li><a class="dropdown-item" href="#">Last 1 day</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="portlet-body" style="padding: 0">
+                                                <app-top-aps></app-top-aps>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="portlet light custom-portlet">
+                                            <div class="portlet-title custom-title">
+                                                <div class="caption">
+                                                    <span>Access Points Model</span>
+                                                </div>
+                                            </div>
+                                            <div class="portlet-body" style="padding: 25px">
+                                               <app-ap-model></app-ap-model>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- /stats-body/graphical-view -->
+                        </div>
+                        <div id="tab2" class="access-point upgrade-tab" *ngIf="isAP">
+                            <div class="stats-head">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="portlet light head" [ngClass]="{'no-padd-bottom': isApSelected==true}">
+                                            <div class="portlet-title" *ngIf="isApSelected">
+                                            <div class="pull-left back-btn">
+                                                    <a href="javascript:void(0)" class="btn" (click)="goback('ap')">
+                                                        <i class="icon icon-left-arrow-1"></i>
+                                                    </a>
+                                                </div>
+                                                <div class="caption">
+                                                    <i class="icon icon-router-signal"></i> <span class="text-bold" id="ap_name">{{selectedApname==''?'Please select the AP': selectedApname}}</span>
+                                                </div>
+                                                <div class="text-right pull-right">
+                                                    <div class="dropdown scrollableList graph btn btn-theme-inverse rounded">
+                                                        <a href="#" class="dropdown-toggle selectedOption" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{     this.ifGraphforAP == true? 'Graphical View':'Table View'}} <i class="icon icon-arrow-point-to-down"></i></a>
+                                                        <div class="dropdown-menu this-list" aria-labelledby="dropdownMenuButton">
+                                                            <ul>
+                                                                <li><a class="dropdown-item"   href="javascript:void(0)" (click)="changeView('graph','ap')">Graphical View</a></li>
+                                                                <li><a class="dropdown-item" href="#"  href="javascript:void(0)" (click)="changeView('table','ap')">Table View</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                          <div class="list-out">
+                                            <div class="table-function" *ngIf="filterOption">
+                                              <ul>
+                                                <li>
+                                                  <span class="pageEntry">Show</span>
+                                                </li>
+                                                <li>
+                                                  <select class="form-control caption-select" [(ngModel)]="rowsOnPage">
+
+                                                  <option [ngValue]="20">20</option>
+                                                  <option [ngValue]="100">100</option>
+                                                  <option [ngValue]="1000">1000</option>
+                                                  <option [ngValue]="5000">5000</option>
+                                                  </select>
+                                                </li>
+                                                <li>
+                                                  <span class="pageEntry">entries</span>
+                                                </li>
+                                              </ul>
+
+
+                                              <!--Customize column options for AccessPoint Columns Table -->
+                                              <ul class="table-function-right" *ngIf="filterOption">
+                                                <li class="posreltive">
+                                                  <a class="dropdown-toggle"
+                                                     id="dropdownPopup"
+                                                     data-toggle="dropdown"
+                                                     aria-haspopup="true"
+                                                     aria-expanded="false"
+                                                     href="#" >Filter columns
+                                                    <i aria-hidden="true" class="fa fa-chevron-down"></i>
+                                                  </a>
+
+                                                  <div class="drop-checkbox dropdown-menu"
+                                                       aria-labelledby="dropdownPopup"
+                                                       (click)="holdPopup($event)">
+                                                    <ul>
+                                                      <li class="dropdown-item" *ngFor="let i of coloumsAPObjects;let index = index">
+                                                        <label class="checkbox">
+                                                          <input class="register-check"
+                                                                 type="checkbox"
+                                                                 checked="i.checked"
+                                                                 (change)="selectAPColoums($event,index)"
+                                                                 [disabled]= "apCount == 3 && i.checked == true">
+
+                                                          <div class="check"></div>
+
+                                                          <span class="check-label">{{i.name}}</span>
+                                                        </label>
+                                                      </li>
+
+                                                    </ul>
+                                                  </div>
+                                                </li>
+                                                <!--customize column option ends-->
+                                              </ul>
+                                            </div>
+
+                                             <table class="display theme record_table table table-striped table-sort"
+                                             cellspacing="0"
+                                             width="100%"
+                                             [mfData]="ap_data"
+                                             #mf2="mfDataTable"
+                                             *ngIf="!isApSelected"
+                                             >
+                                               <thead >
+
+                                               <tr class="table-head">
+                                               <th class="tableHeight" style="text-align:  center;" *ngIf="(coloumsAPObjects[0].checked) == true">
+                                               <mfDefaultSorter by="ap_name">
+                                               <span>AP Name
+                                               <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': isSortedByMeAsc_name }"></i>
+                                               <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': isSortedByMeDesc_name }"></i>
+                                               </span>
+                                               </mfDefaultSorter>
+                                               </th>
+                                               <th  class="tableHeight" style="text-align:  center;" *ngIf="(coloumsAPObjects[1].checked) == true">
+                                               <mfDefaultSorter by="ap_ip">
+                                               <span>IP Address
+                                               <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': isSortedByMeAsc_ip }"></i>
+                                               <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': isSortedByMeDesc_ip }"></i>
+                                               </span>
+                                               </mfDefaultSorter>
+                                               </th>
+                                               <th class="tableHeight" style="text-align:  center;" *ngIf="(coloumsAPObjects[2].checked) == true">
+                                               <mfDefaultSorter by="ap_mac">
+                                               <span>MAC Address
+                                               <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': isSortedByMeAsc_mac }"></i>
+                                               <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': isSortedByMeDesc_mac }"></i>
+                                               </span>
+                                               </mfDefaultSorter>
+                                               </th>
+                                               <th  class="tableHeight" style="text-align:  center;" *ngIf="(coloumsAPObjects[3].checked) == true">
+                                               <mfDefaultSorter by="ap_group">
+                                               <span>Group Name
+                                               <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': isSortedByAsc_gname }"></i>
+                                               <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': isSortedByMeDesc_gname }"></i>
+                                               </span>
+                                               </mfDefaultSorter>
+                                               </th>
+                                               <th class="tableHeight" style="text-align:  center;" *ngIf="(coloumsAPObjects[4].checked) == true">
+                                               <mfDefaultSorter by="active_clients">
+                                               <span>No. of Clients
+                                               <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': isSortedByMeAsc_client }"></i>
+                                               <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': isSortedByMeDesc_client }"></i>
+                                               </span>
+                                               </mfDefaultSorter>
+                                               </th>
+                                               <th class="tableHeight" style="text-align:  center;" *ngIf="(coloumsAPObjects[5].checked) == true">
+                                               <mfDefaultSorter by="ap_model">
+                                               <span>AP Model
+                                               <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': isSortedByMeAsc_model }"></i>
+                                               <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': isSortedByMeDesc_model }"></i>
+                                               </span>
+                                               </mfDefaultSorter>
+                                               </th>
+                                               <th class="tableHeight" style="text-align:  center;" *ngIf="(coloumsAPObjects[6].checked) == true">
+                                               <mfDefaultSorter by="status">
+                                               <span>Status
+                                               <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': isSortedByMeAsc_status }"></i>
+                                               <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': isSortedByMeDesc_status }"></i>
+                                               </span>
+                                               </mfDefaultSorter>
+                                               </th>
+                                               <th  class="tableHeight" style="text-align:  center;">
+                                               <span>Statistics</span>
+                                               </th>
+                                               </tr>
+                                               </thead>
+                                                <tbody>
+                                                    <tr class="table-body table-clickable"
+                                                        *ngFor="let item2 of mf2.data | paginate: {itemsPerPage: rowsOnPage , currentPage: page};"
+                                                        (dblclick)="drawgraphs(item2.ap_mac,item2.ap_name,'ap')">
+
+                                                        <td style="text-align:  center;" *ngIf="(coloumsAPObjects[0].checked) == true">{{item2.ap_name}}</td>
+                                                        <td style="text-align:  center;" *ngIf="(coloumsAPObjects[1].checked) == true">{{item2.ap_ip}}</td>
+                                                        <td style="text-align:  center;" *ngIf="(coloumsAPObjects[2].checked) == true">{{item2.ap_mac}}</td>
+                                                        <td style="text-align:  center;" *ngIf="(coloumsAPObjects[3].checked) == true">{{item2.ap_group}}</td>
+                                                        <td style="text-align:  center;" *ngIf="(coloumsAPObjects[4].checked) == true">{{item2.active_clients}}</td>
+                                                        <td style="text-align:  center;" *ngIf="(coloumsAPObjects[5].checked) == true">{{item2.ap_model}}</td>
+                                                        <td style="text-align:  center;" class="status" *ngIf="(coloumsAPObjects[6].checked) == true" >
+                                                          <span class="{{item2.status==1?'online':'offline'}}" >
+                                                            {{item2.status==1?'Online':'Offline'}}
+                                                          </span>
+
+                                                        </td>
+
+                                                      <td style="text-align:  center;"><a href="javascript:void(0)" class="stat-btn"  (click)="drawgraphs(item2.ap_mac,item2.ap_name,'ap')"><i class="icon icon-bar-chart btn-icon"></i></a>
+                                                        </td>
+
+                                                    </tr>
+                                                     <tr class="table-body" *ngIf="ap_data.length == 0">
+                                                        <td colspan="8" style="text-align: center">No APs registered to the system. Please try again after some time...</td>
+                                                    </tr>
+
+                                                <tr class="page-detail-area" *ngIf="ap_data.length != 0">
+                                                    <td colspan="8">
+                                                      <div class="entry-count text-left" style="float:left;"><span >Showing {{showingfrom}} to {{showingto}} of {{dataLength}} entries</span>
+                            </div>
+                                                      <div class="cpagination">
+                                      <span *ngIf="ap_data  && ap_data.length > rowsOnPage" [class.button-disabled]="firstarrowStatus" class="first" (click)="goToPage(1)"><<</span>
+                                      <pagination-controls (pageChange)="getNext($event)" maxSize="9"
+                                    directionLinks="true"
+                                    autoHide="true"
+                                    previousLabel=""
+                                    nextLabel=""
+                                    screenReaderPaginationLabel="Pagination"
+                                    screenReaderPageLabel="page"
+                      ></pagination-controls>
+                      <span *ngIf="ap_data && ap_data.length > rowsOnPage" [class.button-disabled]="lastarrowStatus" class="last" (click)="goToPage(Math.ceil(ap_data.length/rowsOnPage))">>></span></div>
+                      
+                                                    </td>
+                                                                       </tr>
+
+                                                </tbody>
+                                            </table>
+                                          </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                          <!-- END of Working area of abhi-->
+
+                          <!-- /stats-head -->
+                            <div class="stats-body table-view" *ngIf="!ifGraphforAP && isApSelected">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="portlet light custom-portlet">
+                                            <div class="portlet-body">
+                                                <table class="display theme record_table table table-striped table-sort table-param text-center" cellspacing="0" width="100%" style="margin-bottom: 0;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th rowspan="2" class="text-center border-bottom border-right">Parameters</th>
+                                                            <th colspan="2" class="text-center border-bottom border-right">2.4 GHz</th>
+                                                            <th colspan="2" class="text-center border-bottom border-right">5 GHz</th>
+                                                            <th colspan="2" class="text-center border-bottom">Ethernet</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-center border-right">Uplink</th>
+                                                            <th class="text-center border-right">Downlink</th>
+                                                            <th class="text-center border-right">Uplink</th>
+                                                            <th class="text-center border-right">Downlink</th>
+                                                            <th class="text-center border-right">Uplink</th>
+                                                            <th class="text-center">Downlink</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody *ngIf="tabularData">
+                                                        <tr>
+                                                            <th class="border-bottom">Total ({{tabularData_unit}})</th>
+                                                            <td>{{tabularData.tx2_4}}</td>
+                                                            <td>{{tabularData.rx2_4}}</td>
+                                                            <td>{{tabularData.tx5}}</td>
+                                                            <td>{{tabularData.rx5}}</td>
+                                                            <td>{{tabularData.eth_tx}}</td>
+                                                            <td>{{tabularData.eth_rx}}</td>
+                                                        </tr>
+                                                        <!--<tr>  As requested in bug 994-->
+                                                            <!--<th class="border-bottom">Total Packets</th>-->
+                                                            <!--<td>-</td>-->
+                                                            <!--<td>-</td>-->
+                                                            <!--<td>-</td>-->
+                                                            <!--<td>-</td>-->
+                                                            <!--<td>-</td>-->
+                                                            <!--<td>-</td>-->
+                                                        <!--</tr>-->
+                                                        <tr>
+                                                            <th class="border-bottom">Connected Clients</th>
+                                                            <td style="text-align: center">{{tabularData.client_count_2_4}}</td>
+                                                            <td>&nbsp;</td>
+                                                            <td>{{tabularData.client_count_5}}</td>
+                                                            <td>&nbsp;</td>
+                                                            <td>&nbsp;</td>
+                                                            <td>&nbsp;</td>
+                                                        </tr>
+                                                    </tbody>
+                                                    <tbody *ngIf="!tabularData">
+                                                        <td colspan="7">No data available</td>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="portlet light custom-portlet">
+                                            <div class="portlet-body">
+                                                <table class="display theme record_table table table-striped table-sort text-center" cellspacing="0" width="100%" style="margin-bottom: 0;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-center">AP Status</th>
+                                                            <th class="text-center">CPU Utilization</th>
+                                                            <th class="text-center">Memory Utilization</th>
+                                                            <th class="text-center">Idle Time</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody *ngIf="tabularData">
+                                                        <tr>
+                                                            <td style="text-align:  center;" class="status">
+                                                                <span class="{{tabularData.ap_status==1?'online':'offline'}}">
+                                                                    {{tabularData.ap_status==1?'Online':'Offline'}}
+                                                                </span>
+                                                            </td>
+                                                            <td>{{ tabularData.cpu | number : '1.2-2'}}%</td>
+                                                            <td>{{ tabularData.mem | number : '1.2-2'}}%</td>
+                                                            <td>-</td>
+                                                        </tr>
+                                                    </tbody>
+                                                    <tbody *ngIf="!tabularData">
+                                                        <td colspan="7">No data available</td>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- /stats-body/table-view-->
+                            <div class="stats-body graphical-view" *ngIf="ifGraphforAP && isApSelected">
+<!--Abhishek-->
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="portlet light custom-portlet">
+                                            <div class="portlet-title custom-title">
+                                                <div class="caption">
+                                                    <span>Traffic Usage</span>
+                                                </div>
+                                                <div class="text-right pull-right">
+                                                    <div class="dropdown scrollableList graph btn btn-theme-inverse rounded">
+                                                        <li class="selectedOption" (click)="openOptions('ap_downlink',$event)">{{scaleText_ap_downlink}}<i class="icon icon-arrow-point-to-down"></i></li>
+                                                        <div class="dropdown-menu this-list ap_downlink_options">
+                                                            <ul>
+                                                                <li><a class="dropdown-item"  (click)="setScale('ap_downlink','live')">Live Data</a></li>
+                                                                <li><a class="dropdown-item"  (click)="setScale('ap_downlink','hour')">Last 1 hour</a></li>
+                                                                <li><a class="dropdown-item"  (click)="setScale('ap_downlink','day')">Last 1 day</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="portlet-body portlet-body-graph">
+                                                <app-ap-downlink-traffic [apMac]="apMac" [scale]="scaleVal_ap_downlink"></app-ap-downlink-traffic>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="portlet light custom-portlet">
+                                            <div class="portlet-title custom-title">
+                                                <div class="caption">
+                                                    <span>CPU &amp; Memory Utilization</span>
+                                                </div>
+                                                <div class="text-right pull-right">
+                                                    <div class="dropdown scrollableList graph btn btn-theme-inverse rounded">
+                                                        <li class="selectedOption" (click)="openOptions('cpu',$event)">{{scaleText_cpu}}<i class="icon icon-arrow-point-to-down"></i></li>
+                                                        <div class="dropdown-menu this-list cpu_options">
+                                                            <ul>
+                                                                <li><a class="dropdown-item"  (click)="setScale('cpu','live')">Live Data</a></li>
+                                                                <li><a class="dropdown-item"  (click)="setScale('cpu','hour')">Last 1 hour</a></li>
+                                                                <li><a class="dropdown-item"  (click)="setScale('cpu','day')">Last 1 day</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="portlet-body portlet-body-graph">
+                                                <app-ap-cpu-memory-utilization [apMac]="apMac" [scale]="scaleVal_cpu"></app-ap-cpu-memory-utilization>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="portlet light custom-portlet">
+                                            <div class="portlet-title custom-title">
+                                                <div class="caption">
+                                                    <span>Clients (Top 5)</span>
+                                                </div>
+                                                <div class="text-right pull-right">
+                                                    <div class="dropdown scrollableList graph btn btn-theme-inverse rounded">
+                                                        <a href="#" class="dropdown-toggle selectedOption" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Live Data <i class="icon icon-arrow-point-to-down"></i></a>
+                                                        <div class="dropdown-menu this-list" aria-labelledby="dropdownMenuButton">
+                                                            <ul>
+                                                                <li><a class="dropdown-item" href="#">Last 2 hrs</a></li>
+                                                                <li><a class="dropdown-item" href="#">Last 1 day</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="portlet-body">
+                                                <app-ap-top-clients></app-ap-top-clients>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                               <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="portlet light custom-portlet">
+                                            <div class="portlet-title custom-title">
+                                                <div class="caption">
+                                                    <span>Client Distribution</span>
+                                                </div>
+                                                <div class="text-right pull-right">
+                                                    <div class="dropdown scrollableList graph btn btn-theme-inverse rounded">
+                                                        <a href="#" class="dropdown-toggle selectedOption" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Live Data <i class="icon icon-arrow-point-to-down"></i></a>
+                                                        <div class="dropdown-menu this-list" aria-labelledby="dropdownMenuButton">
+                                                            <ul>
+                                                                <li><a class="dropdown-item" href="#">Last 2 hrs</a></li>
+                                                                <li><a class="dropdown-item" href="#">Last 1 day</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="portlet-body">
+                                                <app-ap-client-distribution></app-ap-client-distribution>
+                                            </div>
+                                        </div>
+                                    </div>
+                                   <div class="col-md-4">
+                                        <div class="portlet light">
+                                            <div class="portlet-body" style="padding: 13px;">
+                                                <app-ap-total-clients></app-ap-total-clients>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="portlet light custom-portlet">
+                                            <div class="portlet-title custom-title">
+                                                <div class="caption">
+                                                    <span>Channel Interference</span>
+                                                </div>
+                                                <div class="text-right pull-right">
+                                                    <div class="dropdown scrollableList graph btn btn-theme-inverse rounded">
+                                                        <a href="#" class="dropdown-toggle selectedOption" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">2.4 GHz <i class="icon icon-arrow-point-to-down"></i></a>
+                                                        <div class="dropdown-menu this-list" aria-labelledby="dropdownMenuButton">
+                                                            <ul>
+                                                                <li><a class="dropdown-item" href="#">2.4 GHz</a></li>
+                                                                <li><a class="dropdown-item" href="#">5 GHz</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="portlet-body">
+                                               <app-ap-channel-interference></app-ap-channel-interference>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- /stats-body/graphical view -->
+                        </div>
+                        <div id="tab3" class="ssid upgrade-tab" *ngIf="isSSID">
+                            <div class="stats-head">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="portlet light head" [ngClass]="{'no-padd-bottom': isSsidSelected==true}">
+                                            <div class="portlet-title" *ngIf="isSsidSelected">
+
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                            <div class="pull-left back-btn">
+                                                                    <a href="javascript:void(0)" class="btn" (click)="goback('ssid')">
+                                                                        <i class="icon icon-left-arrow-1"></i>
+                                                                    </a>
+                                                                </div>
+                                                        <div class="caption">
+                                                            <i class="icon icon-wifi-connection"></i> <span class="text-bold">{{selectedVapname}}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="action-field">
+                                                            <select name="select-group" class="form-control" (change)="drawgraphs(vapId,selectedVapname,'ssid',$event)" *ngIf="vapGroupdata.length > 0">
+                                                                <option value="-1">Select Group</option>
+                                                                <option *ngFor="let grp of vapGroupdata" value="{{grp[0]}}">{{grp[1]}}</option>
+                                                            </select>
+                                                            <p class="no-data-group"  *ngIf="vapGroupdata.length == 0">No groups aviabale</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-5 pull-right text-right">
+                                                        <div class="dropdown scrollableList graph btn btn-theme-inverse rounded" >
+                                                            <a href="#" class="dropdown-toggle selectedOption Graphical" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" [ngClass]="{'disabled':!isgroupSelected}">{{     this.ifGraphforSSID == true? 'Graphical View':'Table View'}} <i class="icon icon-arrow-point-to-down"></i></a>
+                                                            <div class="dropdown-menu this-list Graphical" aria-labelledby="dropdownMenuButton">
+                                                                <ul>
+                                                                    <li><a class="dropdown-item"   href="javascript:void(0)" (click)="changeView('graph','ssid')">Graphical View</a></li>
+                                                                    <li><a class="dropdown-item"  href="javascript:void(0)" (click)="changeView('table','ssid')">Table View</a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                          <!--SSID TABLE-->
+
+                                            <div class="table-function" *ngIf="!isSsidSelected">
+                                              <ul>
+                                                <li>
+                                                  <span class="pageEntry">Show</span>
+                                                </li>
+                                                <li>
+                                                  <select class="form-control caption-select" [(ngModel)]="rowsOnPage">
+
+                                                    <option [ngValue]="20">20</option>
+                                                    <option [ngValue]="100">100</option>
+                                                    <option [ngValue]="1000">1000</option>
+                                                    <option [ngValue]="5000">5000</option>
+                                                  </select>
+                                                </li>
+                                                <li>
+                                                  <span class="pageEntry">entries</span>
+                                                </li>
+                                              </ul>
+                                                <ul class="table-function-right">
+                                                    <li class="posreltive">
+                                                        <a class="dropdown-toggle" id="dropdownUnRegPopup" data-toggle="dropdown" aria-haspopup="true"  aria-expanded="false"  href="#" >Filter columns <i aria-hidden="true" class="fa fa-chevron-down"></i></a>
+                                                        <div class="drop-checkbox dropdown-menu" aria-labelledby="dropdownUnRegPopup" (click)="holdPopup($event)">
+                                                        <ul>
+                                                            <li class="dropdown-item"
+                                                                *ngFor="let i of coloumsVapObjects;let index = index">
+
+                                                                <label class="checkbox">
+                                                                    <input class="register-check" type="checkbox"  checked="i.checked" (change)="selectVapColoums($event,index)"  [disabled]= "vapCount == 3 && i.checked == true">
+                                                                    <div class="check"></div>
+                                                                    <span class="check-label">{{i.name}}</span>
+                                                                </label>
+                                                            </li>
+                                                        </ul>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                            <table
+                                              id="example"
+                                              class="display theme table record_table table-striped table-sort text-center"
+                                              cellspacing="0"
+                                              width="100%"
+                                              [mfData]="vap_data"
+                                              #mf="mfDataTable"
+                                              *ngIf="!isSsidSelected"
+                                              [mfRowsOnPage]=rowsOnPage>
+                                            <thead>
+                                                <tr class="table-head">
+                                                    <!-- <th>
+                                                        <label class="checkbox">
+                                                        <input type="checkbox" class="ssid-all-check" (click)="selectAllSSID($event)" id="selectAllCheck">
+                                                        <div class="check"></div>
+                                                        </label>
+                                                    </th> -->
+                                                    <th class="text-center" *ngIf="(coloumsVapObjects[0].checked) == true">
+                                                        <mfDefaultSorter by="ssid">
+                                                        <span>SSID Name
+                                                        <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='ssid' && _sortOrder=='asc' }"></i>
+                                                        <i class="up icon icon-up-arrow-1"  [ngClass]="{'activeIcon': _sortBy=='ssid' && _sortOrder=='desc' }"></i>
+                                                        </span>
+                                                        </mfDefaultSorter>
+                                                    </th>
+                                                    <th class="text-center" *ngIf="(coloumsVapObjects[1].checked) == true">
+                                                        <mfDefaultSorter by="no_of_groups">
+                                                        <span>No. of Group
+                                                        <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='no_of_groups' && _sortOrder=='asc' }"></i>
+                                                        <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='no_of_groups' && _sortOrder=='desc' }"></i>
+                                                        </span>
+                                                        </mfDefaultSorter>
+                                                    </th>
+                                                    <th class="text-center" *ngIf="(coloumsVapObjects[2].checked) == true">
+                                                        <mfDefaultSorter by="ap_count">
+                                                        <span>No. of Associated AP
+                                                        <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='group_ap_countname' && _sortOrder=='asc' }"></i>
+                                                        <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ap_count' && _sortOrder=='desc' }"></i>
+                                                        </span>
+                                                        </mfDefaultSorter>
+                                                    </th>
+                                                    <th class="text-center" *ngIf="(coloumsVapObjects[3].checked) == true">
+                                                        <mfDefaultSorter by="client_count">
+                                                        <span>No. of Connected Clients
+                                                        <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='client_count' && _sortOrder=='asc' }"></i>
+                                                        <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='client_count' && _sortOrder=='desc' }"></i>
+                                                        </span>
+                                                        </mfDefaultSorter>
+                                                    </th>
+                                                    <th class="text-center" *ngIf="(coloumsVapObjects[4].checked) == true">
+                                                        <mfDefaultSorter by="security">
+                                                        <span>Security
+                                                        <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='group_securityname' && _sortOrder=='asc' }"></i>
+                                                        <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='security' && _sortOrder=='desc' }"></i>
+                                                        </span>
+                                                        </mfDefaultSorter>
+                                                    </th>
+                                                    <th class="text-center" *ngIf="(coloumsVapObjects[4].checked) == true">
+                                                            <span>Statistics</span>
+                                                        </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            <!--aaaaa-->
+                                                <tr
+                                                  class="table-body unreg-tbl table-clickable"
+                                                  *ngFor="let vap_item of mf.data;let activeIndex = index"
+                                                  [ngSwitch]="vap_item.security"
+                                                  id="{{vap_item.vap_id | noHyphen}}"
+                                                  (dblclick)="drawgraphs(vap_item.vap_id,vap_item.ssid,'ssid')">
+
+                                                <td *ngIf="(coloumsVapObjects[0].checked) == true">{{vap_item.ssid}}</td>
+                                                <td *ngIf="(coloumsVapObjects[1].checked) == true">{{vap_item.no_of_groups}}</td>
+                                                <td *ngIf="(coloumsVapObjects[2].checked) == true">{{vap_item.ap_count}}</td>
+                                                <td *ngIf="(coloumsVapObjects[3].checked) == true">{{vap_item.client_count}}</td>
+                                                <td  *ngIf="(coloumsVapObjects[4].checked) == true && vap_item.security == 0">Open</td>
+                                                <td  *ngIf="(coloumsVapObjects[4].checked) == true  && vap_item.security == 2">WPA-PSK</td>
+                                                <td  *ngIf="(coloumsVapObjects[4].checked) == true  && vap_item.security == 3">WPA2-PSK</td>
+                                                <td  *ngIf="(coloumsVapObjects[4].checked) == true  && vap_item.security == 4">WPA2-PSK_Mixed_mode</td>
+                                                <td  *ngIf="(coloumsVapObjects[4].checked) == true  && vap_item.security == 5">WPA_EAP</td>
+
+                                                  <td style="text-align:  center;"><a href="javascript:void(0)" class="stat-btn" (click)="drawgraphs(vap_item.vap_id,vap_item.ssid,'ssid')"><i class="icon icon-bar-chart btn-icon"></i></a>
+                                                </td>
+                                                </tr>
+                                                <tr class="table-body" *ngIf="mf.data.length == 0">
+                                                    <td colspan="6">No data found</td>
+                                                </tr>
+                                            </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- /stats-head-->
+
+                            <div class="stats-body table-view" *ngIf="!ifGraphforSSID && isSsidSelected && isgroupSelected">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="portlet light custom-portlet">
+                                            <div class="portlet-body">
+                                                <table class="display theme record_table table table-striped table-sort table-param text-center" cellspacing="0" width="100%" style="margin-bottom: 0; width: 70%;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th rowspan="2" class="text-center border-bottom border-right">Parameters</th>
+                                                            <th colspan="2" class="text-center border-bottom border-right">2.4 GHz</th>
+                                                            <th colspan="2" class="text-center border-bottom border-right">5 GHz</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-center border-right">Uplink</th>
+                                                            <th class="text-center border-right">Downlink</th>
+                                                            <th class="text-center border-right">Uplink</th>
+                                                            <th class="text-center border-right">Downlink</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <th class="border-bottom">Total ({{tabularData_unit}})</th>
+                                                            <td>{{tabularData.tx24}}</td>
+                                                            <td>{{tabularData.rx24}}</td>
+                                                            <td>{{tabularData.tx5}}</td>
+                                                            <td>{{tabularData.rx5}}</td>
+                                                        </tr>
+                                                        <!-- <tr>
+                                                            <th class="border-bottom">Total Packets</th>
+                                                            <td>-</td>
+                                                            <td>-</td>
+                                                            <td>-</td>
+                                                            <td>-</td>
+                                                        </tr> -->
+                                                        <tr>
+                                                            <th class="border-bottom">Connected Clients</th>
+                                                            <td>{{tabularData.client_count_24}}</td>
+                                                            <td>&nbsp;</td>
+                                                            <td>{{tabularData.client_count_5}}</td>
+                                                            <td>&nbsp;</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="portlet light custom-portlet">
+                                            <div class="portlet-body">
+                                                <table class="display theme record_table table table-striped table-sort text-center" cellspacing="0" width="100%" style="margin-bottom: 0; width: 70%;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th width="25%" class="text-center">Broadcasting APs</th>
+                                                            <th class="text-center">&nbsp;</th>
+                                                            <th class="text-center">&nbsp;</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>-</td>
+                                                            <td>&nbsp;</td>
+                                                            <td class="status">&nbsp;</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- /stats-body/table-view-->
+                            <div class="stats-body graphical-view" *ngIf="ifGraphforSSID && isSsidSelected && isgroupSelected">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="portlet light custom-portlet">
+                                            <div class="portlet-title custom-title">
+
+                                                <div class="caption">
+                                                    <span>2.4 GHz Traffic Usage</span>
+                                                </div>
+                                                <div class="text-right pull-right">
+                                                    <div class="dropdown scrollableList graph btn btn-theme-inverse rounded">
+                                                        <li class="selectedOption" (click)="openOptions('ssid_downlink_2',$event)">{{scaleText_downlink_ssid_2}}<i class="icon icon-arrow-point-to-down"></i></li>
+                                                        <div class="dropdown-menu this-list downlink_ssid_2_options" aria-labelledby="dropdownMenuButton">
+                                                            <ul>
+                                                                <li><a class="dropdown-item"  (click)="setScale('downlink_ssid_2','hour')">Last 1 hour</a></li>
+                                                                <li><a class="dropdown-item"  (click)="setScale('downlink_ssid_2','day')">Last 1 day</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <!-- <div class="dropdown scrollableList graph btn btn-theme-inverse rounded">
+                                                        <li class="selectedOption" (click)="">Total<i class="icon icon-arrow-point-to-down"></i></li>
+                                                        <div class="dropdown-menu this-list downlink_ssid_2_options" aria-labelledby="dropdownMenuButton">
+                                                            <ul>
+                                                                <li><a class="dropdown-item"  (click)="">Total</a></li>
+                                                                <li><a class="dropdown-item"  (click)="">Average</a></li>
+                                                                <li><a class="dropdown-item"  (click)="">Min</a></li>
+                                                                <li><a class="dropdown-item"  (click)="">Max</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div> -->
+                                                    <div class="dropdown scrollableList graph btn btn-theme-inverse rounded">
+                                                        <li class="selectedOption" (click)="openOptions('ssid_downlink_2_range',$event)">{{rangeText_downlink_ssid_2}}<i class="icon icon-arrow-point-to-down"></i></li>
+                                                        <div class="dropdown-menu this-list downlink_ssid_2_options_range" aria-labelledby="dropdownMenuButton">
+                                                            <ul>
+                                                                <li><a class="dropdown-item"  (click)="setRange('downlink_ssid_2','total')">Total</a></li>
+                                                                <li><a class="dropdown-item"  (click)="setRange('downlink_ssid_2','avg')">Average</a></li>
+                                                                <li><a class="dropdown-item"  (click)="setRange('downlink_ssid_2','min')">Minimum</a></li>
+                                                                <li><a class="dropdown-item"  (click)="setRange('downlink_ssid_2','max')">Maximum</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="portlet-body portlet-body-graph">
+                                               <app-ssid-downlink-traffic [apMac]="apMac" [scale]="scaleVal_downlink_2" [groupid]="selectedGrpVapId" [range]="rangeVal_ssid_2" *ngIf="selectedGrpVapId"></app-ssid-downlink-traffic>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="portlet light custom-portlet">
+                                            <div class="portlet-title custom-title">
+                                                <div class="caption">
+                                                    <span>5 GHz Traffic Usage</span>
+                                                </div>
+                                                <div class="text-right pull-right">
+                                                    <div class="dropdown scrollableList graph btn btn-theme-inverse rounded">
+                                                            <li class="selectedOption" (click)="openOptions('ssid_downlink_5',$event)">{{scaleText_downlink_ssid_5}}<i class="icon icon-arrow-point-to-down"></i></li>
+                                                        <div class="dropdown-menu this-list downlink_ssid_5_options" aria-labelledby="dropdownMenuButton">
+                                                                <ul>
+                                                                    <li><a class="dropdown-item"  (click)="setScale('downlink_ssid_5','hour')">Last 1 hour</a></li>
+                                                                    <li><a class="dropdown-item"  (click)="setScale('downlink_ssid_5','day')">Last 1 day</a></li>
+                                                                </ul>
+                                                        </div>
+                                                    </div>
+                                                    <div class="dropdown scrollableList graph btn btn-theme-inverse rounded">
+                                                        <li class="selectedOption" (click)="openOptions('ssid_downlink_5_range',$event)">{{rangeText_downlink_ssid_5}}<i class="icon icon-arrow-point-to-down"></i></li>
+                                                        <div class="dropdown-menu this-list downlink_ssid_5_options_range" aria-labelledby="dropdownMenuButton">
+                                                            <ul>
+                                                                <li><a class="dropdown-item"  (click)="setRange('downlink_ssid_5','total')">Total</a></li>
+                                                                <li><a class="dropdown-item"  (click)="setRange('downlink_ssid_5','avg')">Average</a></li>
+                                                                <li><a class="dropdown-item"  (click)="setRange('downlink_ssid_5','min')">Minimum</a></li>
+                                                                <li><a class="dropdown-item"  (click)="setRange('downlink_ssid_5','max')">Maximum</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="portlet-body portlet-body-graph">
+                                                <app-ssid-downlink-traffic-5 [apMac]="apMac" [scale]="scaleVal_downlink_5" [groupid]="selectedGrpVapId" [range]="rangeVal_ssid_5" *ngIf="selectedGrpVapId"></app-ssid-downlink-traffic-5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- /stats-body/graphical-view -->
+                        </div>
+                        <div id="tab4" class="upgrade-tab" *ngIf="isClient">
+                                <app-connected-clients></app-connected-clients>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/===/WORK AREA END/===/-->

@@ -1,0 +1,24 @@
+<form (ngSubmit)="onSubmit(loginForm.value)"  #loginForm="ngForm" name="loginForm">
+<div class="login-wrap">
+    <h1>Wireless LAN Controller</h1>
+    <div class="login-content">
+        <div class="loginLogo">
+            <img src="../assets/images/logo_log.png">
+        </div>
+        <div class="loginForm">
+            <fieldset>
+                <legend>Username</legend>
+                <input type="text" class="login-input" placeholder="User Name" required   [(ngModel)]="model.email" #email="ngModel" name="email">
+            </fieldset>
+          
+            <fieldset>
+                <legend>Password</legend>
+                <input type="password" class="login-input" placeholder="Password" required   [(ngModel)]="model.password"   #password="ngModel" name="password">
+            </fieldset>
+            <p class="errorMsg"  *ngIf="isError">{{errMsg}}</p>
+            <!-- <p><a href="#">Forgot Password?</a></p> -->
+            <a href="#"><input type="submit" value="Submit"></a>
+        </div>
+    </div>
+</div>
+</form>

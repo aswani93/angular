@@ -1,0 +1,224 @@
+<div class="row" *ngIf="!isClientSelected">
+  <div class="col-md-12">
+      <div class="portlet light head">
+        
+
+
+          <div class="list-out">
+          <div class="table-function" >
+              <ul>
+              <li>
+                  <span class="pageEntry">Show</span>
+              </li>
+              <li>
+                  <select class="form-control caption-select" [(ngModel)]="rowsOnPage">
+
+                  <option [ngValue]="20">20</option>
+                  <option [ngValue]="100">100</option>
+                  <option [ngValue]="1000">1000</option>
+                  <option [ngValue]="5000">5000</option>
+                  </select>
+              </li>
+              <li>
+                  <span class="pageEntry">entries</span>
+              </li>
+              </ul>
+
+
+              <!--Customize column options for AccessPoint Columns Table -->
+              <ul class="table-function-right" >
+              <li class="posreltive">
+                  <a class="dropdown-toggle"
+                      id="dropdownPopup"
+                      data-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="false"
+                      href="#" >Filter columns
+                  <i aria-hidden="true" class="fa fa-chevron-down"></i>
+                  </a>
+
+                  
+                      <div class="drop-checkbox dropdown-menu"
+                      aria-labelledby="dropdownPopup"
+                      (click)="holdPopup($event)">
+                      <ul>
+                          <li class="dropdown-item" *ngFor="let columndata of coloumsClientObjects; let index = index">
+                            <label class="checkbox">
+                              <input class="register-check"
+                                     type="checkbox"
+                                     [checked]=columndata.checked
+                                     (change)="selectClientColoums($event,index)"
+                                     [disabled]="count == 1 && columndata.checked == true">
+                              <div class="check"></div>
+      
+                              <span class="check-label">{{columndata.name}}</span>
+                            </label>
+                          </li>
+      
+                        </ul>
+                 </div>
+                  
+              </li>
+              <!--customize column option ends-->
+              </ul>
+          </div>
+
+          <table id="example"
+          class="display theme table record_table table-striped table-sort text-center"
+          cellspacing="0"
+          width="100%"
+          [mfData]=data
+          #mf="mfDataTable"
+          [mfRowsOnPage]=rowsOnPage>
+     <thead>
+     <tr class="table-head">
+
+       <th class="tableHeight text-center" *ngIf="(coloumsClientObjects[0].checked) == true">
+         <mfDefaultSorter by="ssid">
+                                 <span>Client MAC
+                                   <!-- <i class="down icon icon-download-arrow"  [ngClass]="{'activeIcon': isSSIDNameASC }"></i>
+                                   <i class="up icon icon-up-arrow-1"  [ngClass]="{'activeIcon': isSSIDNameDSC }"></i> -->
+                             </span>
+         </mfDefaultSorter>
+       </th>
+
+       <th class="tableHeight text-center" *ngIf="(coloumsClientObjects[1].checked) == true">
+         <mfDefaultSorter by="no_of_groups">
+                                 <span>AP Name
+                                   <!-- <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': isNoGroupASC }"></i>
+                                   <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': isNoGroupDSC }"></i> -->
+                             </span>
+         </mfDefaultSorter>
+       </th>
+       <th class="tableHeight text-center" *ngIf="(coloumsClientObjects[2].checked) == true">
+         <mfDefaultSorter by="no_of_groups">
+                                 <span>AP MAC
+                                   <!-- <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': isNoGroupASC }"></i>
+                                   <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': isNoGroupDSC }"></i> -->
+                             </span>
+         </mfDefaultSorter>
+       </th>
+
+       <th class="tableHeight text-center" *ngIf="(coloumsClientObjects[3].checked) == true">
+         <mfDefaultSorter by="no_of_groups">
+                                 <span>Group
+                                   <!-- <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': isNoGroupASC }"></i>
+                                   <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': isNoGroupDSC }"></i> -->
+                             </span>
+         </mfDefaultSorter>
+       </th>
+
+       <th class="tableHeight text-center" *ngIf="(coloumsClientObjects[4].checked) == true">
+         <mfDefaultSorter by="no_of_groups">
+                                 <span>SSID
+                                   <!-- <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': isNoGroupASC }"></i>
+                                   <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': isNoGroupDSC }"></i> -->
+                             </span>
+         </mfDefaultSorter>
+       </th>
+
+       <th class="tableHeight text-center" *ngIf="(coloumsClientObjects[5].checked) == true">
+         <mfDefaultSorter by="ap_count">
+                                 <span>RSSI(dBm)
+                                   <!-- <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': isNoAPASC }"></i>
+                                   <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': isNoAPDSC }"></i> -->
+                             </span>
+         </mfDefaultSorter>
+       </th>
+
+
+       <th class="tableHeight text-center" *ngIf="(coloumsClientObjects[6].checked) == true">
+         <mfDefaultSorter by="ap_count">
+                                 <span>Uplink
+                                   <!-- <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': isNoAPASC }"></i>
+                                   <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': isNoAPDSC }"></i> -->
+                             </span>
+         </mfDefaultSorter>
+       </th>
+
+
+       <th class="tableHeight text-center" *ngIf="(coloumsClientObjects[7].checked) == true">
+         <mfDefaultSorter by="ap_count">
+                                 <span>Downlink
+                                   <!-- <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': isNoAPASC }"></i>
+                                   <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': isNoAPDSC }"></i> -->
+                             </span>
+         </mfDefaultSorter>
+       </th>
+
+
+       <th class="tableHeight text-center" *ngIf="(coloumsClientObjects[8].checked) == true">
+         <mfDefaultSorter by="ap_count">
+                                 <span>Online Time
+                                   <!-- <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': isNoAPASC }"></i>
+                                   <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': isNoAPDSC }"></i> -->
+                             </span>
+         </mfDefaultSorter>
+       </th>
+
+       <th class="tableHeight text-center">
+         <span>Client Details</span>
+       </th>
+
+     </tr>
+
+     </thead>
+     <tbody>
+     <tr class="table-body unreg-tbl table-clickable" *ngFor="let item of mf.data"
+         (click)="showDetails(item.client_mac)">
+
+       <td *ngIf="(coloumsClientObjects[0].checked) == true" (click)="showDetails(item.client_mac)">
+         {{item.client_mac}}
+       </td>
+       <td *ngIf="(coloumsClientObjects[1].checked) == true" (click)="showDetails(item.client_mac)">
+         {{item.ap_name}}
+       </td>
+       <td *ngIf="(coloumsClientObjects[2].checked) == true" (click)="showDetails(item.client_mac)">
+         {{item.ap_mac}}
+       </td>
+       <td *ngIf="(coloumsClientObjects[3].checked) == true" (click)="showDetails(item.client_mac)">
+         {{item.group_name}}
+       </td>
+       <td *ngIf="(coloumsClientObjects[4].checked) == true" (click)="showDetails(item.client_mac)">
+         {{item.vap_name}}
+       </td>
+       <td *ngIf="(coloumsClientObjects[5].checked) == true" (click)="showDetails(item.client_mac)">
+         {{item.rssi}}
+       </td>
+       <td *ngIf="(coloumsClientObjects[6].checked) == true" (click)="showDetails(item.client_mac)">
+         {{item.tx}}
+       </td>
+       <td *ngIf="(coloumsClientObjects[7].checked) == true" (click)="showDetails(item.client_mac)">
+         {{item.rx}}
+       </td>
+       <td *ngIf="(coloumsClientObjects[8].checked) == true" (click)="showDetails(item.client_mac)">
+         {{item.online_time}}
+       </td>
+
+       <td>
+         <a href="javascript:void(0)" class="stat-btn"
+            (click)="showDetails(item.client_mac)">
+           <i class="icon icon-bar-chart btn-icon"></i>
+         </a>
+       </td>
+     </tr>
+     <tr class="table-body" *ngIf="mf.data.length == 0">
+       <td colspan="10" style="text-align: center">No clients are connected to the system, Please try again later..
+       </td>
+     </tr>
+     <tr class="page-detail-area">
+       <td colspan="6">
+         <div class="entry-count text-left" style="float:left;"><span *ngIf="dataLength>0">Showing {{showingfrom}} to {{showingto}} of {{dataLength}} entries</span>
+         </div>
+         <div class="list-pagination" style="float:right;">
+           <mfBootstrapPaginator></mfBootstrapPaginator>
+         </div>
+       </td>
+     </tr>
+     </tbody>
+   </table>
+          </div>
+      </div>
+  </div>
+</div>
+<app-connected-client-details *ngIf="isClientSelected" [selectedClient]="selectedClient" (emitEve)="emitEve()"></app-connected-client-details>

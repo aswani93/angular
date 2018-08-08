@@ -1,0 +1,38 @@
+.portlet.light .portlet-title .caption {
+  color:#808e96;
+  font-weight: 500;
+  font-size:15px;
+}
+
+.section-title{
+  border:solid 1px #eef1f5;
+  border-width:1px 0px;
+  margin: 10px -20px 50px -20px;
+  padding: 10px 20px;
+  color:#808e96;
+  font-weight: 500;
+  font-size:15px;
+}
+
+::ng-deep mfdefaultsorter .glyphicon{
+  display: none;
+}
+
+::ng-deep .activeIcon{
+  font-weight: bold;
+  color: #fff !important;
+}
+/*::ng-deep .disabled {*/
+  /*pointer-events: none;*/
+/*}*/
+
+::ng-deep .disabled input {
+  pointer-events: none;
+  background-color: #eee;
+  opacity: 1;
+}
+input[readonly]
+{
+  background-color:white;
+}
+

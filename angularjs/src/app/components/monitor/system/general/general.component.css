@@ -1,0 +1,13 @@
+::ng-deep mfdefaultsorter .glyphicon{
+    display: none;
+}
+
+::ng-deep .activeIcon{
+    font-weight: bold;
+
+    color: #fff !important;
+}
+
+.table-center {
+  text-align: center;
+}

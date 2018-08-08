@@ -1,0 +1,340 @@
+<!--/======================/WORK AREA/======================/-->
+<div class="page-content-wrapper">
+  <div class="row">
+     <div class="col-lg-12 col-sm-12">
+        <div class="portlet light bordered">
+          
+           <div class="portlet-body">
+              <!--/======================/PAGE TAB/======================/-->
+              <div class="detail-area">
+                <ul>
+                  <li class="gobackButton">
+                      <a href="javascript:void(0)" class="btn" (click)="goback()">
+                          <i class="icon icon-left-arrow-1" style="font-size: 20px;"></i>
+                      </a> 
+                  </li>
+                  <li>
+                      <span class="key-label">AP Name : </span> 
+                     
+                      <span class="key-value status"> <span class="{{selectedAp.status==1?'online':'offline'}}"></span>{{selectedAp.ap_name}}</span> 
+                  </li>
+                  <li>
+                      <span class="key-label">IP Address : </span> 
+                      <span class="key-value">{{selectedAp.ap_ip}}</span> 
+                  </li>
+                  <li>
+                      <span class="key-label">MAC Address : </span> 
+                      <span class="key-value">{{selectedAp.ap_mac}}</span> 
+                  </li>
+                  <li>
+                      <span class="key-label">Group Name : </span> 
+                      <span class="key-value">{{selectedAp.ap_group}}</span> 
+                  </li>
+                  
+                                                                  
+                </ul>
+              </div>
+              <div class="ssid-config-tabs">
+                
+                 <tabset  class="radio-tab">
+                    <tab heading="2.4G" (select)="toggleTab(0)">
+                       <div  class="setting-tab active">
+                          <div class="row">
+                             <div class="clearfix"></div>
+                             <div>
+                                <div class="tab-pane active">
+                                  <div class="tabcontent table-responsive" style="display: block;">
+                                    <table class="display theme record_table table table-striped table-sort" cellspacing="0" width="100%" [mfData]="detailData" #mf="mfDataTable" *ngIf="selectedTab == 0" >
+                                       <thead>
+                                          <tr class="table-head">
+                                             <th>
+                                                <label class="checkbox">
+                                                   <input type="checkbox" [checked]="lengthVarTemp == detailDataLength" (change)="selectAll($event.target.checked)">
+                                                   <div class="check"></div>
+                                                </label>
+                                             </th>
+                                             <th class="text-left"> 
+                                                <mfDefaultSorter by="known_ssid_name">
+                                                    <span>SSID Name
+                                                    <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='known_ssid_name' && _sortOrder=='asc' }"></i>
+                                                    <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='known_ssid_name' && _sortOrder=='desc' }"></i>
+                                                    </span>
+                                                </mfDefaultSorter>
+                                             </th>
+                                             <th class="text-center">
+                                                <mfDefaultSorter by="ssid_mac">
+                                                    <span>SSID MAC
+                                                    <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='ssid_mac' && _sortOrder=='asc' }"></i>
+                                                    <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ssid_mac' && _sortOrder=='desc' }"></i>
+                                                    </span>
+                                                </mfDefaultSorter>
+                                             </th>
+                                             <th class="text-center">
+                                                <mfDefaultSorter by="channel">
+                                                    <span>Channel
+                                                    <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='channel' && _sortOrder=='asc' }"></i>
+                                                    <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='channel' && _sortOrder=='desc' }"></i>
+                                                    </span>
+                                                </mfDefaultSorter>
+                                             </th>
+                                             <th class="text-center">
+                                                <mfDefaultSorter by="channel_width">
+                                                    <span>Channel Width
+                                                    <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='channel_width' && _sortOrder=='asc' }"></i>
+                                                    <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='channel_width' && _sortOrder=='desc' }"></i>
+                                                    </span>
+                                                </mfDefaultSorter>
+                                             </th>
+                                             <th class="text-center">
+                                                <mfDefaultSorter by="rssi">
+                                                    <span>RSSI Threshold
+                                                    <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='rssi' && _sortOrder=='asc' }"></i>
+                                                    <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='rssi' && _sortOrder=='desc' }"></i>
+                                                    </span>
+                                                </mfDefaultSorter>
+                                             </th>
+                                             <th class="text-center">
+                                                <mfDefaultSorter by="auth_type">
+                                                    <span>Security
+                                                    <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='auth_type' && _sortOrder=='asc' }"></i>
+                                                    <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='auth_type' && _sortOrder=='desc' }"></i>
+                                                    </span>
+                                                </mfDefaultSorter>
+                                             </th>
+                                             <th class="text-center">
+                                                <mfDefaultSorter by="status">
+                                                    <span>Rogue AP Status
+                                                    <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy == 'status' && _sortOrder =='asc' }"></i>
+                                                    <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy == 'status' && _sortOrder =='desc' }"></i>
+                                                    </span>
+                                                </mfDefaultSorter>
+                                            </th>
+                                          </tr>
+                                       </thead>
+                                       <tbody>
+                                          <tr class="table-body" *ngFor="let item of mf.data">
+                                             <td>
+                                                <label class="checkbox">
+                                                   <input type="checkbox" (change)="checkNredraw($event,item)" checked class="ssid-check">
+                                                   <div class="check"></div>
+                                                </label>
+                                             </td>
+                                             <td class="text-left">{{item.known_ssid_name}}</td>
+                                             <td class="text-center">{{item.ssid_mac}}</td>
+                                             <td class="text-center">{{item.channel}}</td>
+                                             <td class="text-center">{{item.channel_width}}</td>
+                                             <td class="text-center">{{item.rssi}}</td>
+                                             <td class="text-center">{{item.auth_type}}</td>
+                                             <td class="text-center" style="text-transform: capitalize">{{item.status}}</td>
+                                          </tr>
+                                          <tr class="table-body" *ngIf="mf.data.length == 0">
+                                              <td colspan="8" style="text-align: center;">No data available</td>
+                                          </tr>
+                                       </tbody>
+                                    </table>
+                                  </div>
+                                </div>
+                             </div>
+                          </div>
+                       </div>
+                    </tab>
+                    <tab heading="5G" (select)="toggleTab(1)">
+                       <div  class="setting-tab active">
+                          <div class="row">
+                             <div class="clearfix"></div>
+                             <div>
+                                <div class="tab-pane active">
+                                  <div class="tabcontent table-responsive" style="display: block;">
+                                      <table id="example" class="display theme table record_table table-striped table-sort text-center" cellspacing="0" width="100%" *ngIf="selectedTab == 1"  [mfData]="detailData" #mf2="mfDataTable">
+                                          <thead>
+                                            <tr class="table-head">
+                                                <th>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" [checked]="lengthVarTemp == detailDataLength" (change)="selectAll($event.target.checked)">
+                                                        <div class="check"></div>
+                                                    </label>
+                                                </th>
+                                                <th class="text-left"> 
+                                                    <mfDefaultSorter by="known_ssid_name">
+                                                        <span>SSID Name
+                                                        <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy2=='known_ssid_name' && _sortOrder2=='asc' }"></i>
+                                                        <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy2=='known_ssid_name' && _sortOrder2=='desc' }"></i>
+                                                        </span>
+                                                    </mfDefaultSorter>
+                                                </th>
+                                                <th class="text-center">
+                                                    <mfDefaultSorter by="ssid_mac">
+                                                        <span>SSID MAC
+                                                        <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy2=='ssid_mac' && _sortOrder2=='asc' }"></i>
+                                                        <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy2=='ssid_mac' && _sortOrder2=='desc' }"></i>
+                                                        </span>
+                                                    </mfDefaultSorter>
+                                                </th>
+                                                <th class="text-center">
+                                                    <mfDefaultSorter by="channel">
+                                                        <span>Channel
+                                                        <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy2=='channel' && _sortOrder2=='asc' }"></i>
+                                                        <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy2=='channel' && _sortOrder2=='desc' }"></i>
+                                                        </span>
+                                                    </mfDefaultSorter>
+                                                </th>
+                                                <th class="text-center">
+                                                    <mfDefaultSorter by="channel_width">
+                                                        <span>Channel Width
+                                                        <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy2=='channel_width' && _sortOrder2=='asc' }"></i>
+                                                        <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy2=='channel_width' && _sortOrder2=='desc' }"></i>
+                                                        </span>
+                                                    </mfDefaultSorter>
+                                                </th>
+                                                <th class="text-center">
+                                                    <mfDefaultSorter by="rssi">
+                                                        <span>RSSI Threshold
+                                                        <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy2=='rssi' && _sortOrder2=='asc' }"></i>
+                                                        <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy2=='rssi' && _sortOrder2=='desc' }"></i>
+                                                        </span>
+                                                    </mfDefaultSorter>
+                                                </th>
+                                                <th class="text-center">
+                                                    <mfDefaultSorter by="auth_type">
+                                                        <span>Security
+                                                        <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy2=='auth_type' && _sortOrder2=='asc' }"></i>
+                                                        <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy2=='auth_type' && _sortOrder2=='desc' }"></i>
+                                                        </span>
+                                                    </mfDefaultSorter>
+                                                </th>
+                                                <th class="text-center">
+                                                    <mfDefaultSorter by="status">
+                                                        <span>Rogue AP Status
+                                                        <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy2=='status' && _sortOrder2=='asc' }"></i>
+                                                        <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy2=='status' && _sortOrder2=='desc' }"></i>
+                                                        </span>
+                                                    </mfDefaultSorter>
+                                                </th>
+                                                </tr>
+                                          </thead>
+                                          <tbody>
+                                             <tr class="table-body" *ngFor="let item of mf2.data">
+                                                <td>
+                                                   <label class="checkbox">
+                                                      <input type="checkbox"  (change)="checkNredraw($event,item)" checked class="ssid-check">
+                                                      <div class="check"></div>
+                                                   </label>
+                                                </td>
+                                                <td class="text-left">{{item.known_ssid_name}}</td>
+                                                <td>{{item.ssid_mac}}</td>
+                                                <td>{{item.channel}}</td>
+                                                <td>{{item.channel_width}}</td>
+                                                <td>{{item.rssi}}</td>
+                                                <td>{{item.auth_type}}</td>
+                                                <td style="text-transform: capitalize">{{item.status}}</td>
+                                             </tr>
+                                             <tr class="table-body" *ngIf="mf2.data.length == 0">
+                                                <td colspan="8" style="text-align: center;">No data available</td>
+                                            </tr>
+                                          </tbody>
+                                       </table>
+                                  </div>
+                                </div>
+                             </div>
+                          </div>
+                       </div>
+                    </tab>
+                 </tabset>
+              </div>
+              <!--TAB END-->
+           </div>
+        </div>
+        <!-- /portlet-->
+       
+        <div class="row" *ngIf="dataforPlot.length>0">
+            <div class="col-lg-12 col-sm-12">
+               <div class="portlet light bordered custom-portlet">
+                  <div class="portlet-title custom-title">
+                     <div class="caption">
+                        <span>Channel Interference</span>
+                     </div>
+                  </div>
+                  <div class="portlet-body">
+                    <div [chart]="chart"></div>
+                     
+                  </div>
+               </div>
+               <!-- /portlet-->
+            </div>
+         </div>
+     </div>
+  </div>
+  <div class="side-bar " [@slideInOut]="menuState">
+        <div class="btn-filter">
+            <ul class="filter-panel" (click)="toggleMenu()" style=" left: -55px;">
+                <li *ngIf="menuState === 'out'"> <span class="glyphicon glyphicon-filter" aria-hidden="true"></span></li>
+                <li *ngIf="menuState !== 'out'"> <span class="glyphicon glyphicon-menu-right" aria-hidden="true" ></span></li>
+                <li *ngIf="menuState === 'out'"> <span>Filters</span></li>
+                <li *ngIf="menuState !== 'out'"> <span>Close</span></li>
+            </ul>
+        </div>
+        <div class="portlet light  stats custom-portlet">
+                <div class="portlet-title custom-title">
+            <div class="row">
+                <div class="col-lg-9">
+                    
+                        <div class="caption">
+                            <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
+                            <span>Filters</span>
+                        </div>
+                   
+                </div>
+                <div class="col-lg-3">
+                        <span class="glyphicon glyphicon-remove-circle close-icon" aria-hidden="true" (click)="toggleMenu()"></span>
+                </div>
+            </div>
+           </div>
+            
+        </div>
+        <div style="padding:20px;">
+          
+                <div class="form-group row">
+                    <div class="col-lg-12 col-sm-11">
+                        <label>SSID Name</label>
+                        <angular2-multiselect [data]="ssidList | orderBy : 'itemName'" [settings]="ssid_settings" [(ngModel)]="selectedssids" [ngModelOptions]="{standalone: true}"></angular2-multiselect>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-lg-12 col-sm-11">
+                        <label>SSID MAC</label>
+                        <angular2-multiselect [data]="macList | orderBy : 'itemName'" [settings]="mac_settings" [(ngModel)]="selectedmacs" [ngModelOptions]="{standalone: true}"></angular2-multiselect>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-lg-12 col-sm-11">
+                        <label>Channel</label>
+                        <angular2-multiselect [data]="channelList" [settings]="channel_settings" [(ngModel)]="selectedchannels" [ngModelOptions]="{standalone: true}"></angular2-multiselect>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-lg-12 col-sm-11">
+                        <label>Rouge AP Status</label>
+                        <angular2-multiselect [data]="statusList"  [settings]="status_settings" [(ngModel)]="selectedStatus" [ngModelOptions]="{standalone: true}"></angular2-multiselect>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-lg-12 col-sm-11">
+                        <label style="margin-bottom: 30px;">RSSI Threshold </label>
+                        <ng5-slider [(value)]="minValue" [(highValue)]="maxValue" [options]="options" [(ngModel)]="selectedrssi" [ngModelOptions]="{standalone: true}"></ng5-slider>
+
+                    </div>
+                </div>
+                
+               
+                <div class="form-group row">
+                    <div class="col-lg-12 col-sm-11 text-center">
+                        <input type="button" value="Reset" class="btn btn-cancel btn-large" style="margin-right: 15px;" (click)="resetfilter()">
+                        <input type="button" value="Search" class="btn btn-theme btn-large" (click)="filter()" >
+                    </div>
+                </div>
+           
+        </div>
+        
+    </div>
+</div>
+<!--/===/WORK AREA END/===/-->

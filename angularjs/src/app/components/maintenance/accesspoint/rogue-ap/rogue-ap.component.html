@@ -1,0 +1,359 @@
+<!--/======================/WORK AREA/======================/-->
+<div class="page-content-wrapper">
+    <!-- <div class="row">
+      <div class="col-lg-5 col-sm-12">
+          <div class="searchBar">
+              <i class="icon icon-magnifying-glass"></i>
+              <input type="text" placeholder="Search">
+          </div>
+      </div>
+  </div> -->
+  <form action="" (keydown.enter)="$event.preventDefault()" [formGroup]="rogueAPForm">
+    <div class="row">
+        <div class="col-lg-12 col-sm-12">
+            <div class="portlet light bordered table-responsive">
+                <div class="portlet-body">
+                    <div class="tabcontent" style="display: block;">
+                        <div class="list-out">
+                            <div class="table-function">
+                                <ul>
+                                    <li>
+                                        <span class="pageEntry">Show</span>
+                                    </li>
+                                    <li>
+                                        <select class="form-control caption-select" [(ngModel)]="rowsOnPage"  [ngModelOptions]="{standalone: true}">
+                                            <option [ngValue]="20">20</option>
+                                            <option [ngValue]="100">100</option>
+                                            <option [ngValue]="1000">1000</option>
+                                            <option [ngValue]="5000">5000</option>
+                                        </select>
+                                    </li>
+                                    <li>
+                                        <span class="pageEntry">entries</span>
+                                    </li>
+                                </ul>
+                                <ul class="table-function-right">
+                                    <!-- <li class="posreltive">
+                                        <a class="dropdown-toggle" id="dropdownPopup" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">Filter columns
+                                            <i aria-hidden="true" class="fa fa-chevron-down"></i>
+                                        </a>
+
+                                        <div class="drop-checkbox dropdown-menu" aria-labelledby="dropdownPopup" (click)="holdPopup($event)">
+                                            <ul>
+                                                <li class="dropdown-item" *ngFor="let i of coloumsObjects;let index = index">
+                                                    <label class="checkbox">
+                                                        <input class="register-check" type="checkbox" checked="i.checked" (change)="selectColoums($event,index)" [disabled]="count == 4 && i.checked == true">
+                                                        <div class="check"></div>
+                                                        <span class="check-label">{{i.name}}</span>
+                                                    </label>
+                                                </li>
+
+                                            </ul>
+                                        </div>
+                                    </li> -->
+                                    <li>
+                                        <a href="javascript:void(0);" class="disable-selection" (click)="EditAp()" id="edit-btn">
+                                            <i class="icon icon-edit"></i> Edit</a>
+                                    </li>
+                                    <li>
+                                        <label class="btn btn-default" style="margin: 0;border: 0px" id="browsebutton">
+                                           
+                                            <input type="file" accept=".txt" hidden (change)="fileupload($event)" >
+                                       
+                                            <i class="fa fa-upload"></i>  Upload KnownAP list </label>
+                                    </li>
+                                </ul>
+                            </div>
+
+
+                            <table id="example" class="display theme table record_table table-striped table-sort text-center" cellspacing="0" width="100%" style="table-layout: fixed;"
+                                [mfData]="data" #mf="mfDataTable" [mfRowsOnPage]="rowsOnPage">
+                                <thead>
+                                    <tr class="table-head">
+                                        <th>
+                                            <label class="checkbox">
+                                                    <input type="checkbox" (change)="selectAll($event)" id="selectAllCheck">
+                                                <div class="check"></div>
+                                            </label>
+                                        </th>
+                                        <th style="text-align:  center;" *ngIf="(coloumsObjects[0].checked) == true">
+                                            <mfDefaultSorter by="ap_name">
+                                                <span>AP Name
+                                                    <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='ap_name' && _sortOrder=='asc' }"></i>
+                                                    <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ap_name' && _sortOrder=='desc' }"></i>
+                                                </span>
+                                            </mfDefaultSorter>
+                                        </th>
+                                        <th style="text-align:  center;" *ngIf="(coloumsObjects[1].checked) == true">
+                                            <mfDefaultSorter by="ap_ip">
+                                                <span>IP Address
+                                                    <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='ap_ip' && _sortOrder=='asc' }"></i>
+                                                    <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ap_ip' && _sortOrder=='desc' }"></i>
+                                                </span>
+                                            </mfDefaultSorter>
+                                        </th>
+                                        <th style="text-align:  center;" *ngIf="(coloumsObjects[2].checked) == true">
+                                            <mfDefaultSorter by="ap_mac">
+                                                <span>MAC Address
+                                                    <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='ap_mac' && _sortOrder=='asc' }"></i>
+                                                    <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ap_mac' && _sortOrder=='desc' }"></i>
+                                                </span>
+                                            </mfDefaultSorter>
+                                        </th>
+                                        <th style="text-align:  center;" *ngIf="(coloumsObjects[3].checked) == true">
+                                            <mfDefaultSorter by="ap_group">
+                                                <span>Group Name
+                                                    <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='ap_group' && _sortOrder=='asc' }"></i>
+                                                    <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ap_group' && _sortOrder=='desc' }"></i>
+                                                </span>
+                                            </mfDefaultSorter>
+                                        </th>
+                                        <th style="text-align:  center;" *ngIf="(coloumsObjects[4].checked) == true">
+                                            <mfDefaultSorter by="active_clients">
+                                                <span>No. of Clients
+                                                    <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='active_clients' && _sortOrder=='asc' }"></i>
+                                                    <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='active_clients' && _sortOrder=='desc' }"></i>
+                                                </span>
+                                            </mfDefaultSorter>
+                                        </th>
+                                        <th style="text-align:  center;" *ngIf="(coloumsObjects[5].checked) == true">
+                                            <mfDefaultSorter by="ap_model">
+                                                <span>AP Model
+                                                    <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='ap_model' && _sortOrder=='asc' }"></i>
+                                                    <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ap_model' && _sortOrder=='desc' }"></i>
+                                                </span>
+                                            </mfDefaultSorter>
+                                        </th>
+                                        <th style="text-align:  center;" *ngIf="(coloumsObjects[6].checked) == true">
+                                            <mfDefaultSorter by="status">
+                                                <span>Status
+                                                    <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='status' && _sortOrder=='asc' }"></i>
+                                                    <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='status' && _sortOrder=='desc' }"></i>
+                                                </span>
+                                            </mfDefaultSorter>
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- <tr class="table-body">
+                        <td><label class="checkbox"><input type="checkbox"><div class="check"></div></label></td>
+                        <td class="text-left">DHCP 1</td>
+                        <td>1</td>
+                        <td>SERVER</td>
+                    </tr>  -->
+                                    <tr class="table-body" *ngFor="let item of mf.data;let activeIndex = index;" (dblclick)="double_click_event($event,item,activeIndex)">
+
+                                        <td>
+                                            <label class="checkbox">
+
+                                                <input type="checkbox" class="register-table-check"  [checked]="(selectAllFlag)" value="{{item.ap_mac}}" name="{{item.ap_mac | noColon}}" (change)="checkboxClick(item,$event)">
+
+                                                <div class="check"></div>
+                                            </label>
+                                        </td>
+                                        <td style="text-align:  center;" *ngIf="(coloumsObjects[0].checked) == true">{{item.ap_name}}</td>
+                                        <td style="text-align:  center;" *ngIf="(coloumsObjects[1].checked) == true">{{item.ap_ip}}</td>
+                                        <td style="text-align:  center;" *ngIf="(coloumsObjects[2].checked) == true">{{item.ap_mac}}</td>
+                                        <td style="text-align:  center;" *ngIf="(coloumsObjects[3].checked) == true">{{item.ap_group}}</td>
+                                        <td style="text-align:  center;" *ngIf="(coloumsObjects[4].checked) == true">{{item.active_clients}}</td>
+                                        <td style="text-align:  center;" *ngIf="(coloumsObjects[5].checked) == true">{{item.ap_model}}</td>
+
+                                        <td style="text-align:  center;" class="status" *ngIf="(coloumsObjects[6].checked) == true">
+                                            <span class="{{item.status==1?'online':'offline'}}">{{item.status==1?'Online':'Offline'}}</span>
+                                        </td>
+
+                                    </tr>
+
+                                    <!-- Default row to be shown where there is no data to show -->
+                                    <tr class="table-body" *ngIf="mf.data.length == 0">
+                                        <td colspan="8">No data found</td>
+                                    </tr>
+
+                                    <!-- The showing 10 of 10 items text-->
+                                    <tr class="page-detail-area" *ngIf="mf.data.length !== 0">
+                                        <td colspan="8">
+                                            <div class="entry-count text-left" style="float:left;">
+                                                <span>Showing {{showingfrom}} to {{showingto}} of {{dataLength}} entries</span>
+                                            </div>
+                                            <div class="list-pagination" style="float:right;">
+
+                                                <mfBootstrapPaginator></mfBootstrapPaginator>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /list-out-->
+                    </div>
+                </div>
+            </div>
+            <!-- /portlet-->
+            <!-- <div class="row" *ngIf="false">
+                <div class="col-md-12">
+                    <div class="portlet light head">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon icon-router-signal"></i>
+                                <span class="text-bold">AP 5</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <div class="row" *ngIf="roghAPConfigStatus">
+                <div class="col-lg-12 col-xs-12 col-sm-12">
+                    <!-- <div class="portlet">
+              <div class="portlet-body">                                              -->
+                    <!--/======================/PAGE TAB/======================/-->
+                    <!-- <div class="group-config-tabs"> -->
+                    <!-- <div class="row justify-content-md-center">
+                      <div class="col-lg-12 col-md-12 text-center">
+                          <div style="background: #fff; padding-top: 40px;">
+                              <ul class="tab-links">
+                                  <li class="active"><a href="#tab1">2.4 GHz</a></li>
+                                  <li><a href="#tab2">5 GHz</a></li>
+                              </ul>
+                          </div>
+                      </div>
+                  </div> -->
+                    <tabset>
+                        
+                        <div class="tab-content" style="padding: 0; background: transparent;">
+                            <tab heading="2.4G" #2.4Ghz>
+                                <div id="tab1" class="setting-tab active">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="portlet light">
+                                                <div class="portlet-body">
+                                                    <div class="form-group row">
+                                                        <label class="col-md-2 col-form-label text-right">Rogue AP</label>
+                                                        <div class="col-lg-5 col-sm-11">
+                                                            <label class="switch">
+                                                                <input type="checkbox" formControlName="is_rogue_ap_2dot4_enabled">
+                                                                <span class="slider round">
+                                                                    <i class="enable switch-status" >Enable</i>
+                                                                    <i class="disable switch-status" >Disable</i>
+                                                                </span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-md-2 col-form-label text-right">Policy</label>
+                                                        <div class="col-lg-2 col-sm-11">
+                                                            <select name="policy" class="form-control" formControlName="rogue_ap_2dot4_policy" >
+                                                                <option value="1">1 min</option>
+                                                                <option value="5">5 min</option>
+                                                                <option value="10" ng-selected="10">10 min</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <!-- <div class="form-group row">
+                                                        <label class="col-md-2 col-form-label text-right">Known AP List</label>
+                                                        <div class="col-lg-2 col-sm-11">
+                                                            <select name="known-ap-list" class="form-control">
+                                                                <option value="merge">Merge</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-md-2 col-form-label text-right">&nbsp;</label>
+                                                        <div class="col-lg-1 col-sm-11">
+                                                            <label class="btn btn-default btn-large" style="margin: 0;">
+                                                                Browse
+                                                                <input type="file" hidden>
+                                                            </label>
+                                                        </div>
+                                                        <div class="col-lg-3 col-sm-11">
+                                                            <a href="#" class="char-limit">Download Sample</a>
+                                                        </div>
+                                                    </div> -->
+                                                    <div class="form-group row">
+                                                        <div class="col-lg-6 col-sm-11 col-md-offset-4">
+                                                            <input type="button" value="Reset" class="btn btn-cancel btn-large" style="margin-right: 15px;" (click)="reset()">
+                                                            <input type="submit" value="Save" class="btn btn-theme btn-large" (click)="submitData()" [disabled]="btnDisable">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </tab>
+                            <tab heading="5G">
+                                <div id="tab2" class="setting-tab active">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="portlet light">
+                                                <div class="portlet-body">
+                                                    <div class="form-group row">
+                                                        <label class="col-md-2 col-form-label text-right">Rogue AP</label>
+                                                        <div class="col-lg-5 col-sm-11">
+                                                            <label class="switch">
+                                                                <input type="checkbox"  formControlName="is_rogue_ap_5_enabled">
+                                                                <span class="slider round">
+                                                                    <i class="enable switch-status" >Enable</i>
+                                                                    <i class="disable switch-status" >Disable</i>
+                                                                </span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-md-2 col-form-label text-right">Policy</label>
+                                                        <div class="col-lg-2 col-sm-11">
+                                                            <select name="policy" class="form-control" formControlName="rogue_ap_5_policy">
+                                                                <option value="1">1 min</option>
+                                                                <option value="5">5 min</option>
+                                                                <option value="10" selected>10 min</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <!-- <div class="form-group row">
+                                                        <label class="col-md-2 col-form-label text-right">Known AP List</label>
+                                                        <div class="col-lg-2 col-sm-11">
+                                                            <select name="known-ap-list" class="form-control">
+                                                                <option value="merge">Merge</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-md-2 col-form-label text-right">&nbsp;</label>
+                                                        <div class="col-lg-1 col-sm-11">
+                                                            <label class="btn btn-default btn-large" style="margin: 0;">
+                                                                Browse
+                                                                <input type="file" hidden>
+                                                            </label>
+                                                        </div>
+                                                        <div class="col-lg-3 col-sm-11">
+                                                            <a href="#" class="char-limit">Download Sample</a>
+                                                        </div>
+                                                    </div> -->
+                                                    <div class="form-group row">
+                                                        <div class="col-lg-6 col-sm-11 col-md-offset-4">
+                                                            <input type="button" value="Reset" class="btn btn-cancel btn-large" style="margin-right: 15px;" (click)="reset()">
+                                                            <input type="submit" value="Save" class="btn btn-theme btn-large" (click)="submitData()" [disabled]="btnDisable">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </tab>
+                        </div>
+                    </tabset>
+                    <!-- </div>
+          </div>  -->
+                    <!--TAB END-->
+                    <!-- </div> -->
+                </div>
+                <!-- /portlet-->
+            </div>
+            </div>
+            </div>
+            </form>
+            </div>
+            
+            <!--/===/WORK AREA END/===/-->

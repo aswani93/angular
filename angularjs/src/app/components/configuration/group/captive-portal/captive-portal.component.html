@@ -1,0 +1,493 @@
+<div class="page-content-wrapper">
+
+  <!-- <div class="row">
+      <div class="col-lg-12 col-sm-12">
+          <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="#">Configuration</a></li>
+              <li class="breadcrumb-item"><a href="#">Group</a></li>
+              <li class="breadcrumb-item"><a href="#">SSID Configuration</a></li>
+              <li class="breadcrumb-item active">SSID List</li>
+          </ol>
+      </div>
+  </div> -->
+
+  <app-modal-dialog [(visible)]="showDialog" 
+                    (visibleChange)="visibleChange()" 
+                    [headerName]="imageHeader"
+                    [portalPreview]="true">
+
+                    <div class="previewClass" >
+                            <img [src]="imageSource" />
+                    </div>
+      
+                    
+        
+        </app-modal-dialog>
+
+  <div class="row">
+      <div class="col-lg-5 col-sm-12">
+          
+          <div class="searchBar">
+              <i class="icon icon-magnifying-glass"></i>
+              <input type="text" placeholder="Search" (keyup)="searchProfile()" [(ngModel)]="search_key">
+          </div>
+      </div>
+  </div>
+  <div class="row">
+      <div class="col-lg-12 col-sm-12">
+          <div class="portlet light bordered">
+              <div class="portlet-body text-center">  
+                
+                <div >
+                        <ul class="tab-links">
+                                <li class="active"><a href="javascript:void(0)">Internal</a></li>
+                                <li class=""><a href="javascript:void(0)">External</a></li>
+                              </ul>
+                </div>
+             
+                  <div class="tabcontent table-responsive" style="display: block; padding:0em;">
+                      <div class="table-function">
+                          <ul class="table-function-right">
+                              <li><a (click)="getProfileDetails()" style="cursor: pointer;">
+                                  <i class="icon icon-edit"></i> Edit</a></li>
+                              <li><a (click)="deleteData()" style="cursor: pointer;">
+                                  <i class="icon icon-rubbish-bin"></i> Delete</a></li>
+                          </ul>
+                      </div>                              
+                      <table 
+                            id="captivePortalTable" 
+                            class="display theme table record_table table-striped table-sort text-center" 
+                            cellspacing="0" 
+                            width="100%"
+                            [mfData]="profile_data"
+                            #mf="mfDataTable">
+                          <thead>
+                              <tr class="table-head">
+                                  <th>
+                                      <label class="checkbox">
+                                        <input  type="checkbox" 
+                                                class="group-all-check"                                            
+                                                (click)="selectAllProfiles($event)"
+                                                id="selectAllCheck">
+                                         <div class="check"></div>
+                                        </label>
+                                    </th>
+                                  <th class="text-left">
+                                      <mfDefaultSorter by="portal_name">
+                                        <span>Portal Name
+                                            <i class="down icon icon-download-arrow"></i>
+                                            <i class="up icon icon-up-arrow-1"></i>
+                                        </span>
+                                    </mfDefaultSorter>
+                                  </th>
+                                  <th class="text-center">
+                                      <mfDefaultSorter by="redirect_url">
+                                        <span>Redirect URL
+                                            <i class="down icon icon-download-arrow"></i>
+                                            <i class="up icon icon-up-arrow-1"></i>
+                                        </span>
+                                    </mfDefaultSorter>
+                                  </th>
+                                  <th class="text-center">
+                                      <mfDefaultSorter by="no_of_groups">
+                                        <span>No. of Associated Groups
+                                            <i class="down icon icon-download-arrow"></i>
+                                            <i class="up icon icon-up-arrow-1"></i>
+                                        </span>
+                                    </mfDefaultSorter>
+                                  </th>
+                                  <th class="text-center">
+                                      <mfDefaultSorter by="">
+                                        <span>Preview
+                                            <i class="down icon icon-download-arrow"></i>
+                                            <i class="up icon icon-up-arrow-1"></i>
+                                        </span>
+                                    </mfDefaultSorter>
+                                  </th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              <tr   class="table-body" 
+                                    *ngFor="let profile of mf.data;let activeIndex = index"
+                                    (dblclick)="double_click_event($event, profile, activeIndex)">
+                                  <td>
+                                      <label class="checkbox">
+                                      <input    type="checkbox" 
+                                                class="profile-check" 
+                                                [checked]="isAllProfilesSelected" 
+                                                (change)="selectProfile(profile, $event)"
+                                                [value]="profile.profile_id">                                   
+                                            <div class="check"></div></label></td>
+                                  <td class="text-left">{{profile.portal_name}}</td>
+                                  <td>{{profile.redirect_url}}</td>
+                                  <td>{{profile.no_of_groups}}</td>
+                                  <td class="action">
+                                      <a (click)="previewPortal(profile.backgroundPicture, profile.portal_name);showDialog = !showDialog" 
+                                         style="cursor: pointer;"
+                                         title="Preview">
+                                         <i class="icon icon-preview"></i></a>
+
+                                  </td>
+                              </tr>     
+                          </tbody>
+                      </table>
+                      <div class="text-right">
+                          <button class="btn btn-theme" (click)="btnAddProfile()" [disabled]="isChecked">Add Profile</button>
+                        </div>                                                                    
+                  </div>
+
+                  
+              </div>
+          </div><!-- /portlet-->
+      </div>
+  </div>
+  <!-- <div class="row">
+      <div class="col-lg-6 col-sm-6"><div class="entry-count text-left"><span>Showing 1 to 6 of 6 entries</span></div></div>
+      <div class="col-lg-6 col-sm-6">
+          <div class="text-right">
+              <nav aria-label="Page navigation example">
+                  <ul class="pagination">
+                      <li class="page-item">
+                      <a class="page-link" href="#" aria-label="Previous">
+                          <span aria-hidden="true">«</span>
+                          <span class="sr-only">Previous</span>
+                      </a>
+                      </li>
+                      <li class="page-item"><a class="page-link" href="#">1</a></li>
+                      <li class="page-item active"><a class="page-link" href="#">2</a></li>
+                      <li class="page-item"><a class="page-link" href="#">3</a></li>
+                      <li class="page-item"><a class="page-link" href="#">4</a></li>
+                      <li class="page-item"><a class="page-link" href="#">5</a></li>
+                      <li class="page-item">
+                      <a class="page-link" href="#" aria-label="Next">
+                          <span aria-hidden="true">»</span>
+                          <span class="sr-only">Next</span>
+                      </a>
+                      </li>
+                  </ul>
+              </nav>
+          </div>
+      </div>
+  </div> -->
+
+
+  <form [formGroup]="ProfileRegForm" (ngSubmit)="onSubmit" *ngIf="is_add_profile || is_update_profile">  
+    <div class="row">
+            <div class="col-lg-12 col-sm-12">
+                <div class="portlet light bordered-bottom">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <span>{{label}}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="portlet-body">                                             
+                        <!--/======================/PAGE TAB/======================/-->
+                    <div class="ssid-config-tabs">
+                        <div class="row justify-content-md-center">
+                            <div class="col-lg-12  col-md-12 text-center">
+                                <tabset class="tab-links full-tabset" #captivePortalTabs>
+                                    <tab 
+                                        heading="Captive Portal" 
+                                        #CaptivePortalTab>
+                                       
+                            <div class="setting-tab active">
+                                
+                                    <!--Captive Portal Tab-->
+                                    
+                                    <div class="row">
+                                        <div class="clearfix"></div>
+                                        <div>
+                                            <div class="tab-pane active">
+                                                <div class="form-group row">
+                                                    <label class="col-md-2 col-form-label text-right">Profile Name</label>
+                                                    <div class="col-lg-2 col-sm-11">
+                                                        <input type="text" formControlName="portal_name" class="form-control " disabled required>
+                                                    </div>
+                                                    <div>
+                                                            <app-right-tooltip [toolTipText]="getToolTipText('')"></app-right-tooltip>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-2 col-form-label text-right">Authentication</label>
+                                                    <div class="col-lg-2 col-sm-11">
+                                                        <select class="form-control" formControlName="auth" id="auth" disabled>
+                                                            <option value="auth">Auth</option>
+                                                        </select>
+                                                    </div>
+                                                    <div>
+                                                            <app-right-tooltip [toolTipText]="getToolTipText('')"></app-right-tooltip>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-2 col-form-label text-right">After user login, Redirect to</label>
+                                                    <div class="col-lg-2 col-sm-11">
+                                                        <select class="form-control" formControlName="redirect_to" id="redirectTo" disabled>
+                                                            <option value="original-url">Original URL</option>
+                                                            <option value="new-url">New URL</option>
+                                                        </select>
+                                                    </div>
+                                                    <div>
+                                                            <app-right-tooltip [toolTipText]="getToolTipText('')"></app-right-tooltip>
+                                                    </div>
+                                                </div>
+                                                <div class="based-on-select">
+                                                    <div class="form-group row">
+                                                        <label class="col-md-2 col-form-label text-right">&nbsp;</label>
+                                                        <div class="col-lg-2 col-sm-11">
+                                                            <input type="text" class="form-control " required disabled>
+                                                            <div class="text-danger">This field is required</div>
+                                                        </div>
+                                                        <div>
+                                                                <app-right-tooltip [toolTipText]="getToolTipText('')"></app-right-tooltip>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-2 col-form-label text-right">Idle Timeout</label>
+                                                    <div class="col-lg-1 col-sm-11">
+                                                        <input type="number" value="1200" formControlName="idleTimeout" class="form-control" disabled>
+                                                    </div>
+                                                    <div>
+                                                            <app-right-tooltip [toolTipText]="getToolTipText('')"></app-right-tooltip>
+                                                    </div>
+                                                    <div class="col-lg-3 col-sm-11">
+                                                        <span class="char-limit">(0-1440 sec, 0 = unlimited)</span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row ">
+                                                    <div class="col-lg-6 col-sm-11 col-md-offset-4 text-left">
+                                                        <input type="reset" value="Cancel" (click)="formReset()" class="btn btn-cancel btn-large" style="margin-right: 15px;">
+                                                        <input type="button" value="Next" (click)="selectTab(1)" class="btn btn-theme btn-large">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!--Captive Portal Tab END-->
+                                </div>
+                                    
+                                    </tab>
+                                    <tab 
+                                        heading="Splash Page" 
+                                        #SplashPageTab>
+                                        <div class="setting-tab active">
+                                
+                                                <!--Splash Page Tab-->
+                                                <div class="row">
+                                                    <div class="clearfix"></div>
+                                                    <div>
+                                                        <div class="tab-pane active">
+                                                            <div class="form-group row">
+                                                                <label class="col-md-2 col-form-label text-right">Font Color</label>
+                                                                <div class="col-lg-2 col-sm-11">
+                                                                    <select class="form-control" formControlName="fontColor" name="font-color" disabled>
+                                                                        <option value="white">White</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div>
+                                                                        <app-right-tooltip [toolTipText]="getToolTipText('')"></app-right-tooltip>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <div class="select-pic-blk clearfix">
+                                                                    <label class="col-md-2 col-form-label text-right">Background Picture</label>
+                                                                    <div class="col-lg-1 col-sm-11">
+                                                                        <label class="btn btn-default" style="margin: 0;">
+                                                                            Choose File <input type="file" hidden>
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="col-lg-3 col-sm-11">
+                                                                        <span class="char-limit">(*.png, *.jpg, Maximum Size: 128 kb)</span>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- <div class="img-preview clearfix">
+                                                                    <div class="col-md-offset-2 col-md-2">
+                                                                        <img src="../../../assets/images/no-preview.png" alt="Preview">
+                                                                    </div>
+                                                                </div> -->
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <label class="col-md-2 col-form-label text-right">Company Name</label>
+                                                                <div class="col-lg-2 col-sm-11">
+                                                                    <input class="form-control" formControlName="companyName" type="text" disabled>
+                                                                </div>
+                                                                <div>
+                                                                        <app-right-tooltip [toolTipText]="getToolTipText('')"></app-right-tooltip>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <div class="select-pic-blk clearfix">
+                                                                    <label class="col-md-2 col-form-label text-right">Logo Picture</label>
+                                                                    <div class="col-lg-1 col-sm-11">
+                                                                        <label class="btn btn-default" style="margin: 0;">
+                                                                            Choose File <input type="file" hidden>
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="col-lg-3 col-sm-11">
+                                                                        <span class="char-limit">(*.png, *.jpg, Maximum Size: 10 kb)</span>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- <div class="img-preview clearfix">
+                                                                    <div class="col-md-offset-2 col-md-2">
+                                                                        <img src="../../../assets/images/no-preview.png" alt="Preview">
+                                                                    </div>
+                                                                </div> -->
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <label class="col-md-2 col-form-label text-right">Welcome Message</label>
+                                                                <div class="col-lg-2 col-sm-11">
+                                                                    <input class="form-control" formControlName="welcomeMessage" type="text" disabled>
+                                                                </div>
+                                                                <div>
+                                                                        <app-right-tooltip [toolTipText]="getToolTipText('')"></app-right-tooltip>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <label class="col-md-2 col-form-label text-right">Username</label>
+                                                                <div class="col-lg-2 col-sm-11">
+                                                                    <input class="form-control " formControlName="username" type="text" disabled>
+                                                                </div>
+                                                                <div>
+                                                                        <app-right-tooltip [toolTipText]="getToolTipText('')"></app-right-tooltip>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <label class="col-md-2 col-form-label text-right">Password</label>
+                                                                <div class="col-lg-2 col-sm-11">
+                                                                    <input class="form-control" value="OTP" type="password" disabled>
+                                                                </div>
+                                                                <div>
+                                                                        <app-right-tooltip [toolTipText]="getToolTipText('')"></app-right-tooltip>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <label class="col-md-2 col-form-label text-right">Login Button Name</label>
+                                                                <div class="col-lg-2 col-sm-11">
+                                                                    <input class="form-control" formControlName="loginbtn" value="Login" type="text" disabled>
+                                                                </div>
+                                                                <div>
+                                                                        <app-right-tooltip [toolTipText]="getToolTipText('')"></app-right-tooltip>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <label class="col-md-2 col-form-label text-right">Copyright Message</label>
+                                                                <div class="col-lg-2 col-sm-11">
+                                                                    <input class="form-control " formControlName="copyrightMsg" type="text" disabled>
+                                                                </div>
+                                                                <div>
+                                                                        <app-right-tooltip [toolTipText]="getToolTipText('')"></app-right-tooltip>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <div class="col-md-2 text-right">
+                                                                    <label class="checkbox pull-right" style="margin-right: 100px;">
+                                                                        <input type="checkbox" checked><div class="check"></div>
+                                                                        <span>Advertisement</span>
+                                                                    </label>
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                            <div class="advertisement-picture">
+                                                                <div class="form-group row">
+                                                                    <div class="select-pic-blk clearfix">
+                                                                        <label class="col-md-2 col-form-label text-right">Advertisement Picture</label>
+                                                                        <div class="col-lg-1 col-sm-11">
+                                                                            <label class="btn btn-default" style="margin: 0;">
+                                                                                Choose File <input type="file" hidden>
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="col-lg-3 col-sm-11">
+                                                                            <span class="char-limit">(*.png, *.jpg, Maximum Size: 10 kb)</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- <div class="img-preview clearfix">
+                                                                        <div class="col-md-offset-2 col-md-2">
+                                                                            <img src="../../../assets/images/no-preview.png" alt="Preview">
+                                                                        </div>
+                                                                    </div> -->
+                                                                </div>
+                                                                <div class="form-group row">
+                                                                    <label class="col-md-2 col-form-label text-right">Advertisement Link</label>
+                                                                    <div class="col-lg-2 col-sm-11">
+                                                                        <input class="form-control" formControlName="advtLink" value="www.abc.com" type="text" disabled>
+                                                                    </div>
+                                                                    <div>
+                                                                            <app-right-tooltip [toolTipText]="getToolTipText('')"></app-right-tooltip>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <div class="col-md-2 text-right">
+                                                                    <label class="checkbox pull-right" style="margin-right: 117px;">
+                                                                        <input type="checkbox" checked><div class="check"></div>
+                                                                        <span class="checkbox-label">Show Agreement</span>
+                                                                    </label>
+                                                                </div>
+                                                                
+                                                            </div>
+                                                            <div class="advertisement-picture">
+                                                                <div class="form-group row">
+                                                                    <label class="col-md-2 col-form-label text-right">Agreement Title</label>
+                                                                    <div class="col-lg-2 col-sm-11">
+                                                                        <input class="form-control" formControlName="agreementTitle" value="HFCL_VVDN" type="text" disabled>
+                                                                    </div>
+                                                                    <div>
+                                                                            <app-right-tooltip [toolTipText]="getToolTipText('')"></app-right-tooltip>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row">
+                                                                    <label class="col-md-2 col-form-label text-right">Agreement Message</label>
+                                                                    <div class="col-lg-2 col-sm-11">
+                                                                        <input class="form-control" formControlName="agreementMessage" value="Connecting People Together" type="text" disabled>
+                                                                    </div>
+                                                                    <div>
+                                                                            <app-right-tooltip [toolTipText]="getToolTipText('')"></app-right-tooltip>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <div class="col-lg-6 col-md-offset-2 text-left">
+                                                                    <input  type="submit" 
+                                                                            (click)="showDialog = !showDialog"
+                                                                             value="Preview" 
+                                                                             class="btn btn-theme-inverse btn-large">
+                                                                </div>
+                                            
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <div class="col-lg-6 col-sm-11 col-md-offset-4 text-left">
+                                                                    <input type="button" value="Previous" (click)="selectTab(0)" class="btn btn-theme btn-large" style="margin-right: 15px;">
+                                                                    <input type="reset" value="Cancel" (click)="formReset()" class="btn btn-cancel btn-large" style="margin-right: 15px;">
+                                                                    <input type="submit" value="Save" class="btn btn-theme btn-large" disabled>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div><!--Splash Page Tab END-->
+                                            </div>
+                                    
+                                    </tab>
+                                </tabset>
+                                
+                            </div>
+                        </div>
+
+                        <div class="tab-content">
+
+                            
+                        </div>
+                    </div> 
+                    <!--TAB END-->
+                    </div>
+                </div><!-- /portlet-->
+            </div>
+        </div>
+    </form>
+   
+          
+      
+    
+
+</div>

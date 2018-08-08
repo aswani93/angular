@@ -1,0 +1,298 @@
+<!--/======================/WORK AREA/======================/-->
+<div class="page-content-wrapper">
+    <!--<div class="row">
+        <div class="col-lg-12 col-sm-12">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0);">Maintenance</a></li>
+                <li class="breadcrumb-item"><a href="javascript:void(0);">System</a></li>
+                <li class="breadcrumb-item"><a href="javascript:void(0);">Upgrade</a></li>
+                <li class="breadcrumb-item active">Upload</li>
+            </ol>
+        </div>
+    </div>-->
+    <div class="row">
+        <div class="col-lg-12 col-xs-12 col-sm-12">
+            <form action="" [formGroup]="systemupgradeForm" (ngSubmit)="onSubmit()">
+                <div class="upgrade-tabs">
+                    <ul class="tab-links">
+                        <li class="active">
+                            <a href="#tab1">Upload</a>
+                        </li>
+                        <li>
+                            <a href="#tab2"  (click)="callTableLsitAPI()">Upgrade</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="tab1" class="upgrade-tab active">
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label text-right">Upload From</label>
+                                <div class="col-lg-2 col-sm-11">
+                                    <select name="ap-model" id="select-filter" class="form-control" (change)="uploadtypeChange($event)">
+                                        <option value="ftp">FTP</option>
+                                        <option value="local" selected>Local</option>
+                                    </select>
+                                </div>
+                              <app-right-tooltip [toolTipText]="getToolTipText('system_upgrade_upgrade_upload_from')"></app-right-tooltip>
+                            </div>
+                            <div class="upload-ftp filter-content" id="ftp" *ngIf="typestatus">
+                                <div class="form-group row">
+                                    <label class="col-md-2 col-form-label text-right">Firmware File Name</label>
+                                    <div class="col-lg-2 col-sm-11">
+                                        <input type="text"
+                                               
+                                               formControlName="wlc_system_firmware_name"
+                                               class="form-control"
+                                               (input)="ftpnamevaidation()"
+                                                maxlength="32">
+
+                                        <div *ngIf="systemupgradeForm.get('wlc_system_firmware_name').invalid && (systemupgradeForm.get('wlc_system_firmware_name').dirty || systemupgradeForm.get('wlc_system_firmware_name').touched)">
+                                            <div class="text-danger pull-left" *ngIf="systemupgradeForm.get('wlc_system_firmware_name').errors.required">
+                                                Firmware Name is required.
+                                            </div>
+                                            <div class="text-danger pull-left" *ngIf="systemupgradeForm.get('wlc_system_firmware_name').errors.minlength">
+                                                Minimum 2 character required.
+                                            </div>
+                                            <div class="text-danger pull-left" *ngIf="systemupgradeForm.get('wlc_system_firmware_name').errors.maxlength">
+                                                Maximum 32 characters allowed.
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="text-danger pull-left" *ngIf="ftpnamevaluestatus && systemupgradeForm.get('wlc_system_firmware_name').valid ">
+                                                Enter a valid Firmware name
+                                            </div>
+                                    </div>
+                                  <div>
+                                    <app-right-tooltip [toolTipText]="getToolTipText('system_upgrade_upgrade_firmware_name')"></app-right-tooltip>
+                                  </div>
+
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-2 col-form-label text-right">FTP Server</label>
+                                    <div class="col-lg-5 col-sm-11">
+                                        <ul class="radio-out">
+                                            <li>
+                                                <label>
+                                                    <input type="radio" name="ftp-server" checked>
+                                                    <i>IPv4</i>
+                                                    <span class="check">&nbsp;</span>
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label>
+                                                    <input type="radio" name="ftp-server" disabled>
+                                                    <i>IPv6</i>
+                                                    <span class="check">&nbsp;</span>
+                                                </label>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                  <!--<div>-->
+                                    <!--<app-right-tooltip [toolTipText]="getToolTipText('system_upgrade_upgrade_firmware_name')"></app-right-tooltip>-->
+                                  <!--</div>-->
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-md-2 col-form-label text-right">IP Address</label>
+                                    <div class="col-lg-2 col-sm-11">
+                                        <input type="text" value="" formControlName="wlc_system_UPgradefirmware_ip" (keyup)="validateIP()" class="form-control ip_address" >
+                                        <div *ngIf="systemupgradeForm.get('wlc_system_UPgradefirmware_ip').invalid && (systemupgradeForm.get('wlc_system_UPgradefirmware_ip').dirty || systemupgradeForm.get('wlc_system_UPgradefirmware_ip').touched)">
+                                            <div class="text-danger pull-left" *ngIf="systemupgradeForm.get('wlc_system_UPgradefirmware_ip').errors.required">
+                                                IP is required.
+                                            </div>
+                                            <div class="text-danger pull-left" *ngIf="systemupgradeForm.get('wlc_system_UPgradefirmware_ip').errors.pattern">
+                                                Invalid IP address.
+                                            </div>
+                                        </div>
+
+                                        <div *ngIf="iperrorStatus && systemupgradeForm.get('wlc_system_UPgradefirmware_ip').valid" class="text-danger pull-left">
+                                                Invalid IP address.
+                                        </div>
+                                    </div>
+                                  <div>
+                                    <app-right-tooltip [toolTipText]="getToolTipText('system_upgrade_upgrade_ftp_ipaddress')"></app-right-tooltip>
+                                  </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-2 col-form-label text-right">Username</label>
+                                    <div class="col-lg-2 col-sm-11">
+                                        <input type="text" value="" formControlName="wlc_system_upgrade_username" class="form-control"  maxlength="32">
+                                        <div *ngIf="systemupgradeForm.get('wlc_system_upgrade_username').invalid && (systemupgradeForm.get('wlc_system_upgrade_username').dirty || systemupgradeForm.get('wlc_system_upgrade_username').touched)">
+                                            <div class="text-danger pull-left" *ngIf="systemupgradeForm.get('wlc_system_upgrade_username').errors.required">
+                                                User name is required.
+                                            </div>
+                                            <div class="text-danger pull-left" *ngIf="systemupgradeForm.get('wlc_system_upgrade_username').errors.minlength">
+                                                Minimum 2 character required.
+                                            </div>
+                                            <div class="text-danger pull-left" *ngIf="systemupgradeForm.get('wlc_system_upgrade_username').errors.maxlength">
+                                                Maximum 32 characters allowed.
+                                            </div>
+                                            <div class="text-danger pull-left" *ngIf="systemupgradeForm.get('wlc_system_upgrade_username').errors.pattern && !systemupgradeForm.get('wlc_system_upgrade_username').errors.maxlength  && !systemupgradeForm.get('wlc_system_upgrade_username').errors.minlength ">
+                                                Enter a valid User name
+                                            </div>
+                                        </div>
+                                    </div>
+                                  <div>
+                                    <app-right-tooltip [toolTipText]="getToolTipText('system_upgrade_upgrade_ftp_username')"></app-right-tooltip>
+                                  </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-2 col-form-label text-right">Password</label>
+                                    <div class="col-lg-2 col-sm-11">
+                                        <div class="input-group">
+                                            <input type="{{ isText ? 'text' : 'password' }}" type="password" class="form-control" formControlName="wlc_system_upgrade_password" maxlength="32"
+                                                >
+                                            <!-- <i class="icon icon-hide icon-right" [ngClass]="{'fa-eye': isText,'fa-eye-slash':!isText}" (click)="showpassword()"></i> -->
+                                            <div class="input-group-btn">
+                                                <button type="button" class="btn btn-default btn-eye" (click)="showpassword()">
+                                                  <!-- <i class="icon icon-hide icon-right eye-icon"></i> -->
+                                                  <i class="fa fa-eye" [ngClass]="{'fa-eye': isText,'fa-eye-slash':!isText}"></i>
+                                                </button>
+                                              </div>
+                                            <div *ngIf="systemupgradeForm.get('wlc_system_upgrade_password').invalid && (systemupgradeForm.get('wlc_system_upgrade_password').dirty || systemupgradeForm.get('wlc_system_upgrade_password').touched)">
+                                                <div class="text-danger pull-left" *ngIf="systemupgradeForm.get('wlc_system_upgrade_password').errors.required">
+                                                    Password is required.
+                                                </div>
+                                                <div class="text-danger pull-left" *ngIf="systemupgradeForm.get('wlc_system_upgrade_password').errors.minlength">
+                                                    Minimum 2 character required.
+                                                </div>
+                                                <div class="text-danger pull-left" *ngIf="systemupgradeForm.get('wlc_system_upgrade_password').errors.maxlength">
+                                                    Maximum 32 characters allowed.
+                                                </div>
+                                                <div class="text-danger pull-left" *ngIf="systemupgradeForm.get('wlc_system_upgrade_password').errors.pattern && !systemupgradeForm.get('wlc_system_upgrade_password').errors.maxlength && !systemupgradeForm.get('wlc_system_upgrade_password').errors.minlength ">
+                                                    Enter a valid password.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                  <div>
+                                    <app-right-tooltip [toolTipText]="getToolTipText('system_upgrade_upgrade_ftp_password')"></app-right-tooltip>
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="upload-local filter-content" id="local" style="display: block;">
+                                <div class="form-group row">
+                                    <label class="col-md-2 col-form-label text-right">Upload File </label>
+                                    <div class="col-lg-2 col-sm-12">
+                                        <label class="btn btn-default" style="margin: 0;">
+                                            Choose File
+                                            <input type="file" accept=".tar.gz" hidden (change)="fileupload($event)">
+                                        </label>
+                                      <span class="fileSizeText">{{filename}}</span>
+                                       <!--<span class="char-limit">(*Max Size:500MB)</span>-->
+                                    </div>
+
+                                  <div>
+                                    <app-right-tooltip [toolTipText]="getToolTipText('system_upgrade_upgrade_system_image_file_size')"></app-right-tooltip>
+                                  </div>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-lg-6 col-sm-11 col-md-offset-4">
+                                    <input type="button" value="Reset" class="btn btn-cancel btn-large" (click)="reset()" style="margin-right: 15px;">
+                                    <input type="submit" value="Upload" class="btn btn-theme btn-large" data-toggle="modal" data-target="#upload" [disabled]="uploadbuttondisabled || !systemupgradeForm.valid ">
+                                </div>
+                            </div>
+                            <!-- Modal -->
+                            <div class="modal fade text-center" id="upload" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle">
+                                                <label class="checkbox checkbox-theme" style="float: none;">
+                                                    <input type="checkbox" formControlName="uploadStatus" checked>
+                                                    <div class="check"></div>
+                                                </label>Click here to upgrade along with upload
+                                            </h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <!-- <div class="modal-body">
+                                        <select (change)="changeVal($event.target)" name="group" id="group">
+                                            <option value="">Select Group</option>
+                                            <option *ngFor="let group of groups" value={{group.group_name}}>
+                                                {{group.group_name}}
+                                        </select>
+                                        <div *ngIf="gpErrFlg" class="text-danger">Please select group</div>
+                                    </div> -->
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-blank" data-dismiss="modal">Cancel</button>
+                                            <button type="button" id="uploadButton" class="btn btn-theme" data-dismiss="modal" (click)="uploadfile()">Upload</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="tab2" class="upgrade-tab">
+                            <div class="portlet light">
+                                <div class="portlet-body" style="padding: 0;">
+                                    <div class="tabcontent table-responsive" style="display: block; width: 100%;">
+                                        <table id="example" class="display theme table record_table table-striped table-sort text-center" cellspacing="0" width="100%">
+                                            <thead>
+                                                <tr class="table-head">
+                                                    <!-- <th>
+                                                    <label class="checkbox"><input type="checkbox">
+                                                        <div class="check"></div></label></th> -->
+                                                    <th></th>
+                                                    <th class="text-center">
+                                                        <span>Firmware Name
+                                                            <!-- <i class="down icon icon-download-arrow"></i>
+                                                        <i class="up icon icon-up-arrow-1"></i> -->
+                                                        </span>
+                                                    </th>
+                                                    <th class="text-center">
+                                                        <span>Uploaded By
+                                                            <!-- <i class="down icon icon-download-arrow"></i>
+                                                        <i class="up icon icon-up-arrow-1"></i> -->
+                                                        </span>
+                                                    </th>
+                                                    <th class="text-center">
+                                                        <span>Uploaded Time
+                                                            <!-- <i class="down icon icon-download-arrow"></i>
+                                                        <i class="up icon icon-up-arrow-1"></i> -->
+                                                        </span>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="table-body" *ngFor="let Firmwaredata of data">
+                                                    <!-- <td>
+                                                        <label class="radio-out">
+                                                            <input type="radio" (click)="valuechanges($event,Firmwaredata.firmware_name,Firmwaredata.uploaded_by)" formControlName="upgradecheckbox" class="register-check" value={{Firmwaredata.firmware_name}},{{Firmwaredata.uploaded_by}}>
+                                                            <div class="check"></div>
+                                                        </label>
+                                                    </td> -->
+                                                    <td class="radio-out">
+                                                     <div style="position:relative">
+                                                  <label>
+                                                    <input type="radio" (click)="valuechanges($event,Firmwaredata.firmware_name,Firmwaredata.uploaded_by)" formControlName="upgradecheckbox" class="register-check" value={{Firmwaredata.firmware_name}},{{Firmwaredata.uploaded_by}}>
+                                                    <div class="check"></div>
+                                                   </label>
+                                                  </div>
+                                                    </td>
+                                                    <td class="text-center">{{Firmwaredata.firmware_name}}</td>
+                                                    <td class="text-center">{{Firmwaredata.uploaded_by}}</td>
+                                                    <td>
+                                                        <span class="time">{{Firmwaredata.uploaded_time}}</span>&nbsp;
+                                                    </td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                        <div class="text-right">
+                                            <input type="submit" value="Upgrade" class="btn btn-theme btn-large" (click)="confirmSystemFirmwareUpgrade()" [disabled]="upgradebuttondisabled">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /portlet-->
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--/===/WORK AREA END/===/-->

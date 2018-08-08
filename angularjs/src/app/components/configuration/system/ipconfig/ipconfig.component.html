@@ -1,0 +1,716 @@
+<!--/======================/WORK AREA/======================/-->
+<div class="page-content-wrapper">
+
+  <!--<div class="row">-->
+  <!--<div class="col-lg-12 col-sm-12">-->
+  <!--<ol class="breadcrumb">-->
+  <!--<li class="breadcrumb-item"><a href="#">Configuration</a></li>-->
+  <!--<li class="breadcrumb-item"><a href="#">System</a></li>-->
+  <!--<li class="breadcrumb-item"><a href="#">IP Configuration</a></li>-->
+  <!--<li class="breadcrumb-item active">IPv4</li>-->
+  <!--</ol>-->
+  <!--</div>-->
+  <!--</div>-->
+
+
+  <div class="row">
+    <div class="col-lg-12 col-xs-12 col-sm-12">
+
+      <tabset>
+
+        <tab heading="IPV4" #IPV4 [disabled]="false">
+
+          <!--beginning of IPV4 form-->
+
+          <form (keydown.enter)="$event.preventDefault()" [formGroup]="ipConfigForm">
+
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label text-right">DHCP Client</label>
+              <div class="col-lg-2 col-sm-11">
+                <label class="switch">
+
+                  <input
+                    type="checkbox"
+                    formControlName="dhcp">
+
+                  <span class="slider round">
+                    <i class="enable switch-status">Enable</i>
+                    <i class="disable switch-status">Disable</i>
+                  </span>
+
+                </label>
+              </div>
+              <div>
+                <app-right-tooltip
+                  [toolTipText]="getToolTipText('system_aaa_server_s_aaa_passphrase')"></app-right-tooltip>
+              </div>
+            </div>
+
+
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label text-right">IP Address</label>
+              <div class="col-lg-2 col-sm-11">
+                <!--(input)="validateActiveIP()"-->
+
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="ip"
+                  #activeIP
+                  (blur)="generateEndIPforActive(activePrefix.value, activeIP.value,  '1')"
+                  (input)="checkIPActive(activeIP.value)">
+
+                <div
+                  *ngIf="ipConfigForm.get('ip').invalid && (ipConfigForm.get('ip').dirty || ipConfigForm.get('ip').touched)">
+                  <div class="text-danger pull-left" *ngIf="ipConfigForm.get('ip').errors.required ">IP address is
+                    required.
+                  </div>
+                  <div class="text-danger" *ngIf="ipConfigForm.get('ip').errors.pattern">Enter valid IP address</div>
+                  <div class="text-danger"
+                       *ngIf="ipConfigForm.get('ip').errors.restrictedIP && !ipConfigForm.get('ip').errors.pattern && !ipConfigForm.get('ip').errors.required">
+                    Enter valid IP address
+                  </div>
+                </div>
+                <div class="text-danger" *ngIf="sameActiveIP">Active & Standby IP can't be same</div>
+
+              </div>
+
+
+              <div class="col-lg-1 col-sm-11">
+                <input type="text"
+                       class="form-control"
+                       (input)="netmaskValidation('ip_active_prefix')"
+                       formControlName="ip_prefix"
+                       maxlength="2"
+                       #activePrefix
+                       (blur)="generateEndIPforActive(activePrefix.value, this.ipConfigForm.get('ip').value,  '1')">
+
+                <div
+                  *ngIf="ipConfigForm.get('ip_prefix').invalid && (ipConfigForm.get('ip_prefix').dirty || ipConfigForm.get('ip_prefix').touched)">
+                  <div class="text-danger pull-left" *ngIf="ipConfigForm.get('ip_prefix').errors.required">Prefix Required.
+                  </div>
+                  <div class="text-danger pull-left" *ngIf="ipConfigForm.get('ip_prefix').errors.prefixrange && !ipConfigForm.get('ip_prefix').errors.required">Invalid
+                    Prefix.
+                  </div>
+                  <div class="text-danger pull-left"
+                       *ngIf="ipConfigForm.get('ip_prefix').errors.pattern && !ipConfigForm.get('ip_prefix').errors.required">
+                    Invalid Prefix
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label text-right">End IP Address</label>
+              <div class="col-lg-2 col-sm-11">
+
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="end_ip">
+                <div class="text-danger pull-left" *ngIf="activeIPCallError"> {{activeIPCallErrorTxt}}</div>
+              </div>
+              <div>
+                <app-right-tooltip
+                  [toolTipText]="getToolTipText('system_aaa_server_s_aaa_passphrase')"></app-right-tooltip>
+              </div>
+            </div>
+
+            <div formGroupName="ipv4_config">
+
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label text-right">Subnet Mask</label>
+                <div class="col-lg-2 col-sm-11">
+
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="subnet_mask">
+
+                  <div
+                    *ngIf="ipConfigForm.get('ipv4_config.subnet_mask').invalid && (ipConfigForm.get('ipv4_config.subnet_mask').dirty || ipConfigForm.get('ipv4_config.subnet_mask').touched)">
+                    <div class="text-danger pull-left"
+                         *ngIf="ipConfigForm.get('ipv4_config.subnet_mask').errors['required']">Subnetmask is required.
+                    </div>
+                    <div class="text-danger pull-left"
+                         *ngIf="ipConfigForm.get('ipv4_config.subnet_mask').errors['pattern'] && !ipConfigForm.get('ipv4_config.subnet_mask').errors.required">
+                      Enter a valid subnetmask
+                    </div>
+                    <div class="text-danger pull-left"
+                         *ngIf="ipConfigForm.get('ipv4_config.subnet_mask').errors['restrictedIP'] && !ipConfigForm.get('ipv4_config.subnet_mask').errors.pattern && !ipConfigForm.get('ipv4_config.subnet_mask').errors.required">
+                      Enter a valid subnetmask
+                    </div>
+                  </div>
+
+                </div>
+                <div>
+                  <app-right-tooltip
+                    [toolTipText]="getToolTipText('system_aaa_server_s_aaa_passphrase')"></app-right-tooltip>
+                </div>
+
+              </div>
+
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label text-right">Gateway</label>
+                <div class="col-lg-2 col-sm-11">
+
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="gateway">
+
+                  <div
+                    *ngIf="ipConfigForm.get('ipv4_config.gateway').invalid && (ipConfigForm.get('ipv4_config.gateway').dirty || ipConfigForm.get('ipv4_config.gateway').touched)">
+                    <div class="text-danger pull-left" *ngIf="ipConfigForm.get('ipv4_config.gateway').errors.required">
+                      Gateway is required.
+                    </div>
+                    <div class="text-danger pull-left"
+                         *ngIf="ipConfigForm.get('ipv4_config.gateway').errors.pattern && !ipConfigForm.get('ipv4_config.gateway').errors.required">
+                      Enter valid Gateway IP
+                    </div>
+                    <div class="text-danger"
+                         *ngIf="ipConfigForm.get('ipv4_config.gateway').errors.restrictedIP && !ipConfigForm.get('ipv4_config.gateway').errors.pattern && !ipConfigForm.get('ipv4_config.gateway').errors.required">
+                      Enter valid Gateway IP
+                    </div>
+                  </div>
+
+                </div>
+
+                <div>
+                  <app-right-tooltip
+                    [toolTipText]="getToolTipText('system_aaa_server_s_aaa_passphrase')"></app-right-tooltip>
+                </div>
+
+              </div>
+
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label text-right">Primary DNS</label>
+                <div class="col-lg-2 col-sm-11">
+
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="primary_dns">
+
+                  <div
+                    *ngIf="ipConfigForm.get('ipv4_config.primary_dns').invalid && (ipConfigForm.get('ipv4_config.primary_dns').dirty || ipConfigForm.get('ipv4_config.primary_dns').touched)">
+                    <div class="text-danger pull-left"
+                         *ngIf="ipConfigForm.get('ipv4_config.primary_dns').errors.required">DNS server is required.
+                    </div>
+                    <div class="text-danger pull-left"
+                         *ngIf="ipConfigForm.get('ipv4_config.primary_dns').errors.pattern && !ipConfigForm.get('ipv4_config.primary_dns').errors.required">
+                      Enter valid DNS server
+                    </div>
+                    <div class="text-danger"
+                         *ngIf="ipConfigForm.get('ipv4_config.primary_dns').errors.restrictedIP && !ipConfigForm.get('ipv4_config.primary_dns').errors.pattern && !ipConfigForm.get('ipv4_config.primary_dns').errors.required">
+                      Enter valid DNS server
+                    </div>
+                  </div>
+
+                </div>
+                <div>
+                  <app-right-tooltip
+                    [toolTipText]="getToolTipText('system_aaa_server_s_aaa_passphrase')"></app-right-tooltip>
+                </div>
+
+              </div>
+
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label text-right">Secondary DNS</label>
+                <div class="col-lg-2 col-sm-11">
+
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="secondary_dns">
+
+                  <div
+                    *ngIf="ipConfigForm.get('ipv4_config.secondary_dns').invalid && (ipConfigForm.get('ipv4_config.secondary_dns').dirty || ipConfigForm.get('ipv4_config.secondary_dns').touched)">
+                    <div class="text-danger pull-left"
+                         *ngIf="ipConfigForm.get('ipv4_config.secondary_dns').errors.required">DNS server is required.
+                    </div>
+                    <div class="text-danger pull-left"
+                         *ngIf="ipConfigForm.get('ipv4_config.secondary_dns').errors.pattern && !ipConfigForm.get('ipv4_config.secondary_dns').errors.required">
+                      Enter valid DNS server.
+                    </div>
+                    <div class="text-danger"
+                         *ngIf="ipConfigForm.get('ipv4_config.secondary_dns').errors.restrictedIP && !ipConfigForm.get('ipv4_config.secondary_dns').errors.pattern && !ipConfigForm.get('ipv4_config.secondary_dns').errors.required">
+                      Enter valid DNS server
+                    </div>
+                  </div>
+
+                </div>
+                <div>
+                  <app-right-tooltip
+                    [toolTipText]="getToolTipText('system_aaa_server_s_aaa_passphrase')"></app-right-tooltip>
+                </div>
+
+              </div>
+            </div>
+
+
+            <div class="form-group row" >
+              <label class="col-md-3 col-form-label text-right">Configure Redundancy WLC IP?</label>
+              <div class="col-lg-2 col-sm-11">
+               <div (click)="showInfo()">
+                 <label class="switch">
+
+                  <input
+                    type="checkbox"
+                    formControlName="configure_standby">
+
+                  <span class="slider round">
+                    <i class="enable switch-status">Yes</i>
+                    <i class="disable switch-status">No</i>
+                  </span>
+
+               </label>
+               </div>
+              </div>
+              <div class="text-danger"> {{ showInfoText }}</div>
+            </div>
+
+            <!--aaaaaaa-->
+
+
+            <!--<div class="custom-div redundancy-form " *ngIf="showRedundancyFlag">-->
+            <div [ngSwitch]="showRedundancyFlag">
+              <div *ngSwitchCase = 1>
+                <!--<h1> CONDITION 1 BLOCK </h1>-->
+                <div class="custom-div redundancy-form ">
+                  <!--<div class="custom-div redundancy-form " [hidden]="showRedundancyFlag">-->
+
+                  <div class="form-group row">
+                    <label class="col-md-3 col-form-label text-right">DHCP Client</label>
+                    <div class="col-lg-2 col-sm-11">
+                      <label class="switch">
+
+                        <input
+                          type="checkbox"
+                          formControlName="r_dhcp">
+
+                        <span class="slider round">
+                    <i class="enable switch-status">Enable</i>
+                    <i class="disable switch-status">Disable</i>
+                  </span>
+
+                      </label>
+                    </div>
+                    <div>
+                      <app-right-tooltip
+                        [toolTipText]="getToolTipText('system_aaa_server_s_aaa_passphrase')"></app-right-tooltip>
+                    </div>
+
+                  </div>
+
+
+                  <div formGroupName="r_config">
+
+                    <div class="form-group row">
+                      <label class="col-md-3 col-form-label text-right">IP Address</label>
+                      <div class="col-lg-2 col-sm-11">
+
+                        <!--placeholder="123.15.21.1"-->
+                        <input
+                          type="text"
+                          class="form-control"
+                          formControlName="r_ip"
+                          #standByIP
+                          (blur)="generateEndIPforStandby(standbyPrefix.value, standByIP.value,  '2')"
+                          (input)="checkIPStandBy(standByIP.value)">
+
+                        <div
+                          *ngIf="ipConfigForm.get('r_config.r_ip').invalid && (ipConfigForm.get('r_config.r_ip').dirty || ipConfigForm.get('r_config.r_ip').touched)">
+                          <div class="text-danger pull-left" *ngIf="ipConfigForm.get('r_config.r_ip').errors['required'] ">
+                            IP address is required.
+                          </div>
+                          <div class="text-danger" *ngIf="ipConfigForm.get('r_config.r_ip').errors['pattern']">Enter valid
+                            IP address
+                          </div>
+                          <div class="text-danger"
+                               *ngIf="ipConfigForm.get('r_config.r_ip').errors['restrictedIP'] && !ipConfigForm.get('r_config.r_ip').errors['pattern'] && !ipConfigForm.get('r_config.r_ip').errors['required']">
+                            Enter valid IP address
+                          </div>
+                        </div>
+
+                        <div class="text-danger" *ngIf="sameStandByIP">Active & Standby IP can't be same</div>
+
+                      </div>
+
+                      <div class="col-lg-1 col-sm-11">
+
+                        <input type="text"
+                               class="form-control"
+                               (input)="netmaskValidation('ip_standby_prefix')"
+                               formControlName="r_ip_prefix"
+                               maxlength="2"
+                               #standbyPrefix
+                               (blur)="generateEndIPforStandby(standbyPrefix.value, this.ipConfigForm.get('r_config.r_ip').value, '2')">
+
+                        <div
+                          *ngIf="ipConfigForm.get('r_config.r_ip_prefix').invalid && (ipConfigForm.get('r_config.r_ip_prefix').dirty || ipConfigForm.get('r_config.r_ip_prefix').touched)">
+                          <div class="text-danger pull-left"
+                               *ngIf="ipConfigForm.get('r_config.r_ip_prefix').errors.required">Prefix Required
+                          </div>
+                          <div class="text-danger pull-left"
+                               *ngIf="ipConfigForm.get('r_config.r_ip_prefix').errors.prefixrange && !ipConfigForm.get('r_config.r_ip_prefix').errors.required">Invalid Prefix
+                          </div>
+                          <div class="text-danger pull-left"
+                               *ngIf="ipConfigForm.get('r_config.r_ip_prefix').errors.pattern && !ipConfigForm.get('r_config.r_ip_prefix').errors.required">
+                            Invalid Prefix
+                          </div>
+                        </div>
+
+
+                      </div>
+
+                    </div>
+
+                    <div class="form-group row">
+                      <label class="col-md-3 col-form-label text-right">End IP Address</label>
+                      <div class="col-lg-2 col-sm-11">
+
+                        <input
+                          type="text"
+                          class="form-control"
+                          formControlName="r_end_ip">
+                        <div class="text-danger pull-left" *ngIf="standByIPCallError"> {{ standByIPCallErrorTxt }}</div>
+                      </div>
+                      <div>
+                        <app-right-tooltip
+                          [toolTipText]="getToolTipText('system_aaa_server_s_aaa_passphrase')"></app-right-tooltip>
+                      </div>
+                    </div>
+
+
+                    <div class="form-group row">
+
+                      <label class="col-md-3 col-form-label text-right">Subnet mask</label>
+                      <div class="col-lg-2 col-sm-11">
+
+                        <input
+                          type="text"
+                          class="form-control"
+                          formControlName="r_netmask">
+
+                        <div
+                          *ngIf="ipConfigForm.get('r_config.r_netmask').invalid && (ipConfigForm.get('r_config.r_netmask').dirty || ipConfigForm.get('r_config.r_netmask').touched)">
+                          <div class="text-danger pull-left" *ngIf="ipConfigForm.get('r_config.r_netmask').errors.required">
+                            Subnetmask is required.
+                          </div>
+                          <div class="text-danger pull-left"
+                               *ngIf="ipConfigForm.get('r_config.r_netmask').errors.pattern && !ipConfigForm.get('r_config.r_netmask').errors.required">
+                            Enter valid subnetmask
+                          </div>
+                        </div>
+
+                      </div>
+
+                      <div>
+                        <app-right-tooltip
+                          [toolTipText]="getToolTipText('system_aaa_server_s_aaa_passphrase')"></app-right-tooltip>
+                      </div>
+
+                    </div>
+
+                    <div class="form-group row">
+                      <label class="col-md-3 col-form-label text-right">Gateway</label>
+                      <div class="col-lg-2 col-sm-11">
+
+                        <input
+                          type="text"
+                          class="form-control"
+                          formControlName="r_gateway">
+
+                        <div
+                          *ngIf="ipConfigForm.get('r_config.r_gateway').invalid && (ipConfigForm.get('r_config.r_gateway').dirty || ipConfigForm.get('r_config.r_gateway').touched)">
+                          <div class="text-danger pull-left" *ngIf="ipConfigForm.get('r_config.r_gateway').errors.required">
+                            Gateway is required
+                          </div>
+                          <div class="text-danger pull-left"
+                               *ngIf="ipConfigForm.get('r_config.r_gateway').errors.pattern && !ipConfigForm.get('r_config.r_gateway').errors.required">
+                            Enter a valid Gateway IP
+                          </div>
+                          <div class="text-danger pull-left"
+                               *ngIf="ipConfigForm.get('r_config.r_gateway').errors.restrictedIP && !ipConfigForm.get('r_config.r_gateway').errors.pattern && !ipConfigForm.get('r_config.r_gateway').errors.required">
+                            Enter valid Gateway IP
+                          </div>
+                        </div>
+
+                      </div>
+                      <div>
+                        <app-right-tooltip
+                          [toolTipText]="getToolTipText('system_aaa_server_s_aaa_passphrase')"></app-right-tooltip>
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <label class="col-md-3 col-form-label text-right">Primary DNS</label>
+                      <div class="col-lg-2 col-sm-11">
+
+                        <input
+                          type="text"
+                          class="form-control"
+                          formControlName="r_primary_dns">
+                        <div
+                          *ngIf="ipConfigForm.get('r_config.r_primary_dns').invalid && (ipConfigForm.get('r_config.r_primary_dns').dirty || ipConfigForm.get('r_config.r_primary_dns').touched)">
+                          <div class="text-danger pull-left"
+                               *ngIf="ipConfigForm.get('r_config.r_primary_dns').errors.required">DNS server is required
+                          </div>
+                          <div class="text-danger pull-left"
+                               *ngIf="ipConfigForm.get('r_config.r_primary_dns').errors.pattern && !ipConfigForm.get('r_config.r_primary_dns').errors.required">
+                            Enter valid DNS server
+                          </div>
+                          <div class="text-danger pull-left"
+                               *ngIf="ipConfigForm.get('r_config.r_primary_dns').errors.restrictedIP && !ipConfigForm.get('r_config.r_primary_dns').errors.pattern && !ipConfigForm.get('r_config.r_primary_dns').errors.required">
+                            Enter valid DNS server
+                          </div>
+                        </div>
+
+                      </div>
+
+                      <div>
+                        <app-right-tooltip
+                          [toolTipText]="getToolTipText('system_aaa_server_s_aaa_passphrase')"></app-right-tooltip>
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <label class="col-md-3 col-form-label text-right">Secondary DNS</label>
+                      <div class="col-lg-2 col-sm-11">
+
+                        <input
+                          type="text"
+                          class="form-control"
+                          formControlName="r_secondary_dns">
+                        <div
+                          *ngIf="ipConfigForm.get('r_config.r_secondary_dns').invalid && (ipConfigForm.get('r_config.r_secondary_dns').dirty || ipConfigForm.get('r_config.r_secondary_dns').touched)">
+                          <div class="text-danger pull-left"
+                               *ngIf="ipConfigForm.get('r_config.r_secondary_dns').errors['required']">DNS server is
+                            required.
+                          </div>
+                          <div class="text-danger pull-left"
+                               *ngIf="ipConfigForm.get('r_config.r_secondary_dns').errors.pattern && !ipConfigForm.get('r_config.r_secondary_dns').errors.required">
+                            Enter valid DNS server.
+                          </div>
+                          <div class="text-danger pull-left"
+                               *ngIf="ipConfigForm.get('r_config.r_secondary_dns').errors.restrictedIP && !ipConfigForm.get('r_config.r_secondary_dns').errors.pattern && !ipConfigForm.get('r_config.r_secondary_dns').errors.required">
+                            Enter valid DNS server
+                          </div>
+                        </div>
+                        <!--<div class="text-danger" *ngIf="IpvalidateStatus && ipConfigForm.get('r_config.r_secondary_dns').valid ">Enter a valid DNS server.</div>-->
+
+                      </div>
+                      <div>
+                        <app-right-tooltip
+                          [toolTipText]="getToolTipText('system_aaa_server_s_aaa_passphrase')"></app-right-tooltip>
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+              </div>
+              <div *ngSwitchCase = 2>
+                <!--<h1> CONDITION 2 BLOCK </h1>-->
+                <div> </div>
+              </div>
+              <div *ngSwitchDefault>
+                <!--<h1> DEFAULT BLOCK</h1>-->
+              </div>
+            </div>
+
+
+
+
+            <div class="form-group row">
+              <div class="col-lg-6 col-sm-11 col-md-offset-4">
+
+                <input type="button"
+                       value="Reset"
+                       class="btn btn-cancel btn-large"
+                       style="margin-right: 15px;"
+                       (click)="onReset()">
+
+
+                <div *ngIf="submitButtonCondition; then validHalfFormCheck else validFullFormCheck">
+
+                </div>
+
+                <ng-template #validFullFormCheck>
+                  <input type="submit"
+                         value="Save"
+                         class="btn btn-theme btn-large"
+                         data-toggle="modal"
+                         data-target="#upload"
+                         (click)="onSubmit()"
+                         [disabled]="ipConfigForm.invalid || btnDisablex || btnDisableonIP">
+                         <!--[disabled]="ipConfigForm.invalid || btnDisablex">-->
+                </ng-template>
+
+
+                <ng-template #validHalfFormCheck>
+                  <input type="submit"
+                         value="Save"
+                         class="btn btn-theme btn-large"
+                         data-toggle="modal"
+                         data-target="#upload"
+                         (click)="onSubmit()"
+                         [disabled]="ipConfigForm.get('ipv4_config').invalid ||
+                                   ipConfigForm.get('ip').invalid ||
+                                   ipConfigForm.get('ip_prefix').invalid ||
+                                     btnDisablex || btnDisableonIP ">
+                </ng-template>
+
+              </div>
+            </div>
+
+          </form>
+          <!--End of IPV4 form.-->
+          <!--*ngIf="activeIPCheck || redundancyCheck || activeIPCheck"-->
+          <br><br><br>
+
+          <div class="table wrapper" >
+            <div class="tabcontent table-responsive" style="display: block; width: 75%;">
+
+              <div [ngSwitch]="tableViewSwitchCase">
+                <div *ngSwitchCase = 1>
+
+                  <!--<h1> CONDITION 1 BLOCK </h1>-->
+                  <table
+                    class="display theme table record_table table-striped table-sort text-center"
+                    cellspacing="0"
+                    width="100%">
+
+                    <thead>
+                    <tr class="table-head">
+                      <th class="text-center">Parameters</th>
+                      <th class="text-center">Active WLC</th>
+                      <th class="text-center" *ngIf="false">Standby WLC</th>
+                      <!--*ngIf="isStandbyEnabled"-->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="table-body" *ngFor="let item of activeArray ; let i = index">
+                      <td class="text-center">{{ item[0] }}</td>
+                      <td class="text-center">{{ item[1] }}</td>
+                      <td class="text-center" *ngIf="false"> {{ standByArray[i] }}</td>
+                    </tr>
+                    </tbody>
+                  </table>
+
+                </div>
+                <div *ngSwitchCase = 2>
+                  <!--<h1> CONDITION 2 BLOCK </h1>-->
+                  <table
+                    class="display theme table record_table table-striped table-sort text-center"
+                    cellspacing="0"
+                    width="100%">
+
+                    <thead>
+                    <tr class="table-head">
+                      <th class="text-center">Parameters</th>
+                      <th class="text-center" *ngIf="false">Active WLC</th>
+                      <th class="text-center">Standby WLC</th>
+                      <!--*ngIf="isStandbyEnabled"-->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="table-body" *ngFor="let item of activeArray ; let i = index">
+                      <td class="text-center">{{ item[0] }}</td>
+                      <td class="text-center" *ngIf="false">{{ item[1] }}</td>
+                      <td class="text-center"> {{ standByArray[i] }}</td>
+                    </tr>
+                    </tbody>
+                  </table>
+
+                </div>
+                <div *ngSwitchCase = 3>
+                  <!--<h1> CONDITION 3 BLOCK </h1>-->
+                  <table
+                    class="display theme table record_table table-striped table-sort text-center"
+                    cellspacing="0"
+                    width="100%">
+
+                    <thead>
+                    <tr class="table-head">
+                      <th class="text-center">Parameters</th>
+                      <th class="text-center">Active WLC</th>
+                      <th class="text-center">Standby WLC</th>
+                      <!--*ngIf="isStandbyEnabled"-->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="table-body" *ngFor="let item of activeArray ; let i = index">
+                      <td class="text-center">{{ item[0] }}</td>
+                      <td class="text-center">{{ item[1] }}</td>
+                      <td class="text-center"> {{ standByArray[i] }}</td>
+                    </tr>
+                    </tbody>
+                  </table>
+
+                </div>
+                <div *ngSwitchDefault>
+                  <!--<h1> DEFAULT BLOCK</h1>-->
+                  <table
+                    class="display theme table record_table table-striped table-sort text-center"
+                    cellspacing="0"
+                    width="100%" *ngIf="false">
+
+                    <thead>
+                    <tr class="table-head">
+                      <th class="text-center">Parameters</th>
+                      <th class="text-center">Active WLC</th>
+                      <th class="text-center">Standby WLC</th>
+                      <!--*ngIf="isStandbyEnabled"-->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="table-body" *ngFor="let item of activeArray ; let i = index">
+                      <td class="text-center">{{ item[0] }}</td>
+                      <td class="text-center">{{ item[1] }}</td>
+                      <td class="text-center">{{ standByArray[i]}}</td>
+                    </tr>
+                    </tbody>
+                  </table>
+
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+          <!--</div>-->
+
+        </tab>
+
+
+        <tab heading="IPV6" #IPV6 [disabled]=true>
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label text-right">IPv6</label>
+            <div class="col-lg-5 col-sm-11">
+              <label class="switch">
+                <input type="checkbox" checked  disabled>
+                <span class="slider round"><i class="enable switch-status">Enable</i><i class="disable switch-status">Disable</i></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-lg-6 col-sm-11 col-md-offset-4">
+              <input type="button" value="Reset" class="btn btn-cancel btn-large" style="margin-right: 15px;"
+                     [disabled]="disableResetButton">
+              <input type="button" value="Save" class="btn btn-theme btn-large">
+            </div>
+          </div>
+        </tab>
+      </tabset>
+
+    </div>
+  </div>
+</div>
+<!--</div>-->
+<!--</div>-->
+
+
+<!--/===/WORK AREA END/===/-->

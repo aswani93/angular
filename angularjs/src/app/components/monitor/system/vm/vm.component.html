@@ -1,0 +1,442 @@
+<!--/======================/WORK AREA/======================/-->
+<div class="page-content-wrapper page-content-stats">
+  <!-- <div class="row">
+      <div class="col-lg-12 col-sm-12">
+          <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="javascript:void(0);">Monitor</a></li>
+              <li class="breadcrumb-item"><a href="javascript:void(0);">System</a></li>
+              <li class="breadcrumb-item active">General</li>
+          </ol>
+      </div>
+  </div> -->
+
+  <!--<div class="row">-->
+    <!--<div class="col-lg-12 col-xs-12 col-sm-12">-->
+      <!--<div class="portlet light bordered">-->
+        <!--<div class="portlet-title">-->
+          <!--<div class="caption">-->
+            <!--<span>EMS Information</span>-->
+          <!--</div>-->
+        <!--</div>-->
+        <!--<div class="portlet-body">-->
+          <!--<table class="display theme table record_table table-striped table-sort" cellspacing="0" width="100%" [mfData]="data" #mf3="mfDataTable">-->
+            <!--<thead>-->
+            <!--<tr class="table-head">-->
+              <!--<th>-->
+                <!--&lt;!&ndash; <mfDefaultSorter by="ems_ip"> &ndash;&gt;-->
+                <!--<span>Server IP Address-->
+                  <!--&lt;!&ndash; <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='ems_ip' && _sortOrder=='asc' }"></i>-->
+                  <!--<i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ems_ip' && _sortOrder=='desc' }"></i> &ndash;&gt;-->
+                                  <!--</span>-->
+                <!--&lt;!&ndash; </mfDefaultSorter> &ndash;&gt;-->
+              <!--</th>-->
+              <!--<th>-->
+                <!--&lt;!&ndash; <mfDefaultSorter by="ip"> &ndash;&gt;-->
+                <!--<span>Status-->
+                  <!--&lt;!&ndash; <i class="down icon icon-download-arrow"></i>-->
+                  <!--<i class="up icon icon-up-arrow-1"></i> &ndash;&gt;-->
+                                  <!--</span>-->
+                <!--&lt;!&ndash; </mfDefaultSorter> &ndash;&gt;-->
+              <!--</th>-->
+              <!--<th>&nbsp;</th>-->
+              <!--<th>&nbsp;</th>-->
+            <!--</tr>-->
+            <!--</thead>-->
+            <!--<tbody>-->
+            <!--<tr class="table-body" *ngFor="let item3 of mf3.data">-->
+              <!--<td>{{item3.ems_ip}}</td>-->
+              <!--<td class="status">-->
+                <!--<span [ngClass]="{'online': item3.ems_status==true,'offline': item3.ems_status==false}" *ngIf="item3.ems_status!='-'">{{item3.ems_status == true?'Online':'Offline'}}</span>-->
+                <!--<span *ngIf="item3.ems_status=='-'">-</span>-->
+              <!--</td>-->
+              <!--<td>&nbsp;</td>-->
+              <!--<td>&nbsp;</td>-->
+            <!--</tr>-->
+            <!--</tbody>-->
+          <!--</table>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
+
+  <div class="row">
+    <div class="col-lg-12 col-xs-12 col-sm-12">
+      <div class="text-left pull-left">
+        <div class="dropdown scrollableList graph btn btn-theme rounded" *ngIf="isGraphDrawn">
+          <a href="#"
+             class="dropdown-toggle selectedOption"
+             data-toggle="dropdown"
+             aria-haspopup="true"
+             (click)="goBack()"
+             aria-expanded="false"><i class="glyphicon glyphicon-chevron-left" style="right: 10px;"></i>Back </a>
+        </div>
+      </div>
+        <div class="text-right pull-right">
+
+          <div class="dropdown scrollableList graph btn btn-theme rounded">
+            <a href="#"
+               class="dropdown-toggle selectedOption"
+               data-toggle="dropdown"
+               aria-haspopup="true"
+               aria-expanded="false">Export <i class="icon icon-export icon-before icon-export"></i></a>
+            <div class="dropdown-menu this-list" aria-labelledby="dropdownMenuButton">
+              <ul>
+                <li><a class="dropdown-item" href="#">CSV</a></li>
+                <li><a class="dropdown-item" href="#">PDF</a></li>
+              </ul>
+            </div>
+          </div>
+
+        <div class="dropdown scrollableList graph btn btn-theme rounded" *ngIf="isGraphDrawn">
+
+          <a href="#"
+             class="dropdown-toggle selectedOption"
+             data-toggle="dropdown"
+             aria-haspopup="true"
+             aria-expanded="false">{{templateViewText}} <i class="icon icon-arrow-point-to-down"></i></a>
+          <div class="dropdown-menu this-list wlc_downlink_scale_options" aria-labelledby="dropdownMenuButton">
+            <ul>
+              <li><a class="dropdown-item"  (click)="setPanelView('tabular')">Tabular View</a></li>
+              <li><a class="dropdown-item"  (click)="setPanelView('graph')">Graph View</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--<div class="row">-->
+    <!--<div class="col-lg-12 col-xs-12 col-sm-12">-->
+      <!--<div class="text-right pull-right">-->
+        <!--<div class="dropdown scrollableList graph btn btn-theme rounded">-->
+          <!--<a href="#"-->
+             <!--class="dropdown-toggle selectedOption"-->
+             <!--data-toggle="dropdown"-->
+             <!--aria-haspopup="true"-->
+             <!--aria-expanded="false">Export <i class="icon icon-export icon-before icon-export"></i></a>-->
+          <!--<div class="dropdown-menu this-list" aria-labelledby="dropdownMenuButton">-->
+            <!--<ul>-->
+              <!--<li><a class="dropdown-item" href="#">CSV</a></li>-->
+              <!--<li><a class="dropdown-item" href="#">PDF</a></li>-->
+            <!--</ul>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
+
+
+  <div class="row" *ngIf="listedVMTable">
+    <div class="col-lg-12 col-xs-12 col-sm-12">
+      <div class="portlet light bordered">
+        <div class="portlet-title">
+          <div class="caption">
+            <span>VM Information </span>
+          </div>
+        </div>
+        <div class="portlet-body">
+          <table class="display theme table record_table table-striped table-sort text-center"
+                 cellspacing="0"
+                 width="100%"
+                 [mfData]="vmTableData"
+                 #mf="mfDataTable">
+            <thead>
+            <tr class="table-head">
+              <th class="text-center">
+                                  <span>VM Name
+                                    <!-- <i class="down icon icon-download-arrow" ></i>
+                                    <i class="up icon icon-up-arrow-1"></i> -->
+                                  </span>
+              </th>
+              <th class="text-center">
+                                  <span>IP Address
+                                    <!-- <i class="down icon icon-download-arrow"></i>
+                                    <i class="up icon icon-up-arrow-1"></i> -->
+                                  </span>
+              </th>
+              <!--<th class="text-center">-->
+                <!--&lt;!&ndash; <mfDefaultSorter by="total_group"> &ndash;&gt;-->
+                <!--<span>No. of Groups-->
+                  <!--&lt;!&ndash; <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='total_group' && _sortOrder=='asc' }"></i>-->
+                  <!--<i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='total_group' && _sortOrder=='desc' }"></i> &ndash;&gt;-->
+                                  <!--</span>-->
+                <!--&lt;!&ndash; </mfDefaultSorter> &ndash;&gt;-->
+              <!--</th>-->
+              <th class="text-center">
+                <!-- <mfDefaultSorter by="total_ap"> -->
+                <span>CPU Usage
+                  <!-- <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='total_ap' && _sortOrder=='asc' }"></i>
+                  <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='total_ap' && _sortOrder=='desc' }"></i> -->
+                                  </span>
+                <!-- </mfDefaultSorter> -->
+              </th>
+              <th class="text-center">
+                <!-- <mfDefaultSorter by="active_ap"> -->
+                <span>Memory Usage
+                  <!-- <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='active_ap' && _sortOrder=='asc' }"></i>
+                  <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='active_ap' && _sortOrder=='desc' }"></i> -->
+                                  </span>
+                <!-- </mfDefaultSorter> -->
+              </th>
+              <th class="text-center">
+                <!-- <mfDefaultSorter by="total_client"> -->
+                <span>No. of Connected APs
+                  <!-- <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='total_client' && _sortOrder=='asc' }"></i>
+                  <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='emstotal_client_ip' && _sortOrder=='desc' }"></i> -->
+                                  </span>
+                <!-- </mfDefaultSorter> -->
+              </th>
+              <th class="text-center">
+                <!-- <mfDefaultSorter by="total_client"> -->
+                <span>No. of Cores
+                  <!-- <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='total_client' && _sortOrder=='asc' }"></i>
+                  <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='emstotal_client_ip' && _sortOrder=='desc' }"></i> -->
+                                  </span>
+                <!-- </mfDefaultSorter> -->
+              </th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr  class="table-body table-clickable"
+                 *ngFor="let item of mf.data"
+                 (dblclick)="setStatView(item.vm_name)">
+
+              <td>{{item.vm_name}}</td>
+              <td>{{item.ip_addr}}</td>
+              <td>{{item.cpu}}</td>
+              <td>{{item.mem}}</td>
+              <td>{{item.ap_count}}</td>
+              <td>{{item.cores_count}}</td>
+
+            </tr>
+            <tr class="table-body" *ngIf="mf.data.length == 0">
+              <td colspan="6" style="text-align: center;">No VMs found...</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<div id="tabularTemplateView" *ngIf="isTabularViewSelected">
+    <div class="row">
+      <div class="col-lg-12 col-xs-12 col-sm-12">
+        <div class="portlet light custom-portlet bordered">
+          <div class="portlet-title custom-title">
+            <div class="caption">
+              <span> {{ selected_vm_name + ': Information'}} </span>
+            </div>
+          </div>
+          <div class="portlet-body">
+            <table class="display theme record_table table table-striped table-sort table-param"
+                   cellspacing="0"
+                   width="70%"
+                   style="margin-bottom: 0;
+                   width: 70%;">
+              <tbody>
+              <tr>
+                <th class="border-bottom">CPU Utilization</th>
+                <td width="10%">&nbsp;</td>
+                <td > {{vm.cpu}} {{ percentage }} </td>
+              </tr>
+              <tr>
+                <th class="border-bottom">Memory Utilization</th>
+                <td width="10%"> &nbsp;</td>
+                <td>{{vm.mem}} {{ percentage }} </td>
+              </tr>
+              <tr>
+                <th class="border-bottom">Downlink Speed</th>
+                <td width="10%"> </td>
+                <td>{{vm.rx}} {{ unit }}</td>
+              </tr>
+              <tr>
+                <th class="border-bottom">Uplink Speed</th>
+                <td width="10%"> </td>
+                <td>{{vm.tx}} {{ unit }} </td>
+              </tr>
+              <tr>
+                <th class="border-bottom">Ambient Temperature on Host</th>
+                <td width="10%"> </td>
+                <td>{{vm.amp_temp}} {{ degree }}</td>
+              </tr>
+              <tr>
+                <th class="border-bottom">Disk Utilization</th>
+                <td width="10%">&nbsp;</td>
+                <td>{{vm.disk}} {{ disk }}</td>
+              </tr>
+              <tr>
+                <th class="border-bottom">No. of Registered APs</th>
+                <td width="10%">&nbsp;</td>
+                <td>{{vm.ap_count}}</td>
+              </tr>
+              <tr>
+                <th class="border-bottom">No. of WLAN Clients</th>
+                <td width="10%">&nbsp;</td>
+                <td>{{vm.client_count}}</td>
+              </tr>
+              <!--<tr>-->
+                <!--<th class="border-bottom">No. of Groups</th>-->
+                <!--<td width="10%">&nbsp;</td>-->
+                <!--<td>{{vm.group_count}}</td>-->
+              <!--</tr>-->
+              <tr>
+                <th class="border-bottom">Fan</th>
+                <td width="10%">&nbsp;</td>
+                <td>{{vm.fan}} {{rpm}} </td>
+              </tr>
+              <tr>
+                <th class="border-bottom">No. of Cores</th>
+                <td width="10%">&nbsp;</td>
+                <td>{{vm.cores_count}} {{rpm}} </td>
+              </tr>
+              <tr>
+                <th class="border-bottom">Power Supply</th>
+                <td width="10%">&nbsp;</td>
+                <td> {{vm.power_supply}} {{ volt }}
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+  <div id="graphTemplateView" *ngIf="isGraphViewSelected">
+
+    <div class="row">
+      <div class="col-lg-12 col-xs-12 col-sm-12">
+        <div class="portlet light custom-portlet bordered">
+          <div class="portlet-title custom-title">
+            <div class="caption">
+              <span>CPU &amp; Memory Utilization</span>
+            </div>
+            <div class="text-right pull-right">
+              <div class="dropdown scrollableList graph btn btn-theme-inverse rounded" *ngIf="ifLiveSelectedFromCPU">
+
+                <a href="#"
+                   class="dropdown-toggle selectedOption"
+                   id="dropdownMenuButtonMemoryRange"
+                   data-toggle="dropdown"
+                   aria-haspopup="true"
+                   aria-expanded="false">{{rangeText_vm_cpu}}
+                  <i class="icon icon-arrow-point-to-down"></i></a>
+                <div class="dropdown-menu this-list wlc_downlink_scale_options"
+                     aria-labelledby="dropdownMenuButton"
+                     >
+
+                  <ul>
+                    <li><a class="dropdown-item"  (click)="setRange('vm_cpu','avg')">Average</a></li>
+                    <li><a class="dropdown-item"  (click)="setRange('vm_cpu','min')">Minimum</a></li>
+                    <li><a class="dropdown-item"  (click)="setRange('vm_cpu','max')">Maximum</a></li>
+                  </ul>
+                </div>
+              </div>
+
+
+
+              <div class="dropdown scrollableList graph btn btn-theme-inverse rounded">
+
+                <a href="#"
+                   class="dropdown-toggle selectedOption"
+                   id="dropdownMenuButtonUpLinkScale"
+                   data-toggle="dropdown"
+                   aria-haspopup="true"
+                   aria-expanded="false">{{scaleText_vm_cpu}}
+                  <i class="icon icon-arrow-point-to-down"></i></a>
+                <div class="dropdown-menu this-list  wlc_cpu_scale_options" aria-labelledby="dropdownMenuButton">
+                  <ul>
+                    <li><a class="dropdown-item"  (click)="setScale('vm_cpu','live')">Live Data</a></li>
+                    <li><a class="dropdown-item"  (click)="setScale('vm_cpu','hour')">Last 1 hour</a></li>
+                  </ul>
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+
+          <div class="portlet-body portlet-body-graph" *ngIf="ifLiveCPUGraphSelected">
+            <app-vm-cpu-memory-utilization [vmName]="set_vm_host_machine" [scale]="scaleVal_vm_cpu_live"></app-vm-cpu-memory-utilization>
+          </div>
+          <div class="portlet-body portlet-body-graph" *ngIf="ifHourCPUGraphSelected">
+            <app-vm-cpu-memory-utilization  [vmName]="set_vm_host_machine"  [scale]="scaleVal_vm_cpu" [range]="rangeVal_vm_cpu"></app-vm-cpu-memory-utilization>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+
+    <!--Network Traffic utilization graph-->
+    <div class="row">
+      <div class="col-lg-12 col-xs-12 col-sm-12">
+        <div class="portlet light custom-portlet bordered">
+          <div class="portlet-title custom-title">
+            <div class="caption">
+              <span>Uplink-Downlink Traffic</span>
+            </div>
+            <div class="text-right pull-right">
+              <div class="dropdown scrollableList graph btn btn-theme-inverse rounded" *ngIf="ifLiveSelectedFromNetwork">
+                <a href="#"
+                   class="dropdown-toggle selectedOption"
+                   id="dropdownMenuUpLinkRange"
+                   data-toggle="dropdown"
+                   aria-haspopup="true"
+                   aria-expanded="false">{{rangeText_vm_downlink}}<i class="icon icon-arrow-point-to-down"></i></a>
+                <div class="dropdown-menu this-list wlc_downlink_range_options"
+                     aria-labelledby="dropdownMenuButton">
+                  <ul>
+                    <li><a class="dropdown-item"  (click)="setRange('vm_downlink','avg')">Average</a></li>
+                    <li><a class="dropdown-item"  (click)="setRange('vm_downlink','min')">Minimum</a></li>
+                    <li><a class="dropdown-item"  (click)="setRange('vm_downlink','max')">Maximum</a></li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="dropdown scrollableList graph btn btn-theme-inverse rounded">
+
+                <a href="#"
+                   class="dropdown-toggle selectedOption"
+                   id="dropdownMenuUpLinkScale"
+                   data-toggle="dropdown"
+                   aria-haspopup="true"
+                   aria-expanded="false">{{scaleText_vm_downlink}} <i class="icon icon-arrow-point-to-down"></i></a>
+                <div class="dropdown-menu this-list wlc_downlink_scale_options" aria-labelledby="dropdownMenuButton">
+                  <ul>
+                    <li><a class="dropdown-item"  (click)="setScale('vm_downlink','live')">Live Data</a></li>
+                    <li><a class="dropdown-item"  (click)="setScale('vm_downlink','hour')">Last 1 hour</a></li>
+                  </ul>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+
+          <div class="portlet-body portlet-body-graph" *ngIf="ifLiveNetworkGraphSelected" >
+            <app-vm-downlink-traffic-utilization [vmName]="set_vm_host_machine" [scale]="scaleVal_vm_downlink_live"></app-vm-downlink-traffic-utilization>
+          </div>
+
+          <div class="portlet-body portlet-body-graph" *ngIf="ifHourNetworkGraphSelected">
+            <app-vm-downlink-traffic-utilization [vmName]="set_vm_host_machine" [scale]="scaleVal_vm_downlink" [range]="rangeVal_vm_downlink"></app-vm-downlink-traffic-utilization>
+          </div>
+
+          <!--<div class="portlet-body">-->
+          <!--<div id="upLinkDownLink"></div>-->
+          <!--</div>-->
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+
+
+</div>
+<!--/===/WORK AREA END/===/-->

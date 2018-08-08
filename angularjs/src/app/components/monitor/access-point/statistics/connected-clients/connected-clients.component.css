@@ -1,0 +1,29 @@
+.btn-icon{
+  font-size: 15px;
+  margin-right: 10px;
+}
+
+::ng-deep mfdefaultsorter .glyphicon{
+  display: none;
+}
+::ng-deep .activeIcon{
+  font-weight: bold;
+  color: #fff !important;
+}
+::ng-deep .open{
+  display: block;
+}
+
+.tableHeight{
+  height: 40px;
+}
+.stat-btn i{
+  color: #756ed1;
+    font-size: 18px;
+}
+
+
+.table-body td{
+  white-space: nowrap;
+}
+

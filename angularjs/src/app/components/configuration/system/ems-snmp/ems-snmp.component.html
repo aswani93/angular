@@ -1,0 +1,384 @@
+<!--/======================/WORK AREA/======================/-->
+<form id="emsForm" (keydown.enter)="$event.preventDefault()"  [formGroup]="emsForm">
+<div class="page-content-wrapper">
+    <!-- <div class="row">
+        <div class="col-lg-12 col-sm-12">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Configuration</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">System</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">EMS/SNMP</a>
+                </li>
+                <li class="breadcrumb-item active">SNMP</li>
+            </ol>
+        </div>
+    </div> -->
+    <div class="row">
+        <div class="col-lg-12 col-xs-12 col-sm-12">
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <span>SNMP</span>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label text-right">SNMP Version</label>
+                        <div class="col-lg-2 col-sm-12">
+                            <select name="version" id="select-filter" class="form-control" [(ngModel)]='version'  formControlName="version">
+                                <option value="1">V1</option>
+                                <option value="2">V2c</option>
+                            </select>
+                        </div>
+                      <div>
+                      <app-right-tooltip [toolTipText]="getToolTipText('system_ems_snmp_snmp_version')"></app-right-tooltip>
+                        </div>
+                    </div>
+                    <div class="snmp-version-v2 filter-content" id="v2" style="display: block;">
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label text-right">Read Community</label>
+                            <div class="col-lg-2 col-sm-11">
+                                <input type="text"
+                                       class="form-control"
+                                       name="readcommunity"
+                                       id="readcommunity"
+                                       required
+                                       formControlName="read_community"
+                                   
+                                       minlength="2"
+                                       maxlength="32"
+                                      >
+                                      <div *ngIf="emsForm.get('read_community').invalid && (emsForm.get('read_community').dirty || emsForm.get('read_community').touched)">
+                                        <div class="text-danger pull-left" *ngIf="emsForm.get('read_community').errors.required">
+                                            Read Community is required.
+                                        </div>
+                                        <div class="text-danger pull-left" *ngIf="emsForm.get('read_community').errors.minlength">
+                                            Minimum 2 character required.
+                                        </div>
+                                        <div class="text-danger pull-left" *ngIf="emsForm.get('read_community').errors.maxlength">
+                                           Maximum 32 characters allowed.
+                                        </div>
+                                       
+                                        <div class="text-danger pull-left" *ngIf="emsForm.get('read_community').errors.pattern && !emsForm.get('read_community').errors.minlength && !emsForm.get('read_community').errors.maxlength">
+                                           Invalid Read Community.
+                                        </div>
+                                       
+                                </div>
+                            </div>
+                          <div >
+                            <app-right-tooltip [toolTipText]="getToolTipText('system_ems_snmp_read_community')"></app-right-tooltip>
+                          </div>
+
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label text-right">Read-Write Community</label>
+                            <div class="col-lg-2 col-sm-11">
+                                <input name="readWritecommu"
+                                       type="text"
+                                       class="form-control"
+                                       id="readWritecommunity"
+                                      
+                                       required
+                                       formControlName="read_write_community"
+                                       minlength="2"
+                                       maxlength="32"
+                                    >
+
+                                    <div *ngIf="emsForm.get('read_write_community').invalid && (emsForm.get('read_write_community').dirty || emsForm.get('read_write_community').touched)">
+                                        <div class="text-danger pull-left" *ngIf="emsForm.get('read_write_community').errors.required">
+                                            Read-Write Community is required.
+                                        </div>
+                                        <div class="text-danger pull-left" *ngIf="emsForm.get('read_write_community').errors.minlength">
+                                            Minimum 2 character required.
+                                        </div>
+                                        <div class="text-danger pull-left" *ngIf="emsForm.get('read_write_community').errors.maxlength">
+                                           Maximum 32 characters allowed.
+                                        </div>
+                                       
+                                        <div class="text-danger pull-left" *ngIf="emsForm.get('read_write_community').errors.pattern && !emsForm.get('read_write_community').errors.minlength && !emsForm.get('read_write_community').errors.maxlength">
+                                           Invalid Read-Write Community.
+                                        </div>
+                                       
+                                </div>
+                            </div>
+                          <div>
+                            <app-right-tooltip [toolTipText]="getToolTipText('system_ems_snmp_read_write_community')"></app-right-tooltip>
+                          </div>
+
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label text-right">Port Number</label>
+                        <div class="col-lg-1 col-sm-11">
+                            <input
+                              type="number"
+                              value="161"
+                              class="form-control"
+                              name="portnumber"
+                              min="1"
+                              id="EMStrapPort"
+                              minlength=""
+                              max="5"
+                              required
+            
+                              disabled>
+                          <div class="text-danger pull-left" >{{trapPortErrorFlag}}</div>
+                        </div>
+                      <div>
+                        <app-right-tooltip [toolTipText]="getToolTipText('system_ems_snmp_port_number')"></app-right-tooltip>
+                      </div>
+
+                    </div>
+                    <!-- <div class="snmp-version-v3 filter-content" id="v3">
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label text-right">Username</label>
+                            <div class="col-lg-2 col-sm-11">
+                                <input type="text"
+                                       class="form-control is-invalid"
+                                       required="">
+                                <div class="text-danger pull-left">This field is required</div>
+                            </div>
+                          <div>
+                            <app-right-tooltip [toolTipText]="getToolTipText('system_ems_snmp_username')"></app-right-tooltip>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label text-right">Read-Write Community</label>
+                            <div class="col-lg-2 col-sm-11">
+                                <select name="access-priviledge" class="form-control">
+                                    <option value="no-auth-no-priv">NoAuthNoPriv</option>
+                                </select>
+                            </div>
+                          <div>
+                            <app-right-tooltip [toolTipText]="getToolTipText('system_ems_snmp_read_write_community')"></app-right-tooltip>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label text-right">Authentication Algorithm</label>
+                            <div class="col-lg-1 col-sm-11">
+                                <select name="access-priviledge" class="form-control">
+                                    <option value="md5">MD5</option>
+                                </select>
+                            </div>
+                          <div>
+                            <app-right-tooltip [toolTipText]="getToolTipText('system_ems_snmp_auth_algorithm')"></app-right-tooltip>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label text-right">Authentication Password</label>
+                            <div class="col-lg-2 col-sm-11">
+                                <div class="input-field">
+                                  <input
+                                      type="password"
+                                      class="form-control is-invalid"
+                                  required>
+                                  <div class="text-danger col-lg-pull">This field is required</div>
+                                  <i class="icon icon-hide icon-right"></i>
+                                </div>
+                            </div>
+                          <div>
+                            <app-right-tooltip [toolTipText]="getToolTipText('system_ems_snmp_auth_authentication_password')"></app-right-tooltip>
+                          </div>
+                            <div class="col-lg-2">
+                                <span class="char-limit">(8-32 Characters)</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label text-right">Encryption Algorithm</label>
+                            <div class="col-lg-1 col-sm-11">
+                                <select name="access-priviledge" class="form-control">
+                                    <option value="md5">MD5</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label text-right">Encryption Password</label>
+                            <div class="col-lg-2 col-sm-11">
+                                <div class="input-field">
+                                    <input
+                                      type="password"
+                                      class="form-control is-invalid"
+                                      required>
+                                  <div class="text-danger pull-left">This field is required</div>
+                                  <i class="icon icon-hide icon-right"></i>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <span class="char-limit">(8-32 Characters)</span>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+                <div class="portlet-title">
+                    <div class="caption">
+                        <span>Trap</span>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label text-right">Server</label>
+                        <div class="col-lg-3 col-sm-11" style="margin-right: -35px">
+                            <ul class="radio-out">
+                                <li>
+                                    <label>
+                                        <input type="radio"
+                                               name="trap-server"
+                                               checked>
+                                        <i>IPv4</i>
+                                        <span class="check">&nbsp;</span>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input type="radio" name="trap-server" [disabled]="true">
+                                        <i>IPv6</i>
+                                        <span class="check">&nbsp;</span>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input type="radio" name="trap-server" [disabled]="true">
+                                        <i>Hostname</i>
+                                        <span class="check">&nbsp;</span>
+                                    </label>
+                                </li>
+                            </ul>
+
+                        </div>
+                      <div>
+                        <app-right-tooltip [toolTipText]="getToolTipText('system_basic_trap_server')"></app-right-tooltip>
+                      </div>
+                    </div>
+                    <div class="ipv4 filter-content" id="ipv4" style="display: block;">
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label text-right">IP Address</label>
+                            <div class="col-lg-2 col-sm-11">
+                                <input
+                                  type="text"
+                                  value="{{ipv4Val}}"
+                                  id='ipv4input'
+                                  name="ipv4"
+                                  class="form-control"
+                                  formControlName="trap_ipv4"
+                                  (input)="validateIP()"
+                                  required
+                                maxlength="15">
+
+                                <div *ngIf="emsForm.get('trap_ipv4').invalid && (emsForm.get('trap_ipv4').dirty || emsForm.get('trap_ipv4').touched)">
+                                    <div class="text-danger pull-left" *ngIf="emsForm.get('trap_ipv4').errors.required">
+                                        IP address is required.
+                                    </div>
+                                  
+                                   
+                                    <div class="text-danger pull-left" *ngIf="emsForm.get('trap_ipv4').errors.pattern && !emsForm.get('trap_ipv4').errors.minlength && !emsForm.get('trap_ipv4').errors.maxlength">
+                                       Invalid IPaddress.
+                                    </div>
+                                   
+                            </div>
+                            <div class="text-danger" *ngIf="iperrorStatus && emsForm.get('trap_ipv4').valid ">Invalid IPaddress</div>
+                            </div>
+                          <div>
+                            <app-right-tooltip [toolTipText]="getToolTipText('system_basic_trap_ip_server')"></app-right-tooltip>
+                          </div>
+                        </div>
+
+                    </div>
+                    <!-- <div class="ipv6 filter-content" id="ipv6" style="display: none;">
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label text-right">IP Address</label>
+                            <div class="col-lg-2 col-sm-11">
+                                <input type="text"
+                                       value="ipv6"
+                                       name="ipv6"
+                                       class="form-control is-invalid"
+                                       required>
+                                <div class="text-danger pull-left">This field is required</div>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="hostname filter-content" id="hostname" style="display: none;">
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label text-right">Hostname</label>
+                            <div class="col-lg-2 col-sm-11">
+                                <input type="text"
+                                       value="www.hfcl.com"
+                                       class="form-control is-invalid"
+                                       required>
+                                <div class="text-danger pull-left">This field is required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label text-right">Port Number</label>
+                        <div class="col-lg-1 col-sm-11">
+                            <input type="number"
+                                   value=""
+                                   class="form-control"
+                                   name="portnumber"
+                                   min="1"
+                                   id="trapPort"
+                                   minlength=""
+                                   max="5" required
+                                   value="162"
+                                   [ngModelOptions]="{standalone: true}"
+                                   [(ngModel)]="trapportnumber"
+                                  disabled>
+                          <div class="text-danger pull-left">{{trapPortErrorFlag}}</div>
+                        </div>
+                      <div>
+                        <app-right-tooltip [toolTipText]="getToolTipText('system_basic_trap_port_number')"></app-right-tooltip>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label text-right">Community</label>
+                        <div class="col-lg-2 col-sm-11">
+                    <input type="text"
+                           class="form-control"
+                           id='trapcomm'
+                           name="trapCommunity"
+                           minlength="2"
+                           maxlength="32"
+                           required
+                           formControlName="trap_community"
+                        >
+                           <div *ngIf="emsForm.get('trap_community').invalid && (emsForm.get('trap_community').dirty || emsForm.get('trap_community').touched)">
+                            <div class="text-danger pull-left" *ngIf="emsForm.get('trap_community').errors.required">
+                                Trap Community is required.
+                            </div>
+                            <div class="text-danger pull-left" *ngIf="emsForm.get('trap_community').errors.minlength">
+                                Minimum 2 character required.
+                            </div>
+                            <div class="text-danger pull-left" *ngIf="emsForm.get('trap_community').errors.maxlength">
+                               Maximum 32 characters allowed.
+                            </div>
+                           
+                            <div class="text-danger pull-left" *ngIf="emsForm.get('trap_community').errors.pattern && !emsForm.get('trap_community').errors.minlength && !emsForm.get('trap_community').errors.maxlength">
+                               Invalid Trap Community.
+                            </div>
+                        </div>
+                        </div>
+
+                      <div>
+                        <app-right-tooltip [toolTipText]="getToolTipText('system_basic_trap_ip_server')"></app-right-tooltip>
+                      </div>
+
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-lg-6 col-sm-11 col-md-offset-4">
+                            <input type="reset" value="Reset" class="btn btn-cancel btn-large" (click)="reset();" style="margin-right: 15px;">
+                            <input type="submit" value="Save" class="btn btn-theme btn-large" (click)="saveSNMPDetails()" data-toggle="modal" data-target="#Save"  [disabled]="!emsForm.valid || btnDisable " >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+<!--/===/WORK AREA END/===/-->

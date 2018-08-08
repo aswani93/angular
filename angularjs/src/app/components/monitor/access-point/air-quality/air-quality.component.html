@@ -1,0 +1,194 @@
+ <!--/======================/WORK AREA/======================/-->
+ <div class="page-content-wrapper" *ngIf="!isdetailsShowed">
+  <!-- <div class="row">
+      <div class="col-lg-5 col-sm-12">
+          <div class="searchBar">
+              <i class="icon icon-magnifying-glass"></i>
+              <input type="text" placeholder="Search">
+          </div>
+      </div>
+  </div> -->
+  <div class="row">
+      <div class="col-lg-12 col-sm-12">
+          <div class="portlet light bordered">
+              <div class="portlet-body">                                             
+                  <!-- <div class="tabcontent table-responsive" style="display: block;"> -->
+                      <div class="list-out">
+                          <div class="table-function">
+                              <ul>
+                                  <li><span class="pageEntry">Show</span></li>
+                                  <li>
+                                      <select class="form-control">
+                                          <option  value="0: 20" ng-reflect-ng-value="20">20</option>
+                                          <option _ngcontent-c3="" value="1: 100" ng-reflect-ng-value="100">100</option>
+                                          <option _ngcontent-c3="" value="2: 1000" ng-reflect-ng-value="1000">1000</option>
+                                          <option _ngcontent-c3="" value="3: 5000" ng-reflect-ng-value="5000">5000</option>
+                                      </select>
+                                  </li>
+                                  <li><span class="pageEntry">entries</span></li>
+                                      <!-- <li><a href="#"><i class="icon icon-descendant"></i> Sort by <i class="icon icon-arrow-point-to-down"></i></a></li>
+                                      <li><a href="#"><i class="icon icon-filter"></i> Filter by <i class="icon icon-arrow-point-to-down"></i></a></li> -->
+                                  </ul>
+                                  <ul class="table-function-right">
+                                    <li class="posreltive">
+                                      <a class="dropdown-toggle"
+                                         id="dropdownPopup"
+                                         data-toggle="dropdown"
+                                         aria-haspopup="true"
+                                         aria-expanded="false"
+                                         href="#" >Filter columns
+                                        <i aria-hidden="true" class="fa fa-chevron-down"></i>
+                                      </a>
+                  
+                                      <div class="drop-checkbox dropdown-menu" aria-labelledby="dropdownPopup" (click)="holdPopup($event)">
+                                        <ul>
+                                          <li class="dropdown-item" *ngFor="let i of coloumsObjects;let index = index">
+                                            <label class="checkbox">
+                                              <input class="register-check" type="checkbox"  checked="i.checked" (change)="selectColoums($event,index)"  [disabled]= "count == 4 && i.checked == true">
+                                              <div class="check"></div>
+                                              <span class="check-label">{{i.name}}</span>
+                                            </label>
+                                          </li>
+                  
+                                        </ul>
+                                      </div>
+                                    </li>
+                                   
+                                  </ul>
+                              </div>
+                              <table
+                              class="display theme record_table table table-striped table-sort"
+                              cellspacing="0"
+                              width="100%"
+                              [mfData]="data"
+                              #mf="mfDataTable"
+                            >
+                              <thead>
+                              <tr class="table-head">
+                                <!-- <th ><label class="checkbox"><input type="checkbox" (change)="selectAll($event,mf.data)" id="selectAllCheck"><div class="check"></div></label></th> -->
+                                <th style="text-align:  center;" *ngIf="(coloumsObjects[0].checked) == true" class="tableHeight">
+                                  <mfDefaultSorter by="ap_name">
+                                                              <span>AP Name
+                                                                  <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='ap_name' && _sortOrder=='asc' }"></i>
+                                                                  <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ap_name' && _sortOrder=='desc' }"></i>
+                                                              </span>
+                                  </mfDefaultSorter>
+                                </th>
+                                <th style="text-align:  center;" *ngIf="(coloumsObjects[1].checked) == true" class="tableHeight">
+                                  <mfDefaultSorter by="ap_ip">
+                                                              <span>IP Address
+                                                                  <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='ap_ip' && _sortOrder=='asc' }"></i>
+                                                                  <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ap_ip' && _sortOrder=='desc' }"></i>
+                                                              </span>
+                                  </mfDefaultSorter>
+                                </th>
+                                <th style="text-align:  center;" *ngIf="(coloumsObjects[2].checked) == true" class="tableHeight">
+                                  <mfDefaultSorter by="ap_mac">
+                                                              <span>MAC Address
+                                                                  <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='ap_mac' && _sortOrder=='asc' }"></i>
+                                                                  <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ap_mac' && _sortOrder=='desc' }"></i>
+                                                              </span>
+                                  </mfDefaultSorter>
+                                </th>
+                                <th style="text-align:  center;" *ngIf="(coloumsObjects[3].checked) == true" class="tableHeight">
+                                  <mfDefaultSorter by="ap_group">
+                                                              <span>Group Name
+                                                                  <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='ap_group' && _sortOrder=='asc' }"></i>
+                                                                  <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ap_group' && _sortOrder=='desc' }"></i>
+                                                              </span>
+                                  </mfDefaultSorter>
+                                </th>
+                                <th style="text-align:  center;" *ngIf="(coloumsObjects[4].checked) == true" class="tableHeight">
+                                  <mfDefaultSorter by="active_clients">
+                                                              <span>No. of Clients
+                                                                  <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='active_clients' && _sortOrder=='asc' }"></i>
+                                                                  <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='active_clients' && _sortOrder=='desc' }"></i>
+                                                              </span>
+                                  </mfDefaultSorter>
+                                </th>
+                                <th style="text-align:  center;" *ngIf="(coloumsObjects[5].checked) == true" class="tableHeight">
+                                  <mfDefaultSorter by="ap_model">
+                                                                <span>AP Model
+                                                                    <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='ap_model' && _sortOrder=='asc' }"></i>
+                                                                    <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ap_model' && _sortOrder=='desc' }"></i>
+                                                                </span>
+                                  </mfDefaultSorter>
+                                </th>
+                                <th style="text-align:  center;" *ngIf="(coloumsObjects[6].checked) == true" class="tableHeight">
+                                  <mfDefaultSorter by="status">
+                                                              <span>Status
+                                                                  <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='status' && _sortOrder=='asc' }"></i>
+                                                                  <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='status' && _sortOrder=='desc' }"></i>
+                                                              </span>
+                                  </mfDefaultSorter>
+                                </th>
+              
+                              </tr>
+                              </thead>
+                              <tbody>
+                              <tr
+                                class="table-body table-clickable" 
+                                *ngFor="let item of mf.data | paginate: {itemsPerPage: rowsOnPage , currentPage: page};let activeIndex = index"
+                                (dblclick)="double_click_event($event,item,activeIndex)">
+                                <!-- <td>
+                                  <label class="checkbox">
+              
+                                    <input type="checkbox"
+                                           class="register-table-check"
+                                           value="{{item.ap_mac}}"
+                                           name="{{item.ap_mac | noColon}}"
+                                           (change)="checkboxClick(item,$event)">
+              
+                                    <div class="check"></div>
+                                  </label>
+                                </td> -->
+                                <td style="text-align:  center;" *ngIf="(coloumsObjects[0].checked) == true" class="tableHeight">{{item.ap_name}}</td>
+                                <td style="text-align:  center;" *ngIf="(coloumsObjects[1].checked) == true" class="tableHeight">{{item.ap_ip}}</td>
+                                <td style="text-align:  center;" *ngIf="(coloumsObjects[2].checked) == true" class="tableHeight">{{item.ap_mac}}</td>
+                                <td style="text-align:  center;" *ngIf="(coloumsObjects[3].checked) == true" class="tableHeight">{{item.ap_group}}</td>
+                                <td style="text-align:  center;" *ngIf="(coloumsObjects[4].checked) == true" class="tableHeight">{{item.active_clients}}</td>
+                                <td style="text-align:  center;" *ngIf="(coloumsObjects[5].checked) == true" class="tableHeight">{{item.ap_model}}</td>
+              
+                                <td style="text-align:  center;" class="status" *ngIf="(coloumsObjects[6].checked) == true">
+                                  <span class="{{item.status==1?'online':'offline'}}">{{item.status==1?'Online':'Offline'}}</span>
+                                </td>
+              
+                              </tr>
+              
+                              <!-- Default row to be shown where there is no data to show -->
+                              <tr class="table-body" *ngIf="mf.data.length == 0">
+                                <td colspan="8" style="text-align: center;">No APs registered to the system. Please try again after some time</td>
+                              </tr>
+              
+                              <!-- The showing 10 of 10 items text-->
+                              <tr class="page-detail-area" *ngIf="mf.data.length !== 0">
+                                <td colspan="8">
+                                   <div class="entry-count text-left"  style="float:left;"><span>Showing {{showingfrom}} to {{showingto}} of {{dataLength}} entries</span></div>
+                                               
+                                                    <div class="cpagination">
+                                                    <span *ngIf="data  && data.length > rowsOnPage" [class.button-disabled]="firstarrowStatus" class="first" (click)="goToPage(1)"><<</span>
+                                                    <pagination-controls (pageChange)="getNext($event)" maxSize="9"
+                                                  directionLinks="true"
+                                                  autoHide="true"
+                                                  previousLabel=""
+                                                  nextLabel=""
+                                                  screenReaderPaginationLabel="Pagination"
+                                                  screenReaderPageLabel="page"
+                                    ></pagination-controls>
+                                    <span *ngIf="data && data.length > rowsOnPage" [class.button-disabled]="lastarrowStatus" class="last" (click)="goToPage(Math.ceil(data.length/rowsOnPage))">>></span></div>
+                                    
+                                                    </td>
+                              </tr>
+              
+                              </tbody>
+                            </table>
+                      </div><!-- /list-out-->
+                  <!-- </div> -->
+              </div>
+          </div><!-- /portlet-->
+      </div>
+  </div>
+ 
+</div>
+<app-air-quality-details *ngIf="isdetailsShowed" [selectedAp]="selectedAp" (emitEve)="emitEve()"></app-air-quality-details>
+<!--/===/WORK AREA END/===/-->

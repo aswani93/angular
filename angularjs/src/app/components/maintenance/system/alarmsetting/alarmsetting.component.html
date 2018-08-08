@@ -1,0 +1,129 @@
+<div class="page-content-wrapper">
+<div class="row">
+  <div class="col-lg-12 col-sm-12">
+      <div class="portlet light bordered">
+          <div class="portlet-body">
+              <div class="table-responsive">
+                  <div class="table-function">
+                      <!-- <ul class="table-function-right">
+                          <li><a href="#"><i class="icon icon-edit"></i> Edit</a></li>
+                          <li><a href="#"><i class="icon icon-rubbish-bin"></i> Delete</a></li>
+                      </ul> -->
+                      <ul class="table-function-right">
+                          <li class="posreltive">
+                            <a class="dropdown-toggle" id="dropdownUnRegPopup" data-toggle="dropdown" aria-haspopup="true"  aria-expanded="false"  href="#" ><i class="fa fa-filter fa-lg" style="color: #95a2a9" aria-hidden="true"></i></a>
+                            <div class="drop-checkbox dropdown-menu" aria-labelledby="dropdownUnRegPopup" >
+                              <ul>
+                                <li class="dropdown-item"
+                                    *ngFor="let i of coloumsObjects;let index = index">
+
+                                  <label class="checkbox">
+                                    <input class="register-check" type="checkbox" [(ngModel)]="i.checked"  checked="i.checked" (change)="selectColoums($event,index)"  [disabled]= "count == 3 && i.checked == true">
+                                    <div class="check"></div>
+                                    <span class="check-label">{{i.name}}</span>
+                                  </label>
+                                </li>
+                              </ul>
+                  </div>
+                  </li>
+                  </ul>
+                  <table id="example" class="display theme table record_table table-striped table-sort text-center"  cellspacing="0" width="100%" [mfData]="Data" #mf="mfDataTable">
+                      <thead>
+                          <tr class="table-head">
+                              <th class="text-left">
+                                  <span>Enable/Disable
+                                      <!-- <i class="down icon icon-download-arrow"></i>
+                                      <i class="up icon icon-up-arrow-1"></i> -->
+                                  </span>
+                              </th>
+                              <th class="text-center">
+                                  <span>Description
+                                      <!-- <i class="down icon icon-download-arrow"></i>
+                                      <i class="up icon icon-up-arrow-1"></i> -->
+                                  </span>
+                              </th>
+                              <th class="text-center">
+                                  <span>Priorty
+                                     <!--  <i class="down icon icon-download-arrow"></i>
+                                      <i class="up icon icon-up-arrow-1"></i> -->
+                                  </span>
+                              </th>
+                              <th class="text-center">
+                                  <span>Source
+                                    <!--   <i class="down icon icon-download-arrow"></i>
+                                      <i class="up icon icon-up-arrow-1"></i> -->
+                                  </span>
+                              </th>
+                              <th class="text-center">
+                                <span>Type
+                                  <!--   <i class="down icon icon-download-arrow"></i>
+                                    <i class="up icon icon-up-arrow-1"></i> -->
+                                </span>
+                            </th>
+                            <th class="text-center">
+                              <span>Alarm Trigger
+                                <!--   <i class="down icon icon-download-arrow"></i>
+                                  <i class="up icon icon-up-arrow-1"></i> -->
+                              </span>
+                          </th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr class="table-body" *ngFor="let item of mf.data" style="width: 5%;">
+                              <td class="text-right" style="padding-left: 75px!important;">
+                                <label class="switch">
+                                <input type="checkbox" [(ngModel)]="item.enable" [checked]="item.enable">
+                                <span class="slider round"><i class="enable switch-status">Enable</i><i class="disable switch-status">Disable</i></span>
+                              </label>
+                            </td>
+                              <td class="text-center" style="overflow:hidden;width: 60%" nowrap="nowrap"><div style="word-wrap: break-word;" Tooltip="item.description">{{item.description| slice: 0:130}} </div></td>
+                              <td><i class="fa fa-circle" [style.color]="item.priority == 'critical' ? 'red' : null"  [hidden]="!(item.priority == 'critical')"></i>
+                                <i class="fa fa-circle"   [style.color]="item.priority == 'major' ? 'orange' : null"  [hidden]="!(item.priority == 'major')"></i>
+                                <i class="fa fa-circle"   [style.color]="item.priority == 'normal' ? 'yellow' : null" [hidden]="!(item.priority == 'normal')"></i>
+                                <select class="caption-select" [(ngModel)]="item.priority" (change)="changePriorty($event,item)">
+                                <option value="critical" [selected]="item.priority == 'critical'">Critical</option>
+                                <option value="major" [selected]="item.priority == 'major'">Major</option>
+                                <option value="normal" [selected]="item.priority == 'normal'">Normal</option>
+                              </select>
+
+                            </td>
+                              <td class="text-center" style="width: 5%;">{{item.source}}</td>
+                              <td class="text-center" style="width: 10%;">
+                                  {{item.type}}
+                              </td>
+                              <td class="text-right" style="width: 40%;">
+                                  <div class="slidecontainer" style="width: 20px;position: absolute;" *ngIf="item.source == 'Switch' || item.source == 'wlc' ">
+                                      <p class="result-tip" style="top:-15px;position: absolute;" [style.left.px]=" ((item.percentage)*2)+6">{{item.percentage}}%</p>
+                                      <input type="range" min="1" max="100" #ranger class="range-slider" list="tickmarks" [(ngModel)]="item.percentage"  [value]="item.percentage">
+                                        <datalist id="tickmarks" class="ticklabel">
+                                          <option value="1" label="1" class="opt1">
+                                          <option value="100" label="100" class="opt2">
+                                        </datalist>
+                                    </div>
+                                    <div class="slidecontainer" style="width: 20px;position: absolute;" *ngIf="item.source == 'AP'" >
+                                        <p class="result-tip"  style="top: -15px;position: absolute;" [style.left.px]="(item.percentage*10)*2">{{item.percentage}} Clients</p>
+                                        <input type="range" min="1" max="10" #ranger class="range-slider" list="tickmarks" [(ngModel)]="item.percentage"  [value]="item.percentage">
+                                          <datalist id="tickmarks" class="ticklabel">
+                                            <option value="1" label="1" class="opt1">
+                                            <option value="10" label="10" class="opt2">
+                                          </datalist>
+                                      </div>
+                                      <!-- <div class="slidecontainer" style="width: 20px;position: absolute;" *ngIf="item.source == 'wlc'">
+                                          <p class="result-tip" style="top:-15px;position: absolute;" [style.left.px]=" ((item.percentage)*2)+6">{{item.percentage}}%</p>
+                                          <input type="range" min="1" max="100" #ranger class="range-slider" list="tickmarks" [(ngModel)]="item.percentage"  [value]="item.percentage">
+                                           <datalist id="tickmarks" class="ticklabel">
+                                          <option value="1" label="1" class="opt1">
+                                         <option value="100" label="100" class="opt2">
+                                      </datalist>
+                                    </div> -->
+                              </td>
+                          </tr>
+                      </tbody>
+                  </table>
+                  <div class="text-center"><a href="#" class="btn btn-theme">Save</a></div>
+              </div>
+          </div>
+      </div><!-- /portlet-->
+  </div>
+</div>
+</div>

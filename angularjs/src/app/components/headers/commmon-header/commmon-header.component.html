@@ -1,0 +1,179 @@
+    <!--/======================/HEADER/======================/-->
+    <header>
+      <div class="logo">
+          <div class="sidebar-mobile-menu mobclick visible-xs">
+              <i class="fa fa-navicon" aria-hidden="true"></i>
+          </div>
+          <span>HFCL</span>
+          <p>HFCL</p>
+          <div class="sidebar-mact-menu visible-xs">
+              <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+          </div>
+      </div>
+      <div class="top-navigation">
+          <!-- <div class="bread-crumb">
+              Dashboard
+          </div> -->
+          <div class="dropdown scrollableList graph btn btn-theme rounded pull-left wdgbtn" *ngIf="web_wrl_bool_status">
+                <a href="#" class="dropdown-toggle selectedOption" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add Widgets <i class="icon icon-arrow-point-to-down"></i></a>
+                <div class="dropdown-menu this-list" aria-labelledby="dropdownMenuButton">
+                    <ul>
+                        <li><a class="dropdown-item" href="#">CSV</a></li>
+                        <li><a class="dropdown-item" href="#">PDF</a></li>
+                    </ul>
+                </div>
+            </div>
+          <div class="account-menu">
+              <ul>
+                  <li *ngIf="web_wrl_bool_status">
+                      <div class="dropdown scrollableList graph btn btn-theme rounded">
+                            <a href="#" class="dropdown-toggle selectedOption" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export <i class="icon icon-export icon-before icon-export"></i></a>
+                            <div class="dropdown-menu this-list" aria-labelledby="dropdownMenuButton">
+                                <ul>
+                                    <li><a class="dropdown-item" href="#">CSV</a></li>
+                                    <li><a class="dropdown-item" href="#">PDF</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                  </li>
+                  <li id="alarmPopup">
+                    <a href="#" class="notification dropdown-toggle" (click)="callNotificationList()" id="bellDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span *ngIf="notificationStatus">{{initialCount}}</span>
+                        <i class="icon icon-notification" aria-hidden="true"></i>
+                    </a>
+                    <div class="notification-dropdown-wrap dropdown-menu" aria-labelledby="bellDropdown">
+                        <div class="notification-tabs">
+                            <ul class="tab-link">
+                                <li class="active error">
+									<span class="tab-label">Critical</span>
+									<a href="#first-tab">{{high_count}}</a>
+								</li>
+                                <li class="warning">
+									<span class="tab-label">Major</span>
+									<a href="#second-tab">{{med_count}}</a>
+								</li>
+                                <li class="info">
+									<span class="tab-label">Minor</span>
+									<a href="#third-tab">{{low_count}}</a>
+								</li>
+                            </ul>
+                            <div class="tab-content">
+                                <div id="first-tab" class="notify-tab active notify-icon-error">
+                                    <div class="notification-dropdown">
+                                        <ul>
+                                            <li class="dropdown-item" *ngFor="let item of highestNotifydata">
+                                                <div class="notify-icon">
+                                                    <i class="icon icon-hfcl-3 device-icon" *ngIf="item.device_type=='EMS'"></i>
+                                                    <i class="icon icon-hfcl-1 device-icon" *ngIf="item.device_type=='WLC'"></i>
+                                                    <i class="icon icon-smartphone-call device-icon" *ngIf="item.device_type=='Client'"></i>
+                                                    <i class="icon icon-router1 device-icon" *ngIf="item.device_type=='AP'"></i>
+                                                </div>
+                                                <div class="notify-content" *ngIf="item.read_status == 1">
+                                                    <p class="client-info">{{item.msg}}</p>
+                                                    <p class="notify-time">{{item.time  }} <span>{{item.date}}</span></p>
+                                                </div>
+                                                <div class="notify-content" style="background-color:#F7F4F4" *ngIf="item.read_status == 0">
+                                                        <p class="client-info">{{item.msg}}</p>
+                                                        <p class="notify-time">{{item.time  }} <span>{{item.date}}</span></p>
+                                                    </div>
+                                            </li>
+                                            <li class="dropdown-item" *ngIf="highestNotifydata.length == 0">
+                                                    <div class="notify-icon">
+                                                        <span></span>
+                                                    </div>
+                                                    <div class="notify-content">
+                                                        <p class="client-info">No notification available</p>
+                                                        <!-- <p class="notify-time">{{item.time  }}</p> -->
+                                                    </div>
+                                                </li>
+
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div id="second-tab" class="notify-tab notify-icon-warning">
+                                    <div class="notification-dropdown">
+                                        <ul>
+                                            <li class="dropdown-item" *ngFor="let item of mediumNotifydata">
+                                                <div class="notify-icon">
+                                                    <i class="icon icon-hfcl-3 device-icon" *ngIf="item.device_type=='EMS'"></i>
+                                                    <i class="icon icon-hfcl-1 device-icon" *ngIf="item.device_type=='WLC'"></i>
+                                                    <i class="icon icon-smartphone-call device-icon" *ngIf="item.device_type=='Client'"></i>
+                                                    <i class="icon icon-router1 device-icon" *ngIf="item.device_type=='AP'"></i>
+                                                </div>
+                                                <div class="notify-content" *ngIf="item.read_status == 1">
+                                                        <p class="client-info">{{item.msg}}</p>
+                                                        <p class="notify-time">{{item.time}}  <span>{{item.date}}</span></p>
+                                                    </div>
+                                                    <div class="notify-content" style="background-color:#F7F4F4" *ngIf="item.read_status == 0">
+                                                            <p class="client-info">{{item.msg}}</p>
+                                                            <p class="notify-time">{{item.time}} <span>{{item.date}}</span></p>
+                                                        </div>
+                                            </li>
+                                            <li class="dropdown-item" *ngIf="mediumNotifydata.length == 0">
+                                                    <div class="notify-icon">
+                                                        <span></span>
+                                                    </div>
+                                                    <div class="notify-content">
+                                                        <p class="client-info">No notification available</p>
+                                                        <!-- <p class="notify-time">{{item.time  }}</p> -->
+                                                    </div>
+                                                </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div id="third-tab" class="notify-tab notify-icon-info">
+                                    <div class="notification-dropdown">
+                                        <ul>
+                                            <li class="dropdown-item" *ngFor="let item of lowestNotifydata">
+                                                <div class="notify-icon">
+                                                    <i class="icon icon-hfcl-3 device-icon" *ngIf="item.device_type=='EMS'"></i>
+                                                    <i class="icon icon-hfcl-1 device-icon" *ngIf="item.device_type=='WLC'"></i>
+                                                    <i class="icon icon-smartphone-call device-icon" *ngIf="item.device_type=='Client'"></i>
+                                                    <i class="icon icon-router1 device-icon" *ngIf="item.device_type=='AP'"></i>
+                                                </div>
+                                                <div class="notify-content" *ngIf="item.read_status == 1">
+                                                        <p class="client-info">{{item.msg}}</p>
+                                                        <p class="notify-time">{{item.time}}
+                                                          <span>{{item.date}}</span>
+                                                        </p>
+                                                    </div>
+                                                    <div class="notify-content" style="background-color:#F7F4F4"*ngIf="item.read_status == 0">
+                                                            <p class="client-info">{{item.msg}}</p>
+                                                            <p class="notify-time">{{item.time}}
+                                                              <span>{{item.date}}</span>
+                                                            </p>
+                                                        </div>
+                                            </li>
+                                            <li class="dropdown-item" *ngIf="lowestNotifydata.length == 0">
+                                                    <div class="notify-icon">
+                                                        <span></span>
+                                                    </div>
+                                                    <div class="notify-content">
+                                                        <p class="client-info">No notification available</p>
+                                                        <!-- <p class="notify-time">{{item.time  }}</p> -->
+                                                    </div>
+                                                </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="notify-see-all">
+                            <a href="javascript:void(0)" (click)="gotoAlaramPage()">See All</a>
+                        </div>
+                    </div><!-- /notification-dropdown-wrap-->
+                  </li>
+                  <li class="sep"><span class="name">S</span></li>
+                  <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ritika Paul J. <i class="fa fa-chevron-down" aria-hidden="true"></i></a>
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                          <a class="dropdown-item" href="#">Profile</a>
+                          <a class="dropdown-item" href="#">Setting</a>
+                          <a class="dropdown-item" href="#" (click)=onClicklogout()>Logout</a>
+                      </div>
+                  </li>
+              </ul>
+          </div>
+      </div>
+  </header>
+  <!--/===/HEADER END/===/-->

@@ -1,0 +1,258 @@
+<div class="page-content-wrapper page-content-stats">
+  <!--<div class="row">-->
+    <!--<div class="col-lg-12 col-sm-12">-->
+      <!--<ol class="breadcrumb">-->
+        <!--<li class="breadcrumb-item"><a href="#">Monitor</a></li>-->
+        <!--<li class="breadcrumb-item"><a href="#">System</a></li>-->
+        <!--<li class="breadcrumb-itSYem active">Statistics</li>-->
+      <!--</ol>-->
+    <!--</div>-->
+  <!--</div>-->
+  <div class="row">
+    <div class="col-lg-12 col-xs-12 col-sm-12">
+      <div class="text-right pull-right">
+        <div class="dropdown scrollableList graph btn btn-theme rounded">
+          <a href="#"
+             class="dropdown-toggle selectedOption"
+             id="dropdownMenuButton"
+             data-toggle="dropdown"
+             aria-haspopup="true"
+             aria-expanded="false">Export <i class="icon icon-export icon-before icon-export"></i></a>
+          <div class="dropdown-menu this-list" aria-labelledby="dropdownMenuButton">
+            <ul>
+              <li><a class="dropdown-item" href="#">CSV</a></li>
+              <li><a class="dropdown-item" href="#">PDF</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="dropdown scrollableList graph btn btn-theme rounded">
+
+          <a href="#"
+             class="dropdown-toggle selectedOption"
+             id="dropdownMeada"
+             data-toggle="dropdown"
+             aria-haspopup="true"
+             aria-expanded="false">{{templateViewText}} <i class="icon icon-arrow-point-to-down"></i></a>
+          <div class="dropdown-menu this-list wlc_downlink_scale_options" aria-labelledby="dropdownMenuButton">
+            <ul>
+              <li><a class="dropdown-item"  (click)="setPanelView('tabular')">Tabular View</a></li>
+              <li><a class="dropdown-item"  (click)="setPanelView('graph')">Graph View</a></li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+      <!--<div class="portlet">-->
+        <!--<div class="text-right" style="padding-right: 20px;">-->
+          <!--<div class="dropdown scrollableList graph btn btn-theme rounded">-->
+            <!--<a href="#" class="dropdown-toggle selectedOption" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export <i class="icon icon-export icon-before icon-export"></i></a>-->
+            <!--<div class="dropdown-menu this-list" aria-labelledby="dropdownMenuButton">-->
+              <!--<ul>-->
+                <!--<li><a class="dropdown-item" href="#">CSV</a></li>-->
+                <!--<li><a class="dropdown-item" href="#">PDF</a></li>-->
+              <!--</ul>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+
+    </div>
+  </div>
+<div id="tabularTemplateView" *ngIf="isTabularViewSelected">
+  <div class="row">
+    <div class="col-lg-12 col-xs-12 col-sm-12">
+      <div class="portlet light custom-portlet bordered">
+        <div class="portlet-title custom-title">
+          <div class="caption">
+            <span>WLC System Information</span>
+          </div>
+        </div>
+        <div class="portlet-body">
+          <table class="display theme record_table table table-striped table-sort table-param" cellspacing="0" width="70%" style="margin-bottom: 0; width: 70%;">
+            <tbody>
+            <tr>
+              <th class="border-bottom">CPU Utilization</th>
+              <td width="10%">&nbsp;</td>
+              <td > {{wlc_info.cpu}} {{ percentage }} </td>
+            </tr>
+            <tr>
+              <th class="border-bottom">Memory Utilization</th>
+              <td width="10%"> &nbsp;</td>
+              <td>{{wlc_info.mem}} {{ percentage }} </td>
+            </tr>
+            <tr>
+              <th class="border-bottom">Downlink Speed</th>
+              <td width="10%"> </td>
+              <td>{{wlc_info.rx}} {{ unit }}</td>
+            </tr>
+            <tr>
+              <th class="border-bottom">Uplink Speed</th>
+              <td width="10%"> </td>
+              <td>{{wlc_info.tx}} {{ unit }} </td>
+            </tr>
+            <tr>
+              <th class="border-bottom">Ambient Temperature on Host</th>
+              <td width="10%"> </td>
+              <td>{{wlc_info.amp_temp}} {{ degree }}</td>
+            </tr>
+            <tr>
+              <th class="border-bottom">Disk Utilization</th>
+              <td width="10%">&nbsp;</td>
+              <td>{{wlc_info.disk}} {{ disk }}</td>
+            </tr>
+            <tr>
+              <th class="border-bottom">No. of Registered APs</th>
+              <td width="10%">&nbsp;</td>
+              <td>{{wlc_info.ap_count}}</td>
+            </tr>
+            <tr>
+              <th class="border-bottom">No. of WLAN Clients</th>
+              <td width="10%">&nbsp;</td>
+              <td>{{wlc_info.client_count}}</td>
+            </tr>
+            <tr>
+              <th class="border-bottom">Fan</th>
+              <td width="10%">&nbsp;</td>
+              <td>{{wlc_info.fan}} {{rpm}} </td>
+            </tr>
+            <tr>
+              <th>Power Supply</th>
+              <td width="10%">&nbsp;</td>
+              <td> {{wlc_info.power_supply}} {{ volt }}
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <div id="graphTemplateView" *ngIf="isGraphViewSelected">
+  <!--Memory Utilization Graph Area-->
+  <div class="row">
+    <div class="col-lg-12 col-xs-12 col-sm-12">
+      <div class="portlet light custom-portlet bordered">
+        <div class="portlet-title custom-title">
+          <div class="caption">
+            <span>CPU &amp; Memory Utilization</span>
+          </div>
+          <div class="text-right pull-right">
+            <div class="dropdown scrollableList graph btn btn-theme-inverse rounded" *ngIf="ifLiveSelectedFromCPU">
+
+              <a href="#"
+                 class="dropdown-toggle selectedOption"
+                 id="dropdownMenuButtonMemoryRange"
+                 data-toggle="dropdown"
+                 aria-haspopup="true"
+                 aria-expanded="false">{{rangeText_wlc_cpu}}
+                <i class="icon icon-arrow-point-to-down"></i></a>
+              <div class="dropdown-menu this-list wlc_downlink_scale_options" aria-labelledby="dropdownMenuButton">
+                <ul>
+                  <li><a class="dropdown-item"  (click)="setRange('wlc_cpu','avg')">Average</a></li>
+                  <li><a class="dropdown-item"  (click)="setRange('wlc_cpu','min')">Minimum</a></li>
+                  <li><a class="dropdown-item"  (click)="setRange('wlc_cpu','max')">Maximum</a></li>
+                </ul>
+              </div>
+            </div>
+
+
+
+            <div class="dropdown scrollableList graph btn btn-theme-inverse rounded">
+
+              <a href="#"
+                class="dropdown-toggle selectedOption"
+                id="dropdownMenuButtonUpLinkScale"
+                 data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false">{{scaleText_wlc_cpu}}
+                <i class="icon icon-arrow-point-to-down"></i></a>
+              <div class="dropdown-menu this-list  wlc_cpu_scale_options" aria-labelledby="dropdownMenuButton">
+                <ul>
+                  <li><a class="dropdown-item"  (click)="setScale('wlc_cpu','live')">Live Data</a></li>
+                  <li><a class="dropdown-item"  (click)="setScale('wlc_cpu','hour')">Last 1 hour</a></li>
+                </ul>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+
+        <div class="portlet-body portlet-body-graph" *ngIf="ifLiveCPUGraphSelected">
+          <app-system-cpu-memory-utilization   [scale]="scaleVal_wlc_cpu_live"></app-system-cpu-memory-utilization>
+        </div>
+        <div class="portlet-body portlet-body-graph" *ngIf="ifHourCPUGraphSelected">
+          <app-system-cpu-memory-utilization   [scale]="scaleVal_wlc_cpu" [range]="rangeVal_wlc_cpu"></app-system-cpu-memory-utilization>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+
+  <!--Network Traffic utilization graph-->
+  <div class="row">
+    <div class="col-lg-12 col-xs-12 col-sm-12">
+      <div class="portlet light custom-portlet bordered">
+        <div class="portlet-title custom-title">
+          <div class="caption">
+            <span>Uplink-Downlink Traffic</span>
+          </div>
+          <div class="text-right pull-right">
+            <div class="dropdown scrollableList graph btn btn-theme-inverse rounded" *ngIf="ifLiveSelectedFromNetwork">
+              <a href="#"
+                 class="dropdown-toggle selectedOption"
+                 id="dropdownMenuUpLinkRange"
+                 data-toggle="dropdown"
+                 aria-haspopup="true"
+                 aria-expanded="false">{{rangeText_wlc_downlink}}<i class="icon icon-arrow-point-to-down"></i></a>
+              <div class="dropdown-menu this-list wlc_downlink_range_options" aria-labelledby="dropdownMenuButton">
+                <ul>
+                  <li><a class="dropdown-item"  (click)="setRange('wlc_downlink','avg')">Average</a></li>
+                  <li><a class="dropdown-item"  (click)="setRange('wlc_downlink','min')">Minimum</a></li>
+                  <li><a class="dropdown-item"  (click)="setRange('wlc_downlink','max')">Maximum</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="dropdown scrollableList graph btn btn-theme-inverse rounded">
+
+              <a href="#"
+                 class="dropdown-toggle selectedOption"
+                 id="dropdownMenuUpLinkScale"
+                 data-toggle="dropdown"
+                 aria-haspopup="true"
+                 aria-expanded="false">{{scaleText_wlc_downlink}} <i class="icon icon-arrow-point-to-down"></i></a>
+              <div class="dropdown-menu this-list wlc_downlink_scale_options" aria-labelledby="dropdownMenuButton">
+                <ul>
+                  <li><a class="dropdown-item"  (click)="setScale('wlc_downlink','live')">Live Data</a></li>
+                  <li><a class="dropdown-item"  (click)="setScale('wlc_downlink','hour')">Last 1 hour</a></li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+
+        <div class="portlet-body portlet-body-graph" *ngIf="ifLiveNetworkGraphSelected" >
+          <app-system-downlink-traffic-utilization  [scale]="scaleVal_wlc_downlink_live"></app-system-downlink-traffic-utilization>
+        </div>
+
+        <div class="portlet-body portlet-body-graph" *ngIf="ifHourNetworkGraphSelected">
+          <app-system-downlink-traffic-utilization  [scale]="scaleVal_wlc_downlink" [range]="rangeVal_wlc_downlink"></app-system-downlink-traffic-utilization>
+        </div>
+
+        <!--<div class="portlet-body">-->
+          <!--<div id="upLinkDownLink"></div>-->
+        <!--</div>-->
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+

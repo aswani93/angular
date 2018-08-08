@@ -1,0 +1,56 @@
+.table-body {
+  height: 40px;
+  text-align: center;
+}
+
+.table-head {
+  height: 40px;
+  text-align: center;
+}
+
+.table-clickable {
+  cursor: pointer;
+}
+
+
+.custom-title{
+  background-color: #334157;
+  border-radius: 8px 8px 0 0;
+}
+
+.custom-title .caption{
+  color: #fff;
+}
+
+.row {
+  margin-bottom: 10px;
+;
+}
+
+portlet.light .portlet-title .caption  {
+  color: #fff;
+}
+
+.portlet {
+  border-radius: 8px 8px 0 0;
+}
+
+.custom-portlet{
+  border-radius: 8px;
+}
+
+.custom-title  .btn-theme-inverse {
+  background-color: #fff;
+  color:  #111;
+  border-color: #111;
+}
+
+.dropdown.btn-theme-inverse ul li a {
+  color: #334157;
+}
+
+
+.dropdown.btn-theme-inverse ul li a:hover {
+  background-color: #334157;
+  color: white;
+}

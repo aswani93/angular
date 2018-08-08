@@ -1,0 +1,25 @@
+.spanDesign {
+  background-color: #3eaeeb;
+  color: #1f2939;
+}
+span:hover {
+  display: inline;
+  color: #333360;
+}
+
+.color{
+  color: #95a2a9;
+}
+
+.icon-position {
+  margin-top: 10px;
+  float:left;
+  cursor: pointer;
+}
+
+.tooltip .tooltiptext {
+  top: -5px;
+  left: 105%;
+  color: #1f2939;
+}
+

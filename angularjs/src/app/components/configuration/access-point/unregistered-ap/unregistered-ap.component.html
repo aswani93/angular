@@ -1,0 +1,264 @@
+<div class="page-content-wrapper">
+  <!-- <div class="row">
+      <div class="col-lg-12 col-sm-12">
+          <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="javascript:void(0);">Configuration</a></li>
+              <li class="breadcrumb-item"><a href="javascript:void(0);">Access Point</a></li>
+              <li class="breadcrumb-item active">Unregistered AP</li>
+          </ol>
+      </div>
+  </div> -->
+  <div class="row">
+      <div class="col-lg-5 col-sm-12">
+          <div class="searchBar">
+              <i class="icon icon-magnifying-glass"></i>
+              <input type="text" placeholder="Search" (keyup)="search($event)">
+          </div>
+      </div>
+  </div>
+  <div class="row">
+      <div class="col-lg-12 col-sm-12">
+          <div class="portlet light bordered">
+              <!--<div class="portlet-title">
+                    <div class="caption">
+                        <span class="pageEntry">Show</span>
+                        <select class="form-control caption-select" [(ngModel)]="rowsOnPage">
+                            <option [ngValue]="20">20</option>
+                            <option [ngValue]="100">100</option>
+                            <option [ngValue]="1000">1000</option>
+                            <option [ngValue]="5000">5000</option>
+                        </select>
+                        <span class="pageEntry">entries</span>
+                    </div>
+                  <div class="text-right pull-right">
+                      <a href="#" class="btn btn-theme btn-large rounded disabled" id="register-btn" (click)="clearModal(template)">Register</a>
+
+                      <ng-template #template class="text-center" >
+
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle">Select Group</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body reg-body">
+                                        <select (change)="changeVal($event.target)" name="group" id="group">
+                                        <option value="" selected>Select Group</option>
+                                        <option *ngFor="let group of groups" value={{group.group_name}},{{group.group_id}}>
+                                        {{group.group_name}}
+                                        </option>
+                                        </select>
+                                        <div *ngIf="gpErrFlg" class="alert-error">Please select group</div>
+                                    </div>
+                                    <div class="modal-footer reg-footer">
+                                        <button type="button" class="btn btn-blank btn-cancel reg-cancel" (click)="modalRef.hide()">Cancel</button>
+                                        <button type="button" class="btn btn-theme reg-save" (click)="registerap(mf.data)">Register</button>
+                                    </div>
+
+
+                      </ng-template>
+                  </div>
+              </div>-->
+              <div class="portlet-body">
+                  <div class="tabcontent table-responsive" style="display: block;">
+                      <div class="list-out">
+                        <div class="table-function">
+								<ul>
+									<li><span class="pageEntry">Show</span></li>
+									<li>
+										<select class="form-control caption-select" [(ngModel)]="rowsOnPage">
+                                            <option [ngValue]="20">20</option>
+                                            <option [ngValue]="100">100</option>
+                                            <option [ngValue]="1000">1000</option>
+                                            <option [ngValue]="5000">5000</option>
+                                        </select>
+									</li>
+									<li><span class="pageEntry">entries</span></li>
+								</ul>
+                                    <ul class="table-function-right">
+                                    <li class="posreltive">
+                                       <a class="dropdown-toggle" id="dropdownUnRegPopup" data-toggle="dropdown" aria-haspopup="true"  aria-expanded="false"  href="#" >Filter columns <i aria-hidden="true" class="fa fa-chevron-down"></i></a>
+
+                                        <div class="drop-checkbox dropdown-menu" aria-labelledby="dropdownUnRegPopup" (click)="holdPopup($event)">
+                                        <ul>
+                                            <li class="dropdown-item" *ngFor="let i of coloumsObjects;let index = index">
+                                              <label class="checkbox">
+                                                  <input class="register-check" type="checkbox"  checked="i.checked" (change)="selectColoums($event,index)"  [disabled]= "count == 2 && i.checked == true">
+                                                  <div class="check"></div>
+                                                  <span class="check-label">{{i.name}}</span>
+                                                </label>
+                                            </li>
+
+                                        </ul>
+                                        </div>
+                                       </li>
+                                      <li><a class="btn text-white btn-theme btn-large rounded disabled" id="register-btn" (click)="clearModal(template)">Register</a>
+                                                   <ng-template #template class="text-center" >
+
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle">Select Group</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body reg-body">
+                                        <!-- <select (change)="changeVal($event.target)" name="group" id="group">
+                                        <option value="" selected>Select Group</option>
+                                        <option *ngFor="let group of groups" value={{group.group_name}},{{group.group_id}}>
+                                        {{group.group_name}}
+                                        </option>
+                                        </select>
+                                        <div *ngIf="gpErrFlg" class="alert-error">Please select group</div>
+                                    
+                                                <label class="col-md-2 col-form-label text-right">Location</label>
+                                                    <div class="col-lg-5 col-sm-11">
+                                                        <input type="text" name="ap_location" id="ap_location" class="form-control" [(ngModel)]="apLocation">
+                                                    </div> -->
+                                                    <div class="row" style="margin-bottom: 15px">
+                                                        <div class="col-md-12">
+                                                                <select (change)="changeVal($event.target)" name="group" id="group">
+                                                                        <option value="" selected>Select Group</option>
+                                                                        <option *ngFor="let group of groups" value={{group.group_name}},{{group.group_id}}>
+                                                                        {{group.group_name}}
+                                                                        </option>
+                                                                        </select>
+                                                                <div *ngIf="gpErrFlg" class="alert-error">Please select group</div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                    <div class="row" style="margin-bottom: 15px">
+                                                        
+                                                        <div class="col-md-12 text-center">                                                            
+                                                            <input type="text" name="ap_location" id="ap_location" class="form-control location-box" [(ngModel)]="apLocation" placeholder="Location">
+                                                        </div>
+                                                    </div>
+                                    </div>
+                                    <div class="modal-footer reg-footer" style="margin-top: 10%">
+                                        <button type="button" class="btn btn-blank btn-cancel reg-cancel" (click)="modalRef.hide(); selectGroupModified=false">Cancel</button>
+                                        <button type="button" class="btn btn-theme reg-save" [disabled]="registerBtnDisable" (click)="registerap(mf.data)">Register</button>
+                                    </div>
+
+
+                                </ng-template>
+                                      </li>
+                                    </ul>
+                                </div>
+
+                        <table class="display theme record_table table table-striped table-sort" cellspacing="0" width="100%" [mfData]="data" #mf="mfDataTable">
+                          <thead>
+                              <tr class="table-head">
+                                      <th>
+                                        <label class="checkbox">
+                                          <input type="checkbox" (change)="selectAll($event)" name="selectAllCheck"  [(ngModel)]="selectallCheck"  [checked]='selectallCheck'>
+                                          <div class="check"></div>
+                                      </label>
+                                      </th>
+                                      <th style="text-align:  center;" *ngIf="(coloumsObjects[0].checked) == true">
+                                          <mfDefaultSorter by="ap_name">
+                                            <span>AP Name
+                                                <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='ap_name' && _sortOrder=='asc' }"></i>
+                                                <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ap_name' && _sortOrder=='desc' }"></i>
+                                            </span>
+                                          </mfDefaultSorter>
+                                      </th>
+                                      <th style="text-align:  center;" *ngIf="(coloumsObjects[1].checked) == true">
+                                          <mfDefaultSorter by="ap_ip">
+                                            <span>IP Address
+                                                <i class="down icon icon-download-arrow"  [ngClass]="{'activeIcon': _sortBy=='ap_ip' && _sortOrder=='asc' }"></i>
+                                                <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ap_ip' && _sortOrder=='desc' }"></i>
+                                            </span>
+                                          </mfDefaultSorter>
+                                      </th>
+                                      <th style="text-align:  center;" *ngIf="(coloumsObjects[2].checked) == true">
+                                          <mfDefaultSorter by="ap_mac">
+                                            <span>MAC Address
+                                                <i class="down icon icon-download-arrow"  [ngClass]="{'activeIcon': _sortBy=='ap_mac' && _sortOrder=='asc' }"></i>
+                                                <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ap_mac' && _sortOrder=='desc' }"></i>
+                                            </span>
+                                          </mfDefaultSorter>
+                                      </th>
+                                      <th style="text-align:  center;" *ngIf="(coloumsObjects[3].checked) == true">
+                                          <mfDefaultSorter by="ap_model">
+                                            <span>AP Model
+                                                <i class="down icon icon-download-arrow"  [ngClass]="{'activeIcon': _sortBy=='ap_model' && _sortOrder=='asc' }"></i>
+                                                <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ap_model' && _sortOrder=='desc' }"></i>
+                                            </span>
+                                          </mfDefaultSorter>
+                                      </th>
+                                  </tr>
+                          </thead>
+                          <tbody>
+                              <tr class="table-body unreg-tbl" *ngFor="let item of mf.data | paginate: {itemsPerPage: rowsOnPage , currentPage: page};">
+                                  <td>
+                                    <label class="checkbox">
+                                    <input type="checkbox"  class="register-check" name="{{item.ap_mac | noColon}}" (change)="enableDisablebtn($event)"  [(ngModel)]="item.checked" value="{{item.ap_mac}}">
+                                    <div class="check"></div>
+                                    </label>
+                                  </td>
+                                  <td style="text-align:  center;" *ngIf="(coloumsObjects[0].checked) == true">{{item.ap_name}}</td>
+                                  <td style="text-align:  center;" *ngIf="(coloumsObjects[1].checked) == true">{{item.ap_ip}}</td>
+                                  <td style="text-align:  center;" *ngIf="(coloumsObjects[2].checked) == true">{{item.ap_mac}}</td>
+                                  <td style="text-align:  center;" *ngIf="(coloumsObjects[3].checked) == true">{{item.ap_model}}</td>
+                              </tr>
+                              <tr class="table-body" *ngIf="mf.data.length == 0">
+                                      <td colspan="7" style="text-align: center;">No AP's found</td>
+                              </tr>
+                              <!-- *ngIf="hasData" -->
+                                <!--<tr class="page-detail-area" *ngIf="mf.data.length !== 0">
+                                  <td colspan="5">
+                                      <div class="entry-count text-left"  style="float:left;"><span>Showing {{showingfrom}} to {{showingto}} of {{dataLength}} entries</span></div>
+                                      <div class="list-pagination" style="float:right;">
+                                          <mfBootstrapPaginator></mfBootstrapPaginator>
+                                      </div>
+                                  </td>
+
+                              </tr>-->
+                              <tr class="page-detail-area" *ngIf="mf.data.length != 0">
+                                   
+                                  <td colspan="5">
+                                       <div class="entry-count text-left"  style="float:left;"><span>Showing {{showingfrom}} to {{showingto}} of {{dataLength}} entries</span></div>
+                                      <div class="cpagination">
+                                      <span *ngIf="data  && data.length > rowsOnPage" [class.button-disabled]="firstarrowStatus" class="first" (click)="goToPage(1)"><<</span>
+                                      <pagination-controls (pageChange)="getNext($event)" maxSize="9"
+                                    directionLinks="true"
+                                    autoHide="true"
+                                    previousLabel=""
+                                    nextLabel=""
+                                    screenReaderPaginationLabel="Pagination"
+                                    screenReaderPageLabel="page"
+                      ></pagination-controls>
+                      <span *ngIf="data && data.length > rowsOnPage" [class.button-disabled]="lastarrowStatus" class="last" (click)="goToPage(Math.ceil(data.length/rowsOnPage))">>></span></div>
+                      
+                                      </td>
+                                  
+                                
+                                  </tr>
+                          </tbody>
+                      </table>
+                 
+                      </div><!-- /list-out-->
+                  </div>
+              </div>
+          </div><!-- /portlet-->
+      </div>
+  </div>
+
+   <!-- Modal -->
+
+   <div *ngIf="isModalShown" [config]="{ show: true }" (onHidden)="onHidden()" bsModal #autoShownModal="bs-modal" class="modal fade unregModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm error-modal">
+      <div class="error-content modal-content" style="width:600px;">
+        <div class="modal-body">
+            <i class="fa fa-exclamation-triangle error-icon"></i>
+          <p class="error-modal-p1">Error !</p>
+          <p class="error-modal-p2">{{errorMsg}}</p>
+        </div>
+        <div class="modal-footer">
+             <button type="button" class="btn btn-blank" (click)="hideModal()">Dismiss</button>
+         </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>

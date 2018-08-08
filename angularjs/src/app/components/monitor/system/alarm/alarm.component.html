@@ -1,0 +1,226 @@
+ <!--/======================/WORK AREA/======================/-->
+ <div class="page-content-wrapper">
+   
+        <!-- <input type="button" value="Click" (click)="toggleMenu()"> -->
+         <div class="row">
+             <div class="col-lg-12 col-sm-12">
+                 <div class="portlet light bordered mt-15">
+                     <div class="portlet-body">                                             
+                         <div class="tabcontent table-responsive" style="display: block;">
+                             <div class="table-function">
+                                     <ul>
+                                             <li><span class="pageEntry">Show</span></li>
+                                             <li>
+                                                 <select class="form-control caption-select" [(ngModel)]="rowsOnPage"  >
+                                                     <option [ngValue]="20">20</option>
+                                                     <option [ngValue]="100">100</option>
+                                                     <option [ngValue]="1000">1000</option>
+                                                     <option [ngValue]="5000">5000</option>
+                                                 </select>
+                                             </li>
+                                             <li><span class="pageEntry">entries</span></li>
+                                     </ul>
+                                 <!-- <ul>
+                                     <li><a href="#"><i class="icon icon-descendant"></i> Sort by <i class="icon icon-arrow-point-to-down"></i></a></li>
+                                     <li><a href="#"><i class="icon icon-filter"></i> Filter by <i class="icon icon-arrow-point-to-down"></i></a></li>
+                                 </ul> -->
+                                 <!-- <ul class="table-function-right">
+                                     <li><a href="#"><i class="icon icon-edit"></i> Edit</a></li>
+                                     <li><a href="#"><i class="icon icon-rubbish-bin"></i> Delete</a></li>
+                                 </ul> -->
+                             </div>                              
+                             <table id="example" class="display theme table record_table table-striped table-sort text-center" cellspacing="0" width="100%"  [mfData]="alarmData" #mf="mfDataTable" >
+                                 <thead>
+                                     <tr class="table-head">
+                                         <th class="text-center " *ngIf="(coloumsObjects[0].checked) == true" style="text-align: left">
+                                             <mfDefaultSorter by="alarm_type">
+                                                 <span> <label class="altype font">Alarm Type</label>
+                                                     <i class="down icon icon-download-arrow rightd" [ngClass]="{'activeIcon': _sortBy=='alarm_type' && _sortOrder=='asc' }"></i>
+                                                     <i class="up icon icon-up-arrow-1 rightu"  [ngClass]="{'activeIcon': _sortBy=='alarm_type' && _sortOrder=='desc' }"></i>
+                                                 </span>
+                                             </mfDefaultSorter>
+                                         </th>
+                                         <th class="text-center" *ngIf="(coloumsObjects[1].checked) == true" style="text-align: left">
+                                             <mfDefaultSorter by="event_info">
+                                                 <span><label class="altype font">Event Info</label>
+                                                     <i class="down icon icon-download-arrow rightd" [ngClass]="{'activeIcon': _sortBy=='event_info' && _sortOrder=='asc' }"></i>
+                                                     <i class="up icon icon-up-arrow-1 rightu"  [ngClass]="{'activeIcon': _sortBy=='event_info' && _sortOrder=='desc' }"></i>
+                                                 </span>
+                                             </mfDefaultSorter>
+                                         </th>
+                                         <th class="text-center " *ngIf="(coloumsObjects[2].checked) == true" style="text-align: left">
+                                             <mfDefaultSorter by="event">
+                                                 <span><label class="aldtype font">Description</label>
+                                                     <i class="down icon icon-download-arrow rightd" [ngClass]="{'activeIcon': _sortBy=='event' && _sortOrder=='asc' }"></i>
+                                                     <i class="up icon icon-up-arrow-1 rightu"  [ngClass]="{'activeIcon': _sortBy=='event' && _sortOrder=='desc' }"></i>
+                                                 </span>
+                                             </mfDefaultSorter>
+                                         </th>
+                                         <th class="text-center " *ngIf="(coloumsObjects[3].checked) == true">
+                                             <mfDefaultSorter by="event_read_status">
+                                                 <span><label class="altype font"> Status</label>
+                                                     <i class="down icon icon-download-arrow rightd" [ngClass]="{'activeIcon': _sortBy=='event_read_status' && _sortOrder=='asc' }"></i>
+                                                     <i class="up icon icon-up-arrow-1 rightu"  [ngClass]="{'activeIcon': _sortBy=='event_read_status' && _sortOrder=='desc' }"></i>
+                                                 </span>
+                                             </mfDefaultSorter>
+                                         </th>
+                                         <th class="text-center" *ngIf="(coloumsObjects[4].checked) == true">
+                                             <mfDefaultSorter by="event_at">
+                                                 <span><label class="altype font">Time</label>
+                                                     <i class="down icon icon-download-arrow rightd" [ngClass]="{'activeIcon': _sortBy=='event_at' && _sortOrder=='asc' }"></i>
+                                                     <i class="up icon icon-up-arrow-1 rightu"  [ngClass]="{'activeIcon': _sortBy=='event_at' && _sortOrder=='desc' }"></i>
+                                                 </span>
+                                             </mfDefaultSorter>
+                                         </th>
+                                     </tr>
+                                 </thead>
+                                 <tbody>
+                                     <tr class="table-body" *ngFor="let item of mf.data | paginate: {id: 'alarm', itemsPerPage: rowsOnPage , currentPage: page  }; let activeIndex = index">
+                                         <td class="altype" *ngIf="(coloumsObjects[0].checked) == true" style="text-align: left">{{item.alarm_type}}</td>
+                                         <td class="altype" *ngIf="(coloumsObjects[1].checked) == true" style="text-align: left">{{item.event_info}}</td>
+                                         <td class="aldtype" *ngIf="(coloumsObjects[2].checked) == true" style="text-align: left">{{item.event}}</td>
+                                         <td class="altype" *ngIf="(coloumsObjects[3].checked) == true">{{item.event_read_status == 1?'Read':'Unread'}}</td>
+                                         <td class="altype" *ngIf="(coloumsObjects[4].checked) == true">{{item.event_at | date:'dd-MM-yyyy HH:mm:ss'}}</td>
+                                     </tr>
+                                     <tr class="table-body" *ngIf="mf.data.length == 0">
+                                        <td colspan="5">No data available</td>
+                                     </tr>
+                                     <tr class="page-detail-area" *ngIf="mf.data.length != 0">
+                                         <td colspan="10">
+                                           <div class="entry-count text-left" style="float:left;">
+                                               <span  *ngIf="dataLength>0">Showing {{showingfrom}} to {{showingto}} of {{dataLength}} entries
+                                                   </span>
+                                           </div>
+                                         <div class="cpagination" >
+                                             <span *ngIf="alarmData  && alarmData.length > rowsOnPage" [class.button-disabled]="firstarrowStatus" class="first" (click)="goToPage(1)"><<</span>
+                                             <pagination-controls 
+                                             id="alarm"
+                                             (pageChange)="getNextt($event)" 
+                                             maxSize="9"
+                                             directionLinks="true"
+                                             autoHide="true"
+                                             previousLabel=""
+                                             nextLabel=""
+                                             screenReaderPaginationLabel="Pagination"
+                                             screenReaderPageLabel="page"
+                                             >
+                                             </pagination-controls>
+                                             <span *ngIf="alarmData && alarmData.length > rowsOnPage" [class.button-disabled]="lastarrowStatus" class="last" (click)="goToPage(Math.ceil(alarmData.length/rowsOnPage))">>></span>
+                                         </div>
+                                         </td>
+                                       </tr>
+                                 </tbody>
+                             </table>
+                                                                                             
+                         </div>
+                 </div><!-- /portlet-->
+             </div>
+         </div>
+         <!-- <div [@slideInOut]="menuState">
+             <ul class="filter-panel">
+                 <li> <span class="glyphicon glyphicon-filter" aria-hidden="true"></span></li>
+                 <li> <span>Filter</span></li>
+             </ul>
+         </div> -->
+         <div class="side-bar " [@slideInOut]="menuState">
+             <div class="btn-filter">
+                 <ul class="filter-panel" (click)="toggleMenu()" style=" left: -55px;">
+                     <li *ngIf="menuState === 'out'"> <span class="glyphicon glyphicon-filter" aria-hidden="true"></span></li>
+                     <li *ngIf="menuState !== 'out'"> <span class="glyphicon glyphicon-menu-right" aria-hidden="true" ></span></li>
+                     <li *ngIf="menuState === 'out'"> <span>Filters</span></li>
+                     <li *ngIf="menuState !== 'out'"> <span>Close</span></li>
+                 </ul>
+             </div>
+             <div class="portlet light  stats custom-portlet">
+                     <div class="portlet-title custom-title">
+                 <div class="row">
+                     <div class="col-lg-9">
+                         
+                             <div class="caption">
+                                 <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
+                                 <span>Filters</span>
+                             </div>
+                        
+                     </div>
+                     <div class="col-lg-3">
+                             <span class="glyphicon glyphicon-remove-circle close-icon" aria-hidden="true" (click)="toggleMenu()"></span>
+                     </div>
+                 </div>
+                </div>
+                 
+             </div>
+             <div style="padding:20px;">
+                 <form [formGroup]="filterForm">
+                     <div class="form-group row">
+                         <div class="col-lg-12 col-sm-11">
+                             <label>Time Interval</label>
+                             <input [selectMode]="'range'" [owlDateTimeTrigger]="dtPicker3" [owlDateTime]="dtPicker3" class="form-control" formControlName="time_interval">
+                             <owl-date-time #dtPicker3></owl-date-time>
+                         </div>
+                     </div>
+                     <div class="form-group row">
+                         <div class="col-lg-12 col-sm-11">
+                             <label>Device Type</label>
+                             <select class="form-control" formControlName="device_type" (change)="generateAlarmType($event.target.value)">
+                                 <option value="" [selected]="true">Select Device Type</option>
+                                 <option value="AP">AP</option>
+                                 <option value="Client">Client</option>
+                                 <option value="EMS">EMS</option>
+                                 <option value="WLC">WLC</option>
+                                
+                             </select>
+                         </div>
+                     </div>
+                     <div class="form-group row">
+                         <div class="col-lg-12 col-sm-11">
+                             <label>Alarm Type</label>
+                             <select class="form-control" formControlName="alarm_type">
+                                 <option value="" [selected]="true">Select Alarm Type</option>
+                                 <option *ngFor="let i of alarmtype" value="{{i.value}}">{{i.type}}</option>
+                             </select>
+                         </div>
+                     </div>
+                 
+                   
+                 
+                     <!-- <div class="form-group row">
+                         <div class="col-lg-12 col-sm-11">
+                             <label>Status</label>
+                             <select class="form-control" formControlName="status">
+                                 <option>Read</option>
+                                 <option>Unread</option>
+                             </select>
+                         </div>
+                     </div> -->
+                     <div class="form-group row">
+                         <div class="col-lg-12 col-sm-11">
+                             <label>Select severity Level</label>
+                             <select class="form-control" formControlName="severity_level">
+                                 <option value="">Select severity Level</option>
+                                 <option value="Minor">MINOR</option>
+                                 <option value="Major">MAJOR</option>
+                                 <option value="Critical">CRITICAL</option>
+                             </select>
+                         </div>
+                     </div>
+                     
+                     <div class="form-group row">
+                         <div class="col-lg-12 col-sm-11 text-center">
+                             <input type="reset" value="Reset" class="btn btn-cancel btn-large" (click)="reset()" style="margin-right: 15px;">
+                             <input type="button" value="Search" class="btn btn-theme btn-large" (click)="filter()" >
+                         </div>
+                     </div>
+                 </form> 
+             </div>
+             
+         </div>
+         <!-- <div class="filter-btn-container" *ngIf="!isOpened">
+             <ul class="filter-panel" (click)="toggleMenu()">
+                 <li> <span class="glyphicon glyphicon-filter" aria-hidden="true"></span></li>
+                 <li> <span>Filters</span></li>
+             </ul>
+         </div> -->
+        
+     </div>
+     <!--/===/WORK AREA END/===/-->
+     

@@ -1,0 +1,1342 @@
+<!--/======================/WORK AREA/======================/-->
+<div class="page-content-wrapper">
+  <!-- <div class="row">
+      <div class="col-lg-12 col-sm-12">
+          <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                  <a href="#">Configuration</a>
+              </li>
+              <li class="breadcrumb-item">
+                  <a href="#">Group</a>
+              </li>
+              <li class="breadcrumb-item">
+                  <a href="#">Group Configuration</a>
+              </li>
+              <li class="breadcrumb-item active">Group List</li>
+          </ol>
+      </div>
+  </div> -->
+  <div class="row">
+    <div class="col-lg-5 col-sm-12">
+      <div class="searchBar"> <i class="icon icon-magnifying-glass"></i>
+        <input type="text" placeholder="Search" (keyup)="searchGroup()" [(ngModel)]="search_key">
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <div class="portlet light bordered">
+        <div class="portlet-body">
+          <div class="tabcontent table-responsive" style="display: block;">
+            <div class="table-function">
+              <ul class="table-function-right">
+                
+                <li class="posreltive"> <a class="dropdown-toggle" id="dropdownUnRegPopup" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">Filter columns <i aria-hidden="true" class="fa fa-chevron-down"></i></a>
+                  <div class="drop-checkbox dropdown-menu" aria-labelledby="dropdownUnRegPopup" (click)="holdPopup($event)">
+                    <ul>
+                      <li class="dropdown-item" *ngFor="let i of coloumsObjects;let index = index">
+                        <label class="checkbox">
+                          <input class="register-check" type="checkbox" checked="i.checked" (change)="selectColoums($event,index)" [disabled]="count == 2 && i.checked == true">
+                          <div class="check"></div> <span class="check-label">{{i.name}}</span>
+                        </label>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+                <li>
+                  <a (click)="getGroupDetails()" style="cursor: pointer;"> <i class="icon icon-edit"></i> Edit</a>
+                </li>
+                <li>
+                  <a (click)="deleteData()" style="cursor: pointer;"> <i class="icon icon-rubbish-bin"></i> Delete</a>
+                </li>
+                <!-- <li>
+                  <a (click)="formReset('');loadData();" style="cursor: pointer;"> <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+                </li> -->
+              </ul>
+              <div class="clearfix"></div>
+            </div>
+            <table id="example" class="display theme table record_table table-striped table-sort text-center" cellspacing="0" width="100%" [mfData]="group_datas" #mf="mfDataTable">
+              <thead>
+              <tr class="table-head">
+                <th>
+                  <label class="checkbox">
+                    <input type="checkbox" class="group-all-check" (click)="selectAllGroup($event)" id="selectAllCheck">
+                    <div class="check"></div>
+                  </label>
+                </th>
+                <th class="text-left" *ngIf="(coloumsObjects[0].checked) == true">
+                  <mfDefaultSorter by="group_name"> <span>Group Name
+                                                <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='group_name' && _sortOrder=='asc' }"></i>
+                                                <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='group_name' && _sortOrder=='desc' }"></i>
+                                            </span>
+                  </mfDefaultSorter>
+                </th>
+                <th class="text-center" *ngIf="(coloumsObjects[1].checked) == true">
+                  <mfDefaultSorter by="vap_count"> <span>No. of SSID
+                                                <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='vap_count' && _sortOrder=='asc' }"></i>
+                                                <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='vap_count' && _sortOrder=='desc' }"></i>
+                                            </span>
+                  </mfDefaultSorter>
+                </th>
+                <th class="text-center" *ngIf="(coloumsObjects[2].checked) == true">
+                  <mfDefaultSorter by="no_of_ap"> <span>No. of Associated AP
+                                                <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='no_of_ap' && _sortOrder=='asc' }"></i>
+                                                <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='no_of_ap' && _sortOrder=='desc' }"></i>
+                                            </span>
+                  </mfDefaultSorter>
+                </th>
+                <th class="text-center" *ngIf="(coloumsObjects[3].checked) == true">
+                  <mfDefaultSorter by="clients"> <span>No. of Connected Clients
+                                                <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='clients' && _sortOrder=='asc' }"></i>
+                                                <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='clients' && _sortOrder=='desc' }"></i>
+                                            </span>
+                  </mfDefaultSorter>
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr class="table-body" *ngFor="let grp of mf.data;let activeIndex = index" (dblclick)="double_click_event($event,grp,activeIndex)">
+                <!-- (dblclick)="double_click_event($event,grp,activeIndex)" -->
+                <td>
+                  <label class="checkbox">
+                    <input type="checkbox" class="group-check" [checked]="(isAllGroupSelected && !grp.default)" (change)="selectGroup(grp, $event)" [value]="grp.group_id">
+                    <div class="check"></div>
+                  </label>
+                </td>
+                <td class="text-left" *ngIf="(coloumsObjects[0].checked) == true">{{grp.group_name}}</td>
+                <td *ngIf="(coloumsObjects[1].checked) == true">{{grp.vap_count}}</td>
+                <td *ngIf="(coloumsObjects[2].checked) == true">{{grp.no_of_ap}}</td>
+                <td *ngIf="(coloumsObjects[3].checked) == true"> <span class="text-theme">{{grp.clients}}</span>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+            <div class="text-right">
+              <button class="btn btn-theme" (click)="btnAddGroup()" [disabled]="isChecked">Add Group</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /portlet-->
+    </div>
+  </div>
+  <form action="" [formGroup]="GroupRegForm" (ngSubmit)="onSubmit()" *ngIf="add_group || is_update_group">
+    <div class="row">
+      <div class="col-lg-12 col-sm-12">
+        <div class="portlet light bordered">
+          <div class="portlet-title">
+            <div class="caption"> <span>{{label}}</span>
+            </div>
+            <div class="text-right pull-right" *ngIf="label == 'Add Group'">
+              <div class="dropdown scrollableList btn btn-theme rounded"> <a href="#" class="dropdown-toggle selectedOption" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Duplicate from Group
+                <i class="icon icon-arrow-point-to-down"></i>
+              </a>
+                <div class="dropdown-menu this-list" aria-labelledby="dropdownMenuButton">
+                  <ul>
+                    <li *ngFor="let grp of group_datas"> <a class="dropdown-item" (click)="copyFromGroup(grp.group_id)">{{grp.group_name}}</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="portlet-body">
+            <!--/======================/PAGE TAB/======================/-->
+            <div class="group-config-tabs inputGroupName">
+              <div class="row justify-content-md-center">
+                <div class="col-lg-12 col-md-12 text-center">
+                  <tabset class="group-tab">
+                    <tab heading="General" #GeneralTab (select)="hideSSIDList()" [disabled]="(add_group && !lastStepFlag)  && (firstTabOk || secondTabOk)" [active]="!firstTabOk">
+                       
+                      <div class="setting-tab active">
+                        <!--General Tab-->
+                        <div class="col-lg-12 col-md-12 text-center">
+                          <!-- <tabset class="inner-tab"> -->
+                          <!-- <tab heading="Basic" customClass="inner-tab"> -->
+                          <div class="tab-pane active" id="gbasic">
+                            <div class="form-group row">
+                              <label class="col-md-2 col-form-label text-right">Group Name</label>
+                              <div class="col-lg-2 col-sm-11">
+                                <input type="text" class="form-control" formControlName="group_name" id="group_name" maxlength="25" #groupname>
+                                <div *ngIf="GroupRegForm.get('group_name').invalid && (GroupRegForm.get('group_name').dirty || GroupRegForm.get('group_name').touched)">
+                                  <div class="text-danger pull-left" *ngIf="GroupRegForm.get('group_name').errors.required">Name is required.</div>
+                                  <div class="text-danger pull-left" *ngIf="GroupRegForm.get('group_name').errors.minlength && !GroupRegForm.get('group_name').errors.pattern">Minimum 2 character</div>
+                                  <div class="text-danger pull-left" *ngIf="GroupRegForm.get('group_name').errors.maxlength && !isDuplicate">Maximum 25 character allowed</div>
+                                  <div class="text-danger pull-left" *ngIf="GroupRegForm.get('group_name').errors.pattern && !GroupRegForm.get('group_name').errors.emoji">Should not start with a space</div>
+                                  <div class="text-danger pull-left" *ngIf="GroupRegForm.get('group_name').errors.emoji">Should not allow symbols.</div>
+                                </div>
+                                <div *ngIf="GroupRegForm.get('group_name').invalid && isDuplicate">
+                                  <div class="text-danger pull-left" *ngIf="GroupRegForm.get('group_name').errors.maxlength">Maximum 25 character allowed</div>
+                                </div>
+                              </div>
+                              <div>
+                                <app-right-tooltip [toolTipText]="getToolTipText('group_configuration_add_group_group_name')"></app-right-tooltip>
+                              </div>
+                            </div>
+                            <div class="form-group row">
+                              <label class="col-md-2 col-form-label text-right">Data Forwarding</label>
+                              <div class="col-lg-2 col-sm-11">
+                                <select name="wag_data_forwarding" class="form-control" class="form-control" formControlName="wag_data_forwarding" id="data_forwarding">
+                                  <option value="1">WLC</option>
+                                  <option value="2">AP</option>
+                                </select>
+                              </div>
+                              <div>
+                                <app-right-tooltip [toolTipText]="getToolTipText('group_configuration_add_group_data_forwarding')"></app-right-tooltip>
+                              </div>
+                            </div>
+                            <!-- <div class="form-group row">
+                                <label class="col-md-2 col-form-label text-right">Location</label>
+                                <div class="col-lg-2 col-sm-11">
+                                    <select class="form-control">
+                                        <option value="chennai">Chennai</option>
+                                    </select>
+                                </div>
+                            </div> -->
+                            <!-- <div class="form-group row">
+                                <label class="col-md-2 col-form-label text-right">Country</label>
+                                <div class="col-lg-2 col-sm-11">
+                                    <select name="location" class="form-control" formControlName="country" id="country"  #grouplocation disabled>
+                                        <option *ngFor="let country of countryData" value="{{country}}">{{country}}</option>
+                                    </select>
+                                </div>checkNgoto
+                            </div> -->
+                            <div class="form-group row">
+                              <!-- <div class="col-lg-6 col-sm-11 col-md-offset-4"> -->
+                              <input type="button" (click)="formReset('btn')" value="Cancel" class="btn btn-cancel btn-large" style="margin-right: 15px;">
+                              <!-- <input type="submit" [disabled]="!GroupRegForm.valid" value="Save" class="btn btn-theme btn-large" *ngIf="add_group"> -->
+                              <input type="button" value="Next" [disabled]="!GroupRegForm.valid" class="btn btn-theme btn-large" *ngIf="add_group && !lastStepFlag" (click)="checkNgoto(2)">
+                              <input type="button" [disabled]="!GroupRegForm.valid ||btnDisable" (click)="updateGroupInfo()" value="Update" class="btn btn-theme btn-large" *ngIf="is_update_group">
+
+                              <input type="submit" [disabled]="!GroupRegForm.valid" value="Save" class="btn btn-theme btn-large" *ngIf="add_group && lastStepFlag">
+                              
+                              <!-- </div> -->
+                            </div>
+                          </div>
+                          <!-- </tab> -->
+                          <!-- <tab heading="Syslog" customClass="inner-tab" [disabled]="true">
+                              <div class="tab-pane" id="gsyslog">
+                                  <div class="form-group row">
+                                      <label class="col-md-2 col-form-label text-right">Syslog</label>
+                                      <div class="col-lg-5 col-sm-11">
+                                          <label class="switch">
+                                              <input type="checkbox" checked>
+                                              <span class="slider round">
+                                                  <i class="enable switch-status">Enable</i>
+                                                  <i class="disable switch-status">Disable</i>
+                                              </span>
+                                          </label>
+                                      </div>
+                                  </div>
+                                  <div class="form-group row">
+                                      <label class="col-md-2 col-form-label text-right">Server</label>
+                                      <div class="col-lg-5 col-sm-11">
+                                          <ul class="radio-out">
+                                              <li>
+                                                  <label>
+                                                      <input type="radio" name="syslog-server" checked>
+                                                      <i>IPv4</i>
+                                                      <span class="check">&nbsp;</span>
+                                                  </label>
+                                              </li>
+                                              <li>
+                                                  <label>
+                                                      <input type="radio" name="syslog-server">
+                                                      <i>IPv6</i>
+                                                      <span class="check">&nbsp;</span>
+                                                  </label>
+                                              </li>
+                                              <li>
+                                                  <label>
+                                                      <input type="radio" name="syslog-server">
+                                                      <i>Hostname</i>
+                                                      <span class="check">&nbsp;</span>
+                                                  </label>
+                                              </li>
+                                          </ul>
+                                      </div>
+                                  </div>
+                                  <div class="form-group row">
+                                      <label class="col-md-2 col-form-label text-right">IP Address</label>
+                                      <div class="col-lg-2 col-sm-11">
+                                          <input type="text" class="form-control ip_address is-invalid" required>
+                                          <div class="text-danger">This field is required</div>
+                                      </div>
+                                  </div>
+                                  <div class="form-group row">
+                                      <label class="col-md-2 col-form-label text-right">Port Number</label>
+                                      <div class="col-lg-1 col-sm-11">
+                                          <input type="number" value="162" class="form-control" name="port-number">
+                                      </div>
+                                  </div>
+                                  <div class="form-group row ">
+                                      <div class="col-lg-6 col-sm-11 col-md-offset-4">
+                                          <input type="button" (click)="formReset('btn')" value="Cancel" class="btn btn-cancel btn-large" style="margin-right: 15px;">
+                                          <input type="submit" [disabled]="!GroupRegForm.valid" value="Save" class="btn btn-theme btn-large" *ngIf="add_group">
+                                          <input type="button" [disabled]="!GroupRegForm.valid || btnDisable" (click)="updateGroupInfo()" value="Update" class="btn btn-theme btn-large"
+                                              *ngIf="is_update_group">
+                                      </div>
+                                  </div>
+                              </div>
+                          </tab> -->
+                          <!-- <tab heading="WAG" customClass="inner-tab">
+                              <div class="tab-pane" id="gwag">
+                                  <div class="form-group row">
+                                      <label class="col-md-2 col-form-label text-right">Data Forwarding</label>
+                                      <div class="col-lg-2 col-sm-11">
+                                          <select name="wag_data_forwarding" class="form-control" class="form-control" formControlName="wag_data_forwarding" id="data_forwarding" >
+                                             <option value="1">WLC</option>
+                                             <option value="2">AP</option>
+                                          </select>
+                                      </div>
+                                  </div>
+                                  <div class="form-group row">
+                                      <label class="col-md-2 col-form-label text-right">Server</label>
+                                      <div class="col-lg-5 col-sm-11">
+                                          <ul class="radio-out">
+                                              <li>
+                                                  <label>
+                                                      <input type="radio" name="wag_ip_type" formControlName="wag_ip_type" value="1">
+                                                      <i>IPv4</i>
+                                                      <span class="check">&nbsp;</span>
+                                                  </label>
+                                              </li>
+                                              <li>
+                                                  <label>
+                                                      <input type="radio" name="wag_ip_type" formControlName="wag_ip_type" value="2" disabled>
+                                                      <i>IPv6</i>
+                                                      <span class="check">&nbsp;</span>
+                                                  </label>
+                                              </li>
+                                              <li>
+                                                  <label>
+                                                      <input type="radio" name="wag_ip_type" formControlName="wag_ip_type" value="3" disabled>
+                                                      <i>Hostname</i>
+                                                      <span class="check">&nbsp;</span>
+                                                  </label>
+                                              </li>
+                                          </ul>
+                                      </div>
+                                  </div>
+                                  <div class="form-group row">
+                                      <label class="col-md-2 col-form-label text-right">IP Address</label>
+                                      <div class="col-lg-2 col-sm-11">
+                                          <input type="text" class="form-control ip_address" name="wag_ip" formControlName="wag_ip" id="wag_ip" placeholder="0.0.0.0">
+                                          <div *ngIf="GroupRegForm.get('wag_ip').invalid && (GroupRegForm.get('wag_ip').dirty || GroupRegForm.get('wag_ip').touched)">
+                                                  <div class="text-danger pull-left" *ngIf="GroupRegForm.get('wag_ip').errors.required">
+                                                      IP Address is required.
+                                                  </div>
+                                                  <div class="text-danger pull-left" *ngIf="GroupRegForm.get('wag_ip').errors.pattern">
+                                                      Invalid IP address.
+                                                  </div>
+                                              </div>
+                                      </div>
+                                  </div>
+                                  <div class="form-group row">
+                                      <div class="col-lg-6 col-sm-11 col-md-offset-4">
+                                          <input type="button" (click)="formReset('btn')" value="Cancel" class="btn btn-cancel btn-large" style="margin-right: 15px;">
+                                          <input type="submit" [disabled]="!GroupRegForm.valid" value="Save" class="btn btn-theme btn-large" *ngIf="add_group">
+                                          <input type="button" [disabled]="!GroupRegForm.valid || btnDisable" value="Update" (click)="updateGroupInfo()" class="btn btn-theme btn-large"
+                                              *ngIf="is_update_group">
+                                      </div>
+                                  </div>
+                              </div>
+                          </tab> -->
+                          <!-- </tabset> -->
+                        </div>
+                        <!--General Tab END-->
+                      </div>
+                    </tab>
+                    <tab heading="Radio" (select)="hideSSIDList();triggerFalseClick($event);" [disabled]="(add_group && !lastStepFlag)  && (!firstTabOk || secondTabOk)" [active]="firstTabOk">
+                      <div id="tab2" class="setting-tab active">
+                        <!--Radio Tab-->
+                        <div class="col-lg-12 col-md-12 text-center">
+                          <tabset class="radioSecondtab">
+                            <tab heading="General" [disabled]="(add_group && !lastStepFlag)  && (first_2TabOk || second_2TabOk)" [active]="!first_2TabOk" #radioGenTab id="radioGentab">
+                                
+                              <div class="tab-pane" id="radio_general">
+                                <div class="form-group row">
+                                  <div class="pull">
+                                    <label class="col-md-2 col-form-label text-right">Country</label>
+                                    <div class="col-lg-2 col-sm-11">
+                                      <select name="location" class="form-control" formControlName="country" id="country" #grouplocation disabled>
+                                        <option *ngFor="let country of country_data" value="{{country.code}}">{{country.name}}</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <app-right-tooltip [toolTipText]="getToolTipText('group_configuration_add_group_country')"></app-right-tooltip>
+                                  </div>
+                                </div>
+                                <div class="form-group row">
+                                  <input type="button" (click)="checkNgoto(1)" value="Previous" class="btn btn-theme btn-large" style="margin-right: 15px;" *ngIf="add_group && !lastStepFlag">
+                                  <!-- <div class="col-lg-6 col-sm-11 col-md-offset-4"> -->
+                                  <input type="button" (click)="formReset('btn')" value="Cancel" class="btn btn-cancel btn-large" style="margin-right: 15px;">
+                                  <!-- <input type="submit" [disabled]="!GroupRegForm.valid" value="Save" class="btn btn-theme btn-large" *ngIf="add_group"> -->
+                                  <input type="button" value="Next" [disabled]="!GroupRegForm.valid" class="btn btn-theme btn-large" *ngIf="add_group && !lastStepFlag" (click)="checkNgoto('2_1')">
+                                  <input type="button" [disabled]="!GroupRegForm.valid || btnDisable" value="Update" (click)="updateGroupInfo()" class="btn btn-theme btn-large" *ngIf="is_update_group">
+                                  <!-- </div> -->
+
+                                  <input type="submit" [disabled]="!GroupRegForm.valid" value="Save" class="btn btn-theme btn-large" *ngIf="add_group && lastStepFlag">
+                                </div>
+                              </div>
+                            </tab>
+                            <tab heading="2.4G" formGroupName="radio_2_4" [disabled]="(add_group && !lastStepFlag)  && (!first_2TabOk || second_2TabOk)" [active]="first_2TabOk" (select)="deactivateGeneral()" #radio2Tab id="radio2tab">
+                              <div class="tab-pane active" id="r24g">
+                               
+                                <accordion>
+                                    <div class="pull-right not-applicable-error" *ngIf="!ifRadio24Disabled">* Please enable the radio to apply these configurations on AP</div>
+                                  <accordion-group [isOpen]="true">
+                                    
+                                    <div accordion-heading class="clearfix"> 
+                                      <span class="accordian-title">Basic</span>  <i class="fa fa-angle-down" aria-hidden="true">
+                                          
+                                      </i>
+                                    </div>
+                                    <!-- <div class="form-group row">
+                                            <label class="col-md-2 col-form-label text-right">Country</label>
+                                            <div class="col-lg-2 col-sm-11">
+                                                <select name="location" class="form-control" formControlName="country" id="country"  #grouplocation disabled>
+                                                    <option *ngFor="let country of countryData" value="{{country}}">{{country}}</option>
+                                                </select>
+                                            </div>
+                                        </div> -->
+                                    <div class="form-group row">
+                                      <label class="col-md-2 col-form-label text-right">Radio</label>
+                                      <div class="col-lg-1 col-sm-11">
+                                        <label class="switch">
+                                          <input type="checkbox" name="is_enabled" id="is_enabled" formControlName="is_enabled" (change)="setRadioState($event,24)">
+                                          <!-- (change)="changeStateofFields($event.target.checked,'radio_2_4')" --> <span class="slider round">
+                                                                                            <i class="enable switch-status">Enable</i>
+                                                                                            <i class="disable switch-status">Disable</i>
+                                                                                        </span>
+                                        </label>
+                                      </div>
+                                      <div style="margin-left: 115px; display: inline-block" class="pull-left">
+                                        <app-right-tooltip [toolTipText]="getToolTipText('group_configuration_add_group_2_radio')"></app-right-tooltip>
+                                      </div>
+                                    </div>
+                                    <div class="form-group row">
+                                      <label class="col-md-2 col-form-label text-right">Wireless Mode</label>
+                                      <div class="col-lg-2 col-sm-11">
+                                        <select name="wireless-mode" class="form-control" name="wireless_mode" formControlName="wireless_mode" id="wireless_mode" (change)="generateChannelWidth2($event.target.value)">
+                                          <option value="0">802.11b</option>
+                                          <option value="1">802.11g</option>
+                                          <option value="2">802.11ng</option>
+                                          <!-- <option value="3">11ng</option> -->
+                                        </select>
+                                      </div>
+                                      <div>
+                                        <app-right-tooltip [toolTipText]="getToolTipText('group_configuration_add_group_2_wireless_mode')"></app-right-tooltip>
+                                      </div>
+                                    </div>
+                                    <div class="form-group row">
+                                      <label class="col-md-2 col-form-label text-right">Channel Width</label>
+                                      <div class="col-lg-2 col-sm-11">
+                                        <select class="form-control" name="channel_width" formControlName="channel_width" (change)="generateChannel_2($event.target.value)">
+                                          <option *ngFor="let i of channel_width_2;let idx = index" value="{{idx}}">{{i+'MHz'}}</option>
+                                        </select>
+                                        <!-- <select class="form-control" name="channel_width" formControlName="channel_width" *ngIf="GroupRegForm.get('radio_2_4.wireless_mode').value=='1'" (change)="generateChannel_2($event.target.value)">
+                                                                                    <option *ngFor="let i of width_b_g_a;let idx = index" value="{{idx}}" >{{i+'MHz'}}</option>
+
+                                                                                    </select>
+                                                                                    <select class="form-control" name="channel_width" formControlName="channel_width" *ngIf="GroupRegForm.get('radio_2_4.wireless_mode').value=='2'" (change)="generateChannel_2($event.target.value)">
+                                                                                    <option *ngFor="let i of width_na_ng;let idx = index" value="{{idx}}" >{{i+'MHz'}}</option>
+
+                                                                                    </select> -->
+                                      </div>
+                                      <div>
+                                        <app-right-tooltip [toolTipText]="getToolTipText('group_configuration_add_group_2_channel_width')"></app-right-tooltip>
+                                      </div>
+                                    </div>
+                                    <div class="form-group row">
+                                      <label class="col-md-2 col-form-label text-right">Channel</label>
+                                      <div class="col-lg-2 col-sm-11">
+                                        <select class="form-control" name="channel" formControlName="channel" id="channel" (change)="changeChannelVal2($event.target.value)">
+                                          <option value="0">Auto</option>
+                                          <option *ngFor="let i of channel_2" value="{{i}}">{{i}}</option>
+                                        </select>
+                                      </div>
+                                      <div>
+                                        <app-right-tooltip [toolTipText]="getToolTipText('group_configuration_add_group_2_channel')"></app-right-tooltip>
+                                      </div>
+                                    </div>
+                                    <!-- <div class="form-group row" *ngIf="GroupRegForm.get('radio_2_4.channel').value=='1'">
+                                                                        <div class="col-lg-8 col-sm-11 col-md-offset-2">
+
+                                                                            <div class="row">
+                                                                            <label class="col-md-2 col-form-label text-left w78">Radio 1</label>
+                                                                            <div class="col-md-2 col-sm-11">
+                                                                                <select class="form-control w90"  name="channel_1" formControlName="channel_1" id="channel_1">
+                                                                                <option *ngFor="let i of radioArray" value="{{i}}">{{i}}</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <label class="col-md-2 col-form-label text-right">Radio 2</label>
+                                                                            <div class="col-md-2 col-sm-11">
+                                                                                <select class="form-control w90" name="channel_2" formControlName="channel_2" id="channel_2">
+                                                                                <option *ngFor="let i of radioArray" value="{{i}}">{{i}}</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <label class="col-md-2 col-form-label text-right">Radio 3</label>
+                                                                            <div class="col-md-2 col-sm-11">
+                                                                                <select class="form-control w90" name="channel_3" formControlName="channel_3" id="channel_3">
+                                                                                <option *ngFor="let i of radioArray" value="{{i}}">{{i}}</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            </div>
+
+
+                                                                        </div>
+                                                                        </div> -->
+                                    <div class="form-group row">
+                                      <label class="col-md-2 col-form-label text-right">Primary Channel</label>
+                                      <div class="col-lg-2 col-sm-11">
+                                        <ul class="radio-out" [ngClass]="{'disabled':GroupRegForm.get('radio_2_4.channel_width').value !=1 || GroupRegForm.get('radio_2_4.channel').value == 0 }">
+                                          <li>
+                                            <label>
+                                              <input type="radio" name="primary_channel_2" formControlName="primary_channel_2" value="0" (change)="generateChannel_2(GroupRegForm.get('radio_2_4.channel_width').value,$event.target.value);setEnableDisable()"> <i>Lower</i>
+                                              <span class="check">&nbsp;</span>
+                                            </label>
+                                          </li>
+                                          <li>
+                                            <label>
+                                              <input type="radio" name="primary_channel_2" formControlName="primary_channel_2" value="1" (change)="generateChannel_2(GroupRegForm.get('radio_2_4.channel_width').value,$event.target.value,$event.target.value);setEnableDisable()"> <i>Upper</i>
+                                              <span class="check">&nbsp;</span>
+                                            </label>
+                                          </li>
+                                        </ul>
+                                      </div>
+                                      <div>
+                                        <app-right-tooltip [toolTipText]="getToolTipText('group_configuration_add_group_primary_2_channel')"></app-right-tooltip>
+                                      </div>
+                                    </div>
+                                  </accordion-group>
+                                  <accordion-group >
+                                    <div accordion-heading> <span class="accordian-title">Advance</span>  <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                    </div>
+                                    <!-- <div class="form-group row">
+                                        <label class="col-md-2 col-form-label text-right">MCX Index/Data Rate</label>
+                                        <div class="col-lg-2 col-sm-11">
+                                            <select class="form-control" *ngIf="GroupRegForm.get('radio_2_4.wireless_mode').value=='11ng'" name="mcx_data_rate_2" formControlName="mcx_data_rate_2">
+                                                    <option *ngFor="let i of mode_11ng_2" value="{{i}}">{{i}}</option>
+                                            </select>
+                                            <select class="form-control" *ngIf="GroupRegForm.get('radio_2_4.wireless_mode').value=='11bg'" name="mcx_data_rate_2" formControlName="mcx_data_rate_2">
+                                                    <option *ngFor="let i of mode_11bg_2" value="{{i}}">{{i}}</option>
+                                            </select>
+                                            <select class="form-control" *ngf="GroupRegForm.get('radiIo_2_4.wireless_mode').value=='0'" name="mcx_data_rate_2" formControlName="mcx_data_rate_2">
+                                                    <option *ngFor="let i of mode_11b_2" value="{{i}}">{{i}}</option>
+                                            </select>
+                                        </div>
+                                    </div> -->
+                                    <div class="form-group row">
+                                      <label class="col-md-2 col-form-label text-right">Transmit Power</label>
+                                      <div class="col-lg-2 col-sm-11">
+                                        <select class="form-control" name="transmit_power" formControlName="transmit_power">
+                                          <option value="17">17dBm</option>
+                                          <option value="18">18dBm</option>
+                                          <option value="19">19dBm</option>
+                                          <option value="20">20dBm</option>
+                                          <option value="21">21dBm</option>
+                                          <option value="22">22dBm</option>
+                                          <option value="23">23dBm</option>
+                                        </select>
+                                      </div>
+                                      <div>
+                                        <app-right-tooltip [toolTipText]="getToolTipText('group_configuration_add_group_2_transmit_power')"></app-right-tooltip>
+                                      </div>
+                                      <!-- <div class="col-lg-3 col-sm-11">
+                                          <span class="char-limit">(dBm)</span>
+                                      </div> --></div>
+                                    <!-- <div class="form-group row">
+                                        <label class="col-md-2 col-form-label text-right">Guard Interval</label>
+                                        <div class="col-lg-2 col-sm-11">
+                                            <select class="form-control" name="guardInterval_2" formControlName="guardInterval_2">
+                                                <option value="auto">Auto</option>
+                                                <option value="long">Long</option>
+                                            </select>
+                                        </div>
+                                    </div> -->
+                                    <div class="form-group row">
+                                      <label class="col-md-2 col-form-label text-right">RTS Threshold</label>
+                                      <div class="col-lg-2 col-sm-11">
+                                        <input type="number" value="2347" class="form-control" name="rts_threshold" formControlName="rts_threshold" (keydown)="blockChar($event)">
+                                      </div>
+                                      <!--<div class="col-lg-2 col-sm-11">-->
+                                      <!--<span class="char-limit">(256-2347)</span>-->
+                                      <div>
+                                        <app-right-tooltip [toolTipText]="getToolTipText('group_configuration_add_group_2_rts_threshold')"></app-right-tooltip>
+                                      </div>
+                                      <!--</div>-->
+                                      <div *ngIf="GroupRegForm.get('radio_2_4.rts_threshold').invalid && (GroupRegForm.get('radio_2_4.rts_threshold').dirty || GroupRegForm.get('radio_2_4.rts_threshold').touched)" class="row" style="clear: both;">
+                                        <div class="col-md-2 col-form-label text-right"></div>
+                                        <div class="text-danger pull-left pull-custom" *ngIf="GroupRegForm.get('radio_2_4.rts_threshold').errors.required">RTS Threshold is required.</div>
+                                        <div class="text-danger pull-left pull-custom" *ngIf="GroupRegForm.get('radio_2_4.rts_threshold').errors.min || GroupRegForm.get('radio_2_4.rts_threshold').errors.max">Please enter a valid RTS Threshold.</div>
+                                      </div>
+                                    </div>
+                                    <div class="form-group row">
+                                      <label class="col-md-2 col-form-label text-right">Beacon Interval</label>
+                                      <div class="col-lg-2 col-sm-11">
+                                        <input type="number" value="100" class="form-control" name="beacon_interval" formControlName="beacon_interval" (keydown)="blockChar($event)">
+                                        <!--<div class="col-lg-2 col-sm-11">-->
+                                        <!--<span class="char-limit">(100-300 ms)</span>-->
+                                        <!--</div>-->
+                                        <div *ngIf="GroupRegForm.get('radio_2_4.beacon_interval').invalid && (GroupRegForm.get('radio_2_4.beacon_interval').dirty || GroupRegForm.get('radio_2_4.beacon_interval').touched)">
+                                          <div class="text-danger pull-left" *ngIf="GroupRegForm.get('radio_2_4.beacon_interval').errors.required">Beacon Interval is required.</div>
+                                          <div class="text-danger pull-left" *ngIf="GroupRegForm.get('radio_2_4.beacon_interval').errors.min || GroupRegForm.get('radio_2_4.beacon_interval').errors.max">Enter a valid Beacon Interval.</div>
+                                        </div>
+                                      </div>
+                                      <div>
+                                        <app-right-tooltip [toolTipText]="getToolTipText('group_configuration_add_group_2_beacon_interval')"></app-right-tooltip>
+                                      </div>
+                                    </div>
+                                    <div class="form-group row">
+                                      <label class="col-md-2 col-form-label text-right">DTIM Interval</label>
+                                      <div class="col-lg-2 col-sm-11">
+                                        <input type="number" value="3" class="form-control" name="dtim_interval" formControlName="dtim_interval" (keydown)="blockChar($event)">
+                                        <!--<div class="col-lg-2 col-sm-11">-->
+                                        <!--<span class="char-limit">(1-255)</span>-->
+                                        <!--</div>-->
+                                        <div *ngIf="GroupRegForm.get('radio_2_4.dtim_interval').invalid && (GroupRegForm.get('radio_2_4.dtim_interval').dirty || GroupRegForm.get('radio_2_4.dtim_interval').touched)">
+                                          <div class="text-danger pull-left" *ngIf="GroupRegForm.get('radio_2_4.dtim_interval').errors.required">DTIM Interval is required.</div>
+                                          <div class="text-danger pull-left" *ngIf="GroupRegForm.get('radio_2_4.dtim_interval').errors.min || GroupRegForm.get('radio_2_4.dtim_interval').errors.max">Enter a valid DTIM Interval.</div>
+                                        </div>
+                                      </div>
+                                      <div>
+                                        <app-right-tooltip [toolTipText]="getToolTipText('group_configuration_add_group_2_dtim_interval')"></app-right-tooltip>
+                                      </div>
+                                    </div>
+                                    <!-- <div class="form-group row">
+                                        <label class="col-md-2 col-form-label text-right">Broadcast/Multicast Rate Limit</label>
+                                        <div class="col-lg-1 col-sm-11">
+                                            <input type="number" value="50" class="form-control" name="broadcast_rate_2" formControlName="broadcast_rate_2">
+                                        </div>
+                                        <div class="col-lg-1 col-sm-11">
+                                            <span class="char-limit">(0-50)</span>
+                                        </div>
+                                        <div *ngIf="GroupRegForm.get('radio_2_4.broadcast_rate_2').invalid && (GroupRegForm.get('radio_2_4.broadcast_rate_2').dirty || GroupRegForm.get('radio_2_4.broadcast_rate_2').touched)" class="row" style="clear: both;">
+                                                <div class="col-md-2 col-form-label text-right"></div>
+                                                <div class="text-danger pull-left pull-custom" *ngIf="GroupRegForm.get('radio_2_4.broadcast_rate_2').errors.required">Broadcast/Multicast Rate Limit is required.</div>
+                                                <div class="text-danger pull-left pull-custom" *ngIf="GroupRegForm.get('radio_2_4.broadcast_rate_2').errors.min || GroupRegForm.get('radio_2_4.broadcast_rate_2').errors.max">Please enter a valid Broadcast/Multicast Rate Limit.</div>
+                                            </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-md-2 col-form-label text-right">Fixed Multicast Rate</label>
+                                        <div class="col-lg-2 col-sm-11">
+                                            <select class="form-control" name="fixed_multicast_rate_2" formControlName="fixed_multicast_rate_2">
+                                                <option *ngFor="let i of rate_5" value="{{i}}">{{i}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-md-2 col-form-label text-right">A-MPDU</label>
+                                        <div class="col-lg-1 col-sm-11">
+                                            <label class="switch">
+                                                <input type="checkbox" name="a_mpdu_2" formControlName="a_mpdu_2">
+                                                <span class="slider round">
+                                                    <i class="enable switch-status">Enable</i>
+                                                    <i class="disable switch-status">Disable</i>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div> -->
+                                    <!-- <div class="form-group row">
+                                        <label class="col-md-2 col-form-label text-right">Fragmentation</label>
+                                        <div class="col-lg-1 col-sm-11">
+                                            <label class="switch">
+                                                <input type="checkbox" name="fragmentation_threshold" formControlName="fragmentation_threshold">
+                                                <span class="slider round">
+                                                    <i class="enable switch-status">Enable</i>
+                                                    <i class="disable switch-status">Disable</i>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div> -->
+                                    <div class="form-group row">
+                                      <label class="col-md-2 col-form-label text-right">Fragmentation Threshold</label>
+                                      <div class="col-lg-2 col-sm-11">
+                                        <input type="number" value="3" class="form-control" name="fragmentation_threshold" formControlName="fragmentation_threshold" (keydown)="blockChar($event)">
+                                        <!--<div class="col-lg-2 col-sm-11">-->
+                                        <!--<span class="char-limit">(256-2346)</span>-->
+                                        <!--</div>-->
+                                        <div *ngIf="GroupRegForm.get('radio_2_4.fragmentation_threshold').invalid && (GroupRegForm.get('radio_2_4.fragmentation_threshold').dirty || GroupRegForm.get('radio_2_4.fragmentation_threshold').touched)">
+                                          <div class="text-danger pull-left" *ngIf="GroupRegForm.get('radio_2_4.fragmentation_threshold').errors.required">Threshold Interval is required.</div>
+                                          <div class="text-danger pull-left" *ngIf="GroupRegForm.get('radio_2_4.fragmentation_threshold').errors.min || GroupRegForm.get('radio_2_4.fragmentation_threshold').errors.max">Enter a valid Threshold value.</div>
+                                        </div>
+                                      </div>
+                                      <div>
+                                        <app-right-tooltip [toolTipText]="getToolTipText('group_configuration_add_group_2_fragmentation_threshold')"></app-right-tooltip>
+                                      </div>
+                                    </div>
+                                    <div class="form-group row">
+                                      <label class="col-md-2 col-form-label text-right">CTS</label>
+                                      <div class="col-lg-1 col-sm-11">
+                                        <label class="switch">
+                                          <input type="checkbox" name="cts_protection_mode" formControlName="cts_protection_mode"> <span class="slider round">
+                                       <i class="enable switch-status">Enable</i>
+                                       <i class="disable switch-status">Disable</i>
+                                         </span>
+                                        </label>
+                                      </div>
+                                      <div style="margin-left: 115px; display: inline-block" class="pull-left">
+                                        <app-right-tooltip [toolTipText]="getToolTipText('group_configuration_add_group_2_cts')"></app-right-tooltip>
+                                      </div>
+                                    </div>
+                                  </accordion-group>
+                                  <accordion-group class="secondTab">
+                                    <div accordion-heading> <span class="accordian-title">Load Balancing</span>  <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                    </div>
+                                    <div class="form-group row">
+                                      <label class="col-md-2 col-form-label text-right">Channel Utilization</label>
+                                      <div class="col-lg-1 col-sm-11">
+                                        <label class="switch">
+                                        <input type="checkbox" name="is_channel_util_enabled" id="is_channel_util_enabled" formControlName="is_channel_util_enabled">
+                                        <span class="slider round">
+                                          <i class="enable switch-status">Enable</i>
+                                          <i class="disable switch-status">Disable</i>
+                                        </span>
+                                        </label>
+                                      </div>
+                                      <div style="margin-left: 115px; display: inline-block" class="pull-left">
+                                      <app-right-tooltip [toolTipText]="getToolTipText('group_configuration_add_group_5_radio')"></app-right-tooltip>
+                                      </div>
+                                    </div>
+                                    <div class="form-group row" style="margin-top: 30px;" *ngIf="GroupRegForm.get('radio_2_4.is_channel_util_enabled').value == true">
+                                        <label class="col-md-2 col-form-label text-right"></label>
+                                        <div class="col-lg-2">
+                                            <!-- <div class="slidecontainer">
+                                              <p class="result-tip" [style.left.px]="20 + (2*GroupRegForm.get('radio_2_4.channel_util').value)">{{GroupRegForm.get('radio_2_4.channel_util').value}}</p>
+                                                <input type="range" min="1" max="100"  class="range-slider" list="tickmarks1"  formControlName="channel_util">
+                                                  <datalist id="tickmarks1" class="ticklabel">
+                                                    <option value="1" label="1%" class="opt1">
+                                                    <option value="100" label="100%" class="opt2">
+                                                  </datalist>
+                                              </div> -->
+                                              <input type="hidden"  formControlName="channel_util" [(ngModel)]="value">
+                                              <ng5-slider [(value)]="value" [options]="options"></ng5-slider>
+                                             
+
+                                        </div>
+                                       
+                                      </div>
+                                      <div class="form-group row" style="margin-top: 30px;">
+                                          <label class="col-md-2 col-form-label text-right">Max client allowed</label>
+                                          <div class="col-lg-2">
+                                              <!-- <div class="slidecontainer">
+                                                  <p class="result-tip" [style.left.px]="20 + (3.2*GroupRegForm.get('radio_2_4.max_clients').value)">{{GroupRegForm.get('radio_2_4.max_clients').value}}</p>
+                                                  <input type="range" min="1" max="64"  class="range-slider"  list="tickmarks" formControlName="max_clients">
+                                                    <datalist id="tickmarks" class="ticklabel">
+                                                      <option value="1" label="1" class="opt1">
+                                                      <option value="64" label="64" class="opt2">
+                                                    </datalist>
+                                                </div> -->
+                                                <input type="hidden"  formControlName="max_clients" [(ngModel)]="clinet_value">
+                                                <ng5-slider [(value)]="clinet_value" [options]="clinet_options"></ng5-slider>
+                                          
+
+                                          </div>
+                                         
+                                        </div>
+                                  
+                                  </accordion-group>
+                                </accordion>
+                                <div class="form-group row">
+                                  <!-- <div class="col-lg-6 col-sm-11 col-md-offset-4"> -->
+                                  <input type="button" (click)="checkNgoto('2')" value="Previous" class="btn btn-theme btn-large" style="margin-right: 15px;" *ngIf="add_group && !lastStepFlag">
+                                  <input type="button" (click)="formReset('btn')" value="Cancel" class="btn btn-cancel btn-large" style="margin-right: 15px;">
+                                  <!-- <input type="submit" [disabled]="!GroupRegForm.valid" value="Save" class="btn btn-theme btn-large" *ngIf="add_group"> -->
+                                  <input type="button" value="Next" [disabled]="!GroupRegForm.valid" class="btn btn-theme btn-large" *ngIf="add_group && !lastStepFlag" (click)="checkNgoto('2_2')">
+                                  <input type="button" [disabled]="!GroupRegForm.valid || btnDisable" value="Update" (click)="updateGroupInfo()" class="btn btn-theme btn-large" *ngIf="is_update_group">
+                                  <input type="submit" [disabled]="!GroupRegForm.valid" value="Save" class="btn btn-theme btn-large" *ngIf="add_group && lastStepFlag">
+                                  <!-- </div> -->
+                                </div>
+                              </div>
+                            </tab>
+                            <!--/////5 GHZ RADIO TAB/////////////-->
+                            <tab heading="5G" formGroupName="radio_5" [disabled]="(add_group && !lastStepFlag)  && !second_2TabOk" [active]="second_2TabOk" (select)="deactivateGeneral()" #radio5Tab id="radio5tab">
+                              <div class="tab-pane" id="r5g">
+                                <!-- <div class="portlet-title radio_section">
+                                    <div  class="caption">
+                                        <span>Basic</span>
+                                    </div>
+                                </div> -->
+                                <accordion>
+                                    <div class="pull-right not-applicable-error" *ngIf="!ifRadio5Disabled">* Please enable the radio to apply these configurations on AP</div>
+                                  <accordion-group [isOpen]="true">
+                                    <div accordion-heading> <span class="accordian-title">Basic</span>  <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                    </div>
+                                    <!-- <div class="form-group row">
+                                        <label class="col-md-2 col-form-label text-right">Country</label>
+                                        <div class="col-lg-2 col-sm-11">
+                                            <select name="location" class="form-control" formControlName="country" id="country"  #grouplocation disabled>
+                                                <option *ngFor="let country of countryData" value="{{country}}">{{country}}</option>
+                                            </select>
+                                        </div>
+                                    </div> -->
+                                    <div class="form-group row">
+                                      <label class="col-md-2 col-form-label text-right">Radio</label>
+                                      <div class="col-lg-1 col-sm-11">
+                                        <label class="switch">
+                                          <input type="checkbox" name="is_enabled" id="is_enabled" formControlName="is_enabled" (change)="setRadioState($event,5)">
+                                          <!-- (change)="changeStateofFields($event.target.checked,'radio_5')" --> <span class="slider round">
+                                          <i class="enable switch-status">Enable</i>
+                                          <i class="disable switch-status">Disable</i>
+                                          </span>
+                                        </label>
+                                      </div>
+                                      <div style="margin-left: 115px; display: inline-block" class="pull-left">
+                                        <app-right-tooltip [toolTipText]="getToolTipText('group_configuration_add_group_5_radio')"></app-right-tooltip>
+                                      </div>
+                                    </div>
+                                    <div class="form-group row">
+                                      <label class="col-md-2 col-form-label text-right">Wireless Mode</label>
+                                      <div class="col-lg-2 col-sm-11">
+                                        <select name="wireless-mode" class="form-control" name="wireless_mode" formControlName="wireless_mode" id="wireless_mode" (change)="generateChannelWidth5($event.target.value)">
+                                          <option value="3">802.11a</option>
+                                          <option value="4">802.11na</option>
+                                          <option value="5">802.11ac</option>
+                                          <!-- <option value="6">11ac</option> -->
+                                        </select>
+                                      </div>
+                                      <div>
+                                        <app-right-tooltip [toolTipText]="getToolTipText('group_configuration_add_group_5_wireless_mode')"></app-right-tooltip>
+                                      </div>
+                                    </div>
+                                    <div class="form-group row">
+                                      <label class="col-md-2 col-form-label text-right">Channel Width</label>
+                                      <div class="col-lg-2 col-sm-11">
+                                        <select class="form-control " name="channel_width" formControlName="channel_width" (change)="generateChannel_5($event.target.value)">
+                                          <option *ngFor="let i of channel_width_5;let idx = index" value="{{idx}}">{{i+'MHz'}}</option>
+                                        </select>
+                                        <!-- <select class="form-control " name="channel_width" formControlName="channel_width" *ngIf="GroupRegForm.get('radio_5.wireless_mode').value=='4'" (change)="generateChannel_5($event.target.value)">
+                                          <option *ngFor="let i of width_mixed;let idx = index" value="{{idx}}" >{{i+'MHz'}}</option>
+                                      </select>
+                                      <select class="form-control " name="channel_width" formControlName="channel_width" *ngIf="GroupRegForm.get('radio_5.wireless_mode').value=='5'" (change)="generateChannel_5($event.target.value)">
+                                        <option *ngFor="let i of width_mixed;let idx = index" value="{{idx}}" >{{i+'MHz'}}</option>
+                                    </select> -->
+                                      </div>
+                                      <div>
+                                        <app-right-tooltip [toolTipText]="getToolTipText('group_configuration_add_group_5_channel_width')"></app-right-tooltip>
+                                      </div>
+                                    </div>
+                                    <div class="form-group row">
+                                      <label class="col-md-2 col-form-label text-right">Channel</label>
+                                      <div class="col-lg-2 col-sm-11">
+                                        <select class="form-control" name="channel" formControlName="channel" id="channel" (change)="changeChannelVal($event.target.value)">
+                                          <option value="0">Auto</option>
+                                          <option *ngFor="let i of channel_5;" value="{{i}}">{{i}}</option>
+                                        </select>
+                                      </div>
+                                      <div>
+                                        <app-right-tooltip [toolTipText]="getToolTipText('group_configuration_add_group_5_channel')"></app-right-tooltip>
+                                      </div>
+                                    </div>
+                                    <!-- <div class="form-group row" *ngIf="GroupRegForm.get('radio_5.channel').value=='1'">
+                                      <div class="col-lg-8 col-sm-11 col-md-offset-2">
+
+                                        <div class="row">
+                                          <label class="col-md-2 col-form-label text-left w78">Radio 1</label>
+                                          <div class="col-md-2 col-sm-11">
+                                            <select class="form-control w90"  name="channel_1" formControlName="channel_1" id="channel_1">
+                                              <option *ngFor="let i of channel_5_1;" value="{{i}}">{{i}}</option>
+                                            </select>
+
+                                          </div>
+                                          <label class="col-md-2 col-form-label text-right">Radio 2</label>
+                                          <div class="col-md-2 col-sm-11">
+                                            <select class="form-control w90" name="channel_2" formControlName="channel_2" id="channel_2" >
+                                              <option *ngFor="let i of channel_5_1;" value="{{i}}">{{i}}</option>
+                                            </select>
+
+                                          </div>
+                                          <label class="col-md-2 col-form-label text-right">Radio 3</label>
+                                          <div class="col-md-2 col-sm-11">
+                                            <select class="form-control w90" name="channel_3" formControlName="channel_3" id="channel_3" >
+                                              <option *ngFor="let i of channel_5_1;let j = index" value="{{i}}">{{i}}</option>
+                                            </select>
+
+                                          </div>
+                                        </div>
+
+
+                                      </div>
+                                    </div> -->
+                                    <div class="form-group row">
+                                      <label class="col-md-2 col-form-label text-right">Primary Channel</label>
+                                      <div class="col-lg-2 col-sm-11">
+                                        <ul class="radio-out" [ngClass]="{'disabled':GroupRegForm.get('radio_5.channel_width').value !=1 || GroupRegForm.get('radio_5.channel').value == 0 }">
+                                          <li>
+                                            <label>
+                                              <input type="radio" name="primary_channel" formControlName="primary_channel" value="0" (change)="generateChannel_5(GroupRegForm.get('radio_5.channel_width').value,$event.target.value,$event.target.value)"> <i>Lower</i>
+                                              <span class="check">&nbsp;</span>
+                                            </label>
+                                          </li>
+                                          <li>
+                                            <label>
+                                              <input type="radio" name="primary_channel" formControlName="primary_channel" value="1" (change)="generateChannel_5(GroupRegForm.get('radio_5.channel_width').value,$event.target.value,$event.target.value)"> <i>Upper</i>
+                                              <span class="check">&nbsp;</span>
+                                            </label>
+                                          </li>
+                                        </ul>
+                                      </div>
+                                      <div>
+                                        <app-right-tooltip [toolTipText]="getToolTipText('group_configuration_add_group_primary_5_channel')"></app-right-tooltip>
+                                      </div>
+                                    </div>
+                                    <div class="form-group row">
+                                      <label class="col-md-2 col-form-label text-right">MIMO</label>
+                                      <div class="col-lg-1 col-sm-11">
+                                        <label class="switch">
+                                          <input type="checkbox" name="mimo" formControlName="mimo"> <span class="slider round">
+                                                                                        <i class="enable switch-status">Enable</i>
+                                                                                        <i class="disable switch-status">Disable</i>
+                                                                                    </span>
+                                        </label>
+                                      </div>
+                                      <div style="margin-left: 115px; display: inline-block" class="pull-left">
+                                        <app-right-tooltip [toolTipText]="getToolTipText('group_configuration_add_group_5_mimo')"></app-right-tooltip>
+                                      </div>
+                                    </div>
+                                  </accordion-group>
+                                  <!-- <div class="form-group row">
+                                      <label class="col-md-2 col-form-label text-right">MCX Index/Data Rate</label>
+                                      <div class="col-lg-2 col-sm-11">
+                                          <select class="form-control" *ngIf="GroupRegForm.get('radio_5.wireless_mode').value=='2'" name="mcx_data_rate_2" formControlName="mcx_data_rate_2">
+                                                  <option *ngFor="let i of mode_11ac_5" value="{{i}}">{{i}}</option>
+                                          </select>
+                                          <select class="form-control" *ngIf="GroupRegForm.get('radio_5.wireless_mode').value=='1'" name="mcx_data_rate_2" formControlName="mcx_data_rate_2">
+                                                  <option *ngFor="let i of mode_11na_5" value="{{i}}">{{i}}</option>
+                                          </select>
+                                          <select class="form-control" *ngIf="GroupRegForm.get('radio_5.wireless_mode').value=='0'" name="mcx_data_rate_2" formControlName="mcx_data_rate_2">
+                                                  <option *ngFor="let i of mode_11a" value="{{i}}">{{i}}</option>
+                                          </select>
+                                      </div>
+                                  </div> -->
+                                  <!-- <div class="portlet-title radio_section">
+                                      <div  class="caption">
+                                          <span>Advanced</span>
+                                      </div>
+                                  </div> -->
+                                  <accordion-group>
+                                    <div accordion-heading> <span class="accordian-title">Advanced</span>  <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                    </div>
+                                    <div class="form-group row">
+                                      <label class="col-md-2 col-form-label text-right">Transmit Power</label>
+                                      <div class="col-lg-2 col-sm-11">
+                                        <select class="form-control" name="transmit_power" formControlName="transmit_power">
+                                          <option value="17">17dBm</option>
+                                          <option value="18">18dBm</option>
+                                          <option value="19">19dBm</option>
+                                          <option value="20">20dBm</option>
+                                          <option value="21">21dBm</option>
+                                          <option value="22">22dBm</option>
+                                          <option value="23">23dBm</option>
+                                        </select>
+                                      </div>
+                                      <div>
+                                        <app-right-tooltip [toolTipText]="getToolTipText('group_configuration_add_group_5_transmit_power')"></app-right-tooltip>
+                                      </div>
+                                      <!-- <div class="col-lg-3 col-sm-11">
+                                          <span class="char-limit">(dBm)</span>
+                                      </div> --></div>
+                                    <!-- <div class="form-group row">
+                                        <label class="col-md-2 col-form-label text-right">Guard Interval</label>
+                                        <div class="col-lg-2 col-sm-11">
+                                            <select class="form-control" name="guardInterval_2" formControlName="guardInterval_2">
+                                                <option value="auto">Auto</option>
+                                                <option value="short">Short</option>
+                                                <option value="long">Long</option>
+                                            </select>
+                                        </div>
+                                    </div> -->
+                                    <div class="form-group row">
+                                      <label class="col-md-2 col-form-label text-right">RTS Threshold</label>
+                                      <div class="col-lg-2 col-sm-11">
+                                        <input type="number" value="2347" class="form-control" name="rts_threshold" formControlName="rts_threshold" (keydown)="blockChar($event)">
+                                      </div>
+                                      <!--<div class="col-lg-2 col-sm-11">-->
+                                      <!--<span class="char-limit">(256-2347)</span>-->
+                                      <div>
+                                        <app-right-tooltip [toolTipText]="getToolTipText('group_configuration_add_group_5_rts_threshold')"></app-right-tooltip>
+                                      </div>
+                                      <!--</div>-->
+                                      <div *ngIf="GroupRegForm.get('radio_5.rts_threshold').invalid && (GroupRegForm.get('radio_5.rts_threshold').dirty || GroupRegForm.get('radio_5.rts_threshold').touched)" class="row" style="clear: both;">
+                                        <div class="col-md-2 col-form-label text-right"></div>
+                                        <div class="text-danger pull-left pull-custom" *ngIf="GroupRegForm.get('radio_5.rts_threshold').errors.required">RTS Threshold is required.</div>
+                                        <div class="text-danger pull-left pull-custom" *ngIf="GroupRegForm.get('radio_5.rts_threshold').errors.min || GroupRegForm.get('radio_5.rts_threshold').errors.max">Please enter a valid RTS Threshold.</div>
+                                      </div>
+                                    </div>
+                                    <div class="form-group row">
+                                      <label class="col-md-2 col-form-label text-right">Beacon Interval</label>
+                                      <div class="col-lg-2 col-sm-11">
+                                        <input type="number" value="100" class="form-control" name="beacon_interval" formControlName="beacon_interval" (keydown)="blockChar($event)">
+                                        <!--<div class="col-lg-2 col-sm-11">-->
+                                        <!--<span class="char-limit">(100-300 ms)</span>-->
+                                        <!--</div>-->
+                                        <div *ngIf="GroupRegForm.get('radio_5.beacon_interval').invalid && (GroupRegForm.get('radio_5.beacon_interval').dirty || GroupRegForm.get('radio_5.beacon_interval').touched)">
+                                          <div class="text-danger pull-left" *ngIf="GroupRegForm.get('radio_5.beacon_interval').errors.required">Beacon Interval is required.</div>
+                                          <div class="text-danger pull-left" *ngIf="GroupRegForm.get('radio_5.beacon_interval').errors.min || GroupRegForm.get('radio_5.beacon_interval').errors.max">Enter a valid Beacon Interval.</div>
+                                        </div>
+                                      </div>
+                                      <div>
+                                        <app-right-tooltip [toolTipText]="getToolTipText('group_configuration_add_group_5_beacon_interval')"></app-right-tooltip>
+                                      </div>
+                                    </div>
+                                    <div class="form-group row">
+                                      <label class="col-md-2 col-form-label text-right">DTIM Interval</label>
+                                      <div class="col-lg-2 col-sm-11">
+                                        <input type="number" value="3" class="form-control" name="dtim_interval" formControlName="dtim_interval" (keydown)="blockChar($event)">
+                                        <!--<div class="col-lg-2 col-sm-11">-->
+                                        <!--<span class="char-limit">(1-255)</span>-->
+                                        <!--</div>-->
+                                        <div *ngIf="GroupRegForm.get('radio_5.dtim_interval').invalid && (GroupRegForm.get('radio_5.dtim_interval').dirty || GroupRegForm.get('radio_5.dtim_interval').touched)">
+                                          <div class="text-danger pull-left" *ngIf="GroupRegForm.get('radio_5.dtim_interval').errors.required">DTIM Interval is required.</div>
+                                          <div class="text-danger pull-left" *ngIf="GroupRegForm.get('radio_5.dtim_interval').errors.min || GroupRegForm.get('radio_5.dtim_interval').errors.max">Enter a valid DTIM Interval.</div>
+                                        </div>
+                                      </div>
+                                      <div>
+                                        <app-right-tooltip [toolTipText]="getToolTipText('group_configuration_add_group_5_dtim_interval')"></app-right-tooltip>
+                                      </div>
+                                    </div>
+                                    <!-- <div class="form-group row">
+                                        <label class="col-md-2 col-form-label text-right">Broadcast/Multicast Rate Limit</label>
+                                        <div class="col-lg-1 col-sm-11">
+                                            <input type="number" value="50" class="form-control" name="broadcast_rate_2" formControlName="broadcast_rate_2">
+                                        </div>
+                                        <div class="col-lg-1 col-sm-11">
+                                            <span class="char-limit">(0-50)</span>
+                                        </div>
+                                        <div *ngIf="GroupRegForm.get('radio_5.broadcast_rate_2').invalid && (GroupRegForm.get('radio_5.broadcast_rate_2').dirty || GroupRegForm.get('radio_5.broadcast_rate_2').touched)" class="row" style="clear: both;">
+                                                <div class="col-md-2 col-form-label text-right"></div>
+                                                <div class="text-danger pull-left pull-custom" *ngIf="GroupRegForm.get('radio_5.broadcast_rate_2').errors.required">Broadcast/Multicast Rate Limit is required.</div>
+                                                <div class="text-danger pull-left pull-custom" *ngIf="GroupRegForm.get('radio_5.broadcast_rate_2').errors.min || GroupRegForm.get('radio_5.broadcast_rate_2').errors.max">Please enter a valid Broadcast/Multicast Rate Limit.</div>
+                                            </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-md-2 col-form-label text-right">Fixed Multicast Rate</label>
+                                        <div class="col-lg-2 col-sm-11">
+                                            <select class="form-control" name="fixed_multicast_rate_2" formControlName="fixed_multicast_rate_2">
+                                                <option *ngFor="let i of rate_2" value="{{i}}">{{i}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-md-2 col-form-label text-right">A-MPDU</label>
+                                        <div class="col-lg-1 col-sm-11">
+                                            <label class="switch">
+                                                <input type="checkbox" name="a_mpdu_2" formControlName="a_mpdu_2">
+                                                <span class="slider round">
+                                                    <i class="enable switch-status">Enable</i>
+                                                    <i class="disable switch-status">Disable</i>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div> -->
+                                    <!-- <div class="form-group row">
+                                        <label class="col-md-2 col-form-label text-right">Fragmentation</label>
+                                        <div class="col-lg-1 col-sm-11">
+                                            <label class="switch">
+                                                <input type="checkbox" name="fragmentation_threshold" formControlName="fragmentation_threshold">
+                                                <span class="slider round">
+                                                    <i class="enable switch-status">Enable</i>
+                                                    <i class="disable switch-status">Disable</i>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div> -->
+                                    <div class="form-group row">
+                                      <label class="col-md-2 col-form-label text-right">Fragmentation Threshold</label>
+                                      <div class="col-lg-2 col-sm-11">
+                                        <input type="number" value="3" class="form-control" name="fragmentation_threshold" formControlName="fragmentation_threshold" (keydown)="blockChar($event)">
+                                        <!--<div class="col-lg-2 col-sm-11">-->
+                                        <!--<span class="char-limit">(256-2346)</span>-->
+                                        <!--</div>-->
+                                        <div *ngIf="GroupRegForm.get('radio_5.fragmentation_threshold').invalid && (GroupRegForm.get('radio_5.fragmentation_threshold').dirty || GroupRegForm.get('radio_5.fragmentation_threshold').touched)">
+                                          <div class="text-danger pull-left" *ngIf="GroupRegForm.get('radio_5.fragmentation_threshold').errors.required">Threshold Interval is required.</div>
+                                          <div class="text-danger pull-left" *ngIf="GroupRegForm.get('radio_5.fragmentation_threshold').errors.min || GroupRegForm.get('radio_5.fragmentation_threshold').errors.max">Enter a valid Threshold value.</div>
+                                        </div>
+                                      </div>
+                                      <div>
+                                        <app-right-tooltip [toolTipText]="getToolTipText('group_configuration_add_group_5_fragmentation_threshold')"></app-right-tooltip>
+                                      </div>
+                                    </div>
+                                    <div class="form-group row">
+                                      <label class="col-md-2 col-form-label text-right">CTS</label>
+                                      <div class="col-lg-1 col-sm-11">
+                                        <label class="switch">
+                                          <input type="checkbox" name="cts_protection_mode" formControlName="cts_protection_mode"> <span class="slider round">
+                                                                                    <i class="enable switch-status">Enable</i>
+                                                                                    <i class="disable switch-status">Disable</i>
+                                                                                </span>
+                                        </label>
+                                      </div>
+                                      <div style="margin-left: 115px; display: inline-block" class="pull-left">
+                                        <app-right-tooltip [toolTipText]="getToolTipText('group_configuration_add_group_5_radio')"></app-right-tooltip>
+                                      </div>
+                                    </div>
+                                  </accordion-group>
+                                  <accordion-group class="secondTab">
+                                      <div accordion-heading> <span class="accordian-title">Load Balancing</span>  <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                      </div>
+                                      <div class="form-group row">
+                                        <label class="col-md-2 col-form-label text-right">Channel Utilization</label>
+                                        <div class="col-lg-1 col-sm-11">
+                                          <label class="switch">
+                                          <input type="checkbox" name="is_channel_util_enabled" id="is_channel_util_enabled" formControlName="is_channel_util_enabled">
+                                          <span class="slider round">
+                                            <i class="enable switch-status">Enable</i>
+                                            <i class="disable switch-status">Disable</i>
+                                          </span>
+                                          </label>
+                                        </div>
+                                        <div style="margin-left: 115px; display: inline-block" class="pull-left">
+                                        <app-right-tooltip [toolTipText]="getToolTipText('group_configuration_add_group_5_radio')"></app-right-tooltip>
+                                        </div>
+                                      </div>
+                                      <div class="form-group row" style="margin-top: 30px;" *ngIf="GroupRegForm.get('radio_5.is_channel_util_enabled').value == true">
+                                          <label class="col-md-2 col-form-label text-right"></label>
+                                          <div class="col-lg-2">
+                                              <div class="slidecontainer">
+                                                <p class="result-tip" [style.left.px]="20 + (2*GroupRegForm.get('radio_5.channel_util').value)">{{GroupRegForm.get('radio_5.channel_util').value}}</p>
+                                                  <input type="range" min="1" max="100"  class="range-slider" list="tickmarks1"  formControlName="channel_util">
+                                                    <datalist id="tickmarks1" class="ticklabel">
+                                                      <option value="1" label="1%" class="opt1">
+                                                      <option value="100" label="100%" class="opt2">
+                                                    </datalist>
+                                                </div>
+                                          </div>
+                                         
+                                        </div>
+                                        <div class="form-group row" style="margin-top: 30px;">
+                                            <label class="col-md-2 col-form-label text-right">Max client allowed</label>
+                                            <div class="col-lg-2">
+                                                <div class="slidecontainer">
+                                                    <p class="result-tip" [style.left.px]="20 + (3.2*GroupRegForm.get('radio_5.max_clients').value)">{{GroupRegForm.get('radio_5.max_clients').value}}</p>
+                                                    <input type="range" min="1" max="64"  class="range-slider"  list="tickmarks" formControlName="max_clients">
+                                                      <datalist id="tickmarks" class="ticklabel">
+                                                        <option value="1" label="1" class="opt1">
+                                                        <option value="64" label="64" class="opt2">
+                                                      </datalist>
+                                                  </div>
+                                            </div>
+                                           
+                                          </div>
+                                    
+                                    </accordion-group>
+                                </accordion>
+                                <div class="form-group row">
+                                  <!-- <div class="col-lg-6 col-sm-11 col-md-offset-4"> -->
+                                  <input type="button" (click)="checkNgoto('2_1')" value="Previous" class="btn btn-theme btn-large" style="margin-right: 15px;" *ngIf="add_group && !lastStepFlag">
+                                  <input type="button" (click)="formReset('btn')" value="Cancel" class="btn btn-cancel btn-large" style="margin-right: 15px;">
+                                  <!-- <input type="submit" [disabled]="!GroupRegForm.valid" value="Save" class="btn btn-theme btn-large" *ngIf="add_group"> -->
+                                  <input type="button" value="Next" [disabled]="!GroupRegForm.valid" class="btn btn-theme btn-large" *ngIf="add_group && !lastStepFlag" (click)="checkNgoto(3)">
+                                  <input type="button" [disabled]="!GroupRegForm.valid || btnDisable" value="Update" (click)="updateGroupInfo()" class="btn btn-theme btn-large" *ngIf="is_update_group">
+
+
+
+                                 
+                                  <input type="submit" [disabled]="!GroupRegForm.valid" value="Save" class="btn btn-theme btn-large" *ngIf="add_group && lastStepFlag">
+                                  <!-- </div> -->
+                                </div>
+                              </div>
+                            </tab>
+                          </tabset>
+                        </div>
+                        <!--Radio Tab END-->
+                      </div>
+                    </tab>
+                    <tab heading="SSID" (select)="clickSSIDTab()" [disabled]="(add_group && !lastStepFlag)  && !secondTabOk" [active]="secondTabOk">
+                        <div class="pull-right not-applicable-error" *ngIf="!ifRadio24Disabled && ifRadio5Disabled">* 2.4G radio is disabled for this group </div>
+                        <div class="pull-right not-applicable-error" *ngIf="ifRadio24Disabled && !ifRadio5Disabled">* 5G radio is disabled for this group </div>
+                        <div class="pull-right not-applicable-error" *ngIf="!ifRadio24Disabled && !ifRadio5Disabled">* Both 2.4G & 5G radios are disabled for this group </div>
+                      <div id="tab3" class="setting-tab active">
+                        <!--SSID Tab-->
+                        <div class="form-group row">
+                          <label class="col-md-2 col-form-label text-right">Assign SSID</label>
+                          <div class="col-lg-5 col-sm-11">
+                            <!-- <select name="assign-ssid" class="form-control" (change)="getSSID($event)">
+                                <option value="">Please Select SSID</option>
+                                <option *ngFor="let ssid of ssidArray | orderBy : 'ssid'" value="{{ssid.vapid}}">{{ssid.ssid}}</option>
+                            </select> -->
+                            <div class="form-group">
+                              <angular2-multiselect [data]="itemList | orderBy : 'itemName'" [settings]="settings" [(ngModel)]="selectedItems" [ngModelOptions]="{standalone: true}"></angular2-multiselect>
+                            </div>
+                          </div>
+                          <div class="col-lg-1 col-sm-11">
+                            <!-- <input type="button" class="btn btn-theme btn-add" value="ADD" (click)="addSSIDs($event)"> -->
+                            <button class="btn btn-theme  btn-add" (click)="addSSIDs($event)" type="button"> <i class="fa fa-plus fa-custom"></i>Add</button>
+                          </div>
+                        </div>
+                        <div class="tabcontent table-responsive" style="display: block; width: 100%;" *ngIf="ssid_list.length > 0 && show_ssid_list">
+                          <div class="portlet-title selectedSsid">
+                            <div class="caption"> <span>Selected SSID's</span>
+                            </div>
+                          </div>
+                          <div class="table-function">
+                            <ul class="table-function-right">
+                              <li class="pointer">
+                                <a (click)="deleteSSID()"> <i class="icon icon-rubbish-bin"></i> Delete</a>
+                              </li>
+                            </ul>
+                          </div>
+                          <table id="example" class="display theme table record_table table-striped table-sort text-center" cellspacing="0" width="100%" [mfData]="ssid_list" #mf2="mfDataTable">
+                            <thead>
+                            <tr class="table-head">
+                              <th>
+                                <label class="checkbox">
+                                  <input type="checkbox" (click)="selectAll($event)">
+                                  <div class="check"></div>
+                                </label>
+                              </th>
+                              <th class="text-left">
+                                <mfDefaultSorter by="ssid"> <span> SSID Name
+                                                                            <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='ssid' && _sortOrder=='asc' }"></i>
+                                                                            <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ssid' && _sortOrder=='desc' }"></i>
+                                                                        </span>
+                                </mfDefaultSorter>
+                              </th>
+                              <th class="text-center">2.4 GHz</th>
+                              <th class="text-center">5 GHz</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="table-body" *ngFor="let ssid of mf2.data">
+                              <td>
+                                <label class="checkbox">
+                                  <input type="checkbox" [checked]="ssid.is_select" (click)="selectSSID(ssid, $event)">
+                                  <div class="check"></div>
+                                </label>
+                              </td>
+                              <td class="text-left">{{ssid.ssid}}</td>
+                              <td>
+                                <label class="switch">
+                                  <input type="checkbox" [checked]="ssid.radio_24" [disabled]="!ssid.radio_5" (change)="changeTwo(ssid.vapid, $event)"> <span class="slider round"></span>
+                                  <span (click)="checkIsAble(ssid.radio_5,5)" class="btn-behind"></span>
+                                </label>
+                              </td>
+                              <td>
+                                <label class="switch">
+                                  <input type="checkbox" [checked]="ssid.radio_5" [disabled]="!ssid.radio_24" (change)="changeFive(ssid.vapid, $event)"> <span class="slider round"></span>
+                                  <span (click)="checkIsAble(ssid.radio_24,2)" class="btn-behind"></span>
+                                </label>
+                              </td>
+                            </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <div class="form-group row m40">
+                          <!-- <div class="col-lg-5 col-sm-11 col-md-offset-4"> -->
+                          <!-- <input type="button" (click)="checkNgoto('2_3')" value="Previous" class="btn btn-theme btn-large" style="margin-right: 15px;" *ngIf="add_group && !lastStepFlag"> -->
+                          <input type="button" (click)="formReset('btn')" value="Cancel" class="btn btn-cancel btn-large" style="margin-right: 15px;">
+                          <input type="submit" [disabled]="!GroupRegForm.valid" value="Save" class="btn btn-theme btn-large" *ngIf="add_group">
+                          <input type="button" [disabled]="!GroupRegForm.valid || btnDisable" value="Update" (click)="updateGroupInfo()" class="btn btn-theme btn-large" *ngIf="is_update_group">
+                          <!-- </div> -->
+                        </div>
+                        <!--SSID Tab END-->
+                      </div>
+                    </tab>
+                  </tabset>
+                </div>
+              </div>
+            </div>
+            <!--TAB END-->
+          </div>
+        </div>
+        <!-- /portlet-->
+      </div>
+    </div>
+    <!-- <div class="row" *ngIf="ssid_list?.length > 0 && show_ssid_list">
+        <div class="col-lg-12 col-sm-12">
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <span>{{GroupRegForm.get('group_name').value}}</span>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="tabcontent table-responsive" style="display: block; width: 100%;">
+                        <div class="table-function">
+                            <ul class="table-function-right">
+                                <li class="pointer" [ngClass]="{'disabled': selectedAllssid==true}">
+                                    <a (click)="deleteSSID()" [ngClass]="{'disabled': selectedAllssid==true}">
+                                        <i class="icon icon-rubbish-bin"></i> Delete</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <table id="example" class="display theme table record_table table-striped table-sort text-center" cellspacing="0" width="100%" [mfData]="ssid_list" #mf2="mfDataTable">
+                            <thead>
+                                <tr class="table-head">
+                                    <th>
+                                        <label class="checkbox">
+                                            <input type="checkbox" (click)="selectAll($event)">
+                                            <div class="check"></div>
+                                        </label>
+                                    </th>
+                                    <th class="text-left">
+                                        <mfDefaultSorter by="ssid">
+                                            <span> SSID Name
+                                                <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': _sortBy=='ssid' && _sortOrder=='asc' }"></i>
+                                                <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': _sortBy=='ssid' && _sortOrder=='desc' }"></i>
+                                            </span>
+                                        </mfDefaultSorter>
+                                    </th>
+                                    <th class="text-center">2.4 GHz</th>
+                                    <th class="text-center">5 GHz</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="table-body" *ngFor="let ssid of mf2.data">
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" [checked]="ssid.is_select" (click)="selectSSID(ssid, $event)">
+                                            <div class="check"></div>
+                                        </label>
+                                    </td>
+                                    <td class="text-left">{{ssid.ssid}}</td>
+                                    <td>
+                                        <label class="switch">
+                                            <input type="checkbox" [checked]="ssid.radio_24" [disabled]="!ssid.radio_5" (change)="changeTwo(ssid.vapid, $event)">
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <label class="switch">
+                                            <input type="checkbox" [checked]="ssid.radio_5" [disabled]="!ssid.radio_24" (change)="changeFive(ssid.vapid, $event)">
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                        <div class="form-group row">
+                            <div class="col-lg-6 col-sm-11 col-md-offset-4">
+                                <input type="button" (click)="formReset('btn')" value="Cancel" class="btn btn-cancel btn-large" style="margin-right: 15px;">
+                                <input type="submit" [disabled]="!GroupRegForm.valid" value="Save" class="btn btn-theme btn-large" *ngIf="add_group">
+                                <input type="button" [disabled]="!GroupRegForm.valid || btnDisable" value="Update" (click)="updateGroupInfo()" class="btn btn-theme btn-large"
+                                    *ngIf="is_update_group">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div> -->
+    <!-- <input type="text" name="radio_2_4" formControlName="radio_2_4">
+    <input type="text" name="radio5" formControlName="radio_5"> -->
+  </form>
+  <div *ngIf="isModalShown" [config]="{ show: true }" (onHidden)="onHidden()" bsModal #autoShownModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-body"> <i class="fa fa-exclamation-triangle error-icon"></i>
+          <p class="error-modal-p1">{{errorMsg}}</p>
+          <!-- <p class="error-modal-p2">{{errorMsg}}</p> -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-blank" (click)="hideModal()">Dismiss</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--/===/WORK AREA END/===/-->

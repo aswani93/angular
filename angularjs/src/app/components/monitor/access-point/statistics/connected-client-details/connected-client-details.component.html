@@ -1,0 +1,96 @@
+<div class="stats-head" *ngIf="clientDetails">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="portlet light head">
+        <div class="portlet-title">
+          <div class="pull-left back-btn">
+            <a href="javascript:void(0)" class="btn" (click)="goback()">
+              <i class="icon icon-left-arrow-1"></i>
+            </a>
+          </div>
+          <div class="caption">
+            <i class="icon icon-smartphone-call"></i> <span class="text-bold">Client Name</span>
+          </div>
+          <!-- <div class="text-right pull-right">
+              <div class="dropdown scrollableList graph btn btn-theme-inverse rounded">
+                  <a href="#" class="dropdown-toggle selectedOption" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">View <i class="icon icon-arrow-point-to-down"></i></a>
+                  <div class="dropdown-menu this-list" aria-labelledby="dropdownMenuButton">
+                      <ul>
+                          <li><a class="dropdown-item" href="#">Graphical View</a></li>
+                          <li><a class="dropdown-item" href="#">Table View</a></li>
+                      </ul>
+                  </div>
+              </div>
+          </div>            -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /stats-head -->
+<div class="stats-body table-view" *ngIf="clientDetails">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="portlet light">
+        <div class="portlet-body">
+          <table class="display theme record_table table table-striped table-sort table-param" cellspacing="0"
+                 width="70%" style="width: 70%; margin-bottom: 0;">
+            <tbody>
+            <tr>
+              <th class="border-bottom">Client Name</th>
+              <td width="10%">&nbsp;</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <th class="border-bottom">MAC Address</th>
+              <td width="10%">&nbsp;</td>
+              <td>{{clientDetails.client_mac}}</td>
+            </tr>
+            <tr>
+              <th class="border-bottom">IP Address</th>
+              <td width="10%"> &nbsp;</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <th class="border-bottom">Connected SSID Name</th>
+              <td width="10%">&nbsp;</td>
+              <td>{{clientDetails.vap_name}}</td>
+            </tr>
+            <tr>
+              <th class="border-bottom">Connected AP Name</th>
+              <td width="10%"></td>
+              <td>{{clientDetails.ap_name}}</td>
+            </tr>
+            <tr>
+              <th class="border-bottom">Connected Group Name</th>
+              <td width="10%"></td>
+              <td>{{clientDetails.group_name}}</td>
+            </tr>
+            <tr>
+              <th class="border-bottom">Total Uplink</th>
+              <td width="10%">&nbsp;</td>
+              <td>{{clientDetails.tx}}</td>
+            </tr>
+            <tr>
+              <th class="border-bottom">Total Downlink</th>
+              <td width="10%">&nbsp;</td>
+              <td>{{clientDetails.rx}}</td>
+            </tr>
+            <tr>
+              <th class="border-bottom">RSSI</th>
+              <td width="10%">&nbsp;</td>
+              <td>{{clientDetails.rssi}}</td>
+            </tr>
+            <tr>
+              <th>Online Time</th>
+              <td width="10%">&nbsp;</td>
+              <td class="status"> {{clientDetails.online_time}}
+                <!-- <span class="online">Online</span> -->
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /stats-body/table-view-->
