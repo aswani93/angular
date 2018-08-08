@@ -1,0 +1,14 @@
+<app-header></app-header>
+<h3>Login</h3>
+<form [formGroup]="loginForm" (ngSubmit)="submitForm()">
+
+  <div>
+   <div> <label>Username<input formControlName="username" ></label>
+  
+  <span *ngIf="loginForm.get('username').invalid && loginForm.get('username').touched">Username cant be empty</span></div>
+  <div><label>Password<input formControlName="password" type="password"></label>
+    <span *ngIf="loginForm.get('password').invalid && loginForm.get('password').touched">Password must be more than 7 character</span></div>
+<div> <input type="submit" value="submit" [disabled]=!loginForm.valid ></div>
+<span *ngIf="error === 1">No user exist</span>
+  </div>
+</form>  

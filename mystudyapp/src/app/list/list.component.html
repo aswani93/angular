@@ -1,0 +1,11 @@
+<app-innerheader></app-innerheader>
+<ul *ngIf ="status; then thenblock else elseblock ">
+  <ng-template #thenblock>
+  <li *ngFor="let list of List">{{list.question}} <input type="button" (click)="readMore(list.id)" value="ReadMore"/></li>
+</ng-template>
+<ng-template #elseblock>
+ <li>Loading...</li>
+</ng-template>
+
+</ul>
+
