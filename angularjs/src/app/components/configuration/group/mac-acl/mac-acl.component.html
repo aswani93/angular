@@ -157,7 +157,7 @@
                   <div class="form-group row">
                       <label class="col-md-2 col-form-label text-right">ACL Profile Name</label>
                       <div class="col-lg-5 col-sm-11">
-                          <input type="text" class="form-control" formControlName="mac_acl_profile_name" id="mac_acl_profile_name">
+                          <input type="text" class="form-control" formControlName="mac_acl_profile_name" id="mac_acl_profile_name" (keyup)=EditChangeName()>
                           <div *ngIf="macForm.get('mac_acl_profile_name').invalid && (macForm.get('mac_acl_profile_name').dirty || macForm.get('mac_acl_profile_name').touched)">
                             <div class="text-danger pull-left" *ngIf="macForm.get('mac_acl_profile_name').errors.required">Name is required.</div>
                             <div class="text-danger pull-left" *ngIf="macForm.get('mac_acl_profile_name').errors.minlength && !macForm.get('mac_acl_profile_name').errors.pattern">Minimum 2 character</div>
@@ -190,11 +190,11 @@
                               Browse <input type="file" hidden formControlName="fileBrowse" id="fileBrowse"  (change)="FileChange($event)">
                           </label>
                       </div>
-                      <div>
-                        <app-right-tooltip [toolTipText]="getToolTipText('group_macacl_configuration_add_mac_File_upload')"></app-right-tooltip>
-                      </div>
                       <div class="col-lg-3 col-sm-11">
-                          <a href="assets/images/macs.txt" download class="char-limit">Download Sample</a>
+                          <div>
+                              <app-right-tooltip [toolTipText]="getToolTipText('group_macacl_configuration_add_mac_File_upload')"></app-right-tooltip>
+                            </div>
+                          <a href="assets/images/macs.txt" download class="char-limit">&nbsp;Download Sample</a>
                       </div>
                   </div>
                   <div class="form-group row" [hidden]=true>
@@ -249,7 +249,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="table-responsive">
-                            <div class="table-function">&nbsp;</div>
+                            <div class="table-function" style="margin-bottom: 0px!important">&nbsp;</div>
                             <table id="example" class="display theme table record_table table-striped table-sort text-center" cellspacing="0" width="100%">
                                 <thead>
                                     <tr class="table-head">
@@ -289,7 +289,7 @@
                       <div class="col-lg-6 col-md-offset-3 text-center">
                           <input type="button" value="Reset" class="btn btn-cancel btn-large" style="margin-right: 15px;" (click)=" resetAddProfile()" >
                           <input type="button" [hidden]=isEdit (click)="SaveProfile()" value="Save" class="btn btn-theme btn-large" [disabled]="(macForm.get('mac_acl_profile_name').status == 'INVALID')" >
-                          <input type="button"  [hidden]=!isEdit (click)="SaveProfile()" value="Update" class="btn btn-theme btn-large" [disabled]="(macForm.get('mac_acl_profile_name').status == 'INVALID')" >
+                          <input type="button"  [hidden]=!isEdit (click)="SaveProfile()" value="Update" class="btn btn-theme btn-large" [disabled]="!(isEditEnable)">
                       </div>
                   </div>
               </div>

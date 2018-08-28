@@ -34,12 +34,12 @@
                                     
                                 </li>
                                 <li>
-                                    <a href="#"><i class="icon icon-cancel"></i></a>
+                                    <a href="javascript:void(0)" (click)="delete(9)"><i class="icon icon-cancel"></i></a>
                                 </li>
                             </ul>
                         </div>
                     </div>
-                    <div class="portlet-body clientsSsid">
+                    <div class="portlet-body clientssid">
                         <div style="height: 240px;" [chart]="clientsSsid" *ngIf="chartBoolStatus"></div>
                          <!--<div style="height: 250px;" id="clientsSsid"></div>-->
                          <div style="height: 240px;" *ngIf="!chartBoolStatus"><p class="no-data" style="font-size: 13px;">No clients connected to the SSID</p></div>
@@ -54,6 +54,6 @@
                  
 </app-modal-dialog>
 
-<app-modal-setting [visible]="showDialogsetting" (visibleDisable)="closeSettingPopup($event)" [headerName]="titleText"  [autoRefresh]="initialtimerInterval" (modelSettingFun)="modelSettingFun($event)">
+<app-modal-setting [visible]="showDialogsetting" (visibleDisable)="closeSettingPopup($event)" [headerName]="titleText"  [autoRefresh]="initialtimerInterval" (modelSettingFun)="modelSettingFun($event)" [SSIDData]="SSIDdata">
 
  </app-modal-setting>

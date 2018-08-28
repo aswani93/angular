@@ -106,7 +106,7 @@ export class SsidConfigComponent implements OnInit {
     });
     this.loadData();
     this.generateForm();
-
+    this.updateMobility(this.ssidForm.get('is_l2_roaming_enabled').value);
    // window.addEventListener('scroll', this.scroll, true); //third parameter
   }
 
@@ -115,7 +115,7 @@ export class SsidConfigComponent implements OnInit {
       'ssid': new FormControl('', [
         Validators.required,
         Validators.minLength(2),
-        Validators.maxLength(25),
+        Validators.maxLength(32),
         this.noSpaceatStart,
         this.noSpaceatend,
         this.noSpecialCharatStart,
@@ -145,6 +145,10 @@ export class SsidConfigComponent implements OnInit {
         Validators.required
 
       ]),
+      'is_l2_roaming_enabled': new FormControl(true, [
+        Validators.required
+      ]),
+      'mobility_domain': new FormControl(0),
       'l3_roaming': new FormControl(true, [
         Validators.required
       ]),
@@ -167,7 +171,15 @@ export class SsidConfigComponent implements OnInit {
       'mac_acl_type': new FormControl('0'),
       'mac_acl_id': new FormControl(null),
       'mac_acl_policy': new FormControl(true),
-      'is_pmf_enabled': new FormControl(false)
+      'is_pmf_enabled': new FormControl(true),
+      'upload_rate_limit_in_mbps': new FormControl(1,[ 
+        Validators.min(1),
+        Validators.max(1024)
+      ]),
+      'download_rate_limit_in_mbps': new FormControl(1,[ 
+        Validators.min(1),
+        Validators.max(1024)
+      ]),
     });
   }
   public ValidNumbers(control: FormControl) {
@@ -235,10 +247,10 @@ export class SsidConfigComponent implements OnInit {
       this.ssidForm.get('passphrase').clearValidators();
       this.ssidForm.get('passphrase').setValue(null);
     } else {
-      this.ssidForm.get('passphrase').setValidators([
+        this.ssidForm.get('passphrase').setValidators([
         Validators.required,
         Validators.minLength(8),
-        Validators.maxLength(64),
+        Validators.maxLength(63),
         this.noSpaceatStart, this.noEmoji]);
         this.ssidForm.get('passphrase').setValue(this.addFlag ? 'password' : this.auth_type_copy == val ? this.passphrase_copy : 'password');
 
@@ -398,18 +410,43 @@ export class SsidConfigComponent implements OnInit {
     }).catch((error) => {
       this.notifyPopup.logoutpop(commonMessages.InternalserverError);
     });
+
+    this.resetVal();
+  }
+  onMacAclChange(value){
+    if(value == '1'){
+      this.getMacAclDetails();
+
+      this.ssidForm.get('mac_acl_id').setValidators([
+        this.selectOne
+      ]);
+      if(!this.editFlag || this.ssidForm.get('mac_acl_id').value == '00000000-0000-0000-0000-000000000000'){
+        this.ssidForm.get('mac_acl_id').setValue('-1');
+      }
+      
+    }else{
+      
+      this.ssidForm.get('mac_acl_id').clearValidators();
+      this.ssidForm.get('mac_acl_id').setValue(null);
+    }
+  }
+  getMacAclDetails(){
     this._service.getWeb('configurations/mac-acl-group/?from=ssid', '', '').then(data => {
       if (data) {
-        this.macAclArr = [];
-        for(let i of data.result){
-          let macdet = {
-            "mac_acl_profile_id": i.mac_acl_profile_id,
-            "mac_acl_profile_name": i.mac_acl_profile_name,
+        if( data.result.length == 0){
+          this.notifyPopup.error('MAC ACL Profile is not configured. Please create at least one profile')
+        }else{
+          this.macAclArr = [];
+          for(let i of data.result){
+            let macdet = {
+              "mac_acl_profile_id": i.mac_acl_profile_id,
+              "mac_acl_profile_name": i.mac_acl_profile_name,
+            }
+            this.macAclArr.push(macdet);
+            
           }
-          this.macAclArr.push(macdet);
-          console.log(this.macAclArr[0].mac_acl_profile_id);
-          this.ssidForm.get('mac_acl_id').setValue(this.macAclArr[0].mac_acl_profile_id);
         }
+       
 
 
       }else{
@@ -421,8 +458,6 @@ export class SsidConfigComponent implements OnInit {
     }).catch((error) => {
       this.notifyPopup.logoutpop(commonMessages.InternalserverError);
     });
-
-    this.resetVal();
   }
 
   public timeOut;
@@ -432,6 +467,7 @@ export class SsidConfigComponent implements OnInit {
       this.ssidForm.get('broadcastssid').setValue(this.ssidForm.get('broadcastssid').value ? 1 : 0);
       this.ssidForm.get('vap_enable').setValue(this.ssidForm.get('vap_enable').value ? 1 : 0);
       this.ssidForm.get('l3_roaming').setValue(this.ssidForm.get('l3_roaming').value ? 1 : 0);
+      this.ssidForm.get('is_l2_roaming_enabled').setValue(this.ssidForm.get('is_l2_roaming_enabled').value ? 1 : 0);
       this.ssidForm.get('band_steering').setValue(this.ssidForm.get('band_steering').value ? 1 : 0);
       this.ssidForm.get('authtype').setValue(parseInt(this.ssidForm.get('authtype').value));
       this.ssidForm.get('rssi_threshold').setValue(parseInt(this.ssidForm.get('rssi_threshold').value));
@@ -463,7 +499,10 @@ export class SsidConfigComponent implements OnInit {
           }else{
           this.notifyPopup.error(commonMessages.ssid_failed);
           //this.loadData();
-          this.formReset();
+          setTimeout(() => {
+            this.formReset();
+          }, 3000);
+         
           }
 
         }
@@ -483,6 +522,7 @@ export class SsidConfigComponent implements OnInit {
     this.isChecked = false;
     this.unchekAll();
     this.selectedVapArray = [];
+    this.updateMobility(this.ssidForm.get('is_l2_roaming_enabled').value);
     clearTimeout(this.timeOut);
   }
 
@@ -625,6 +665,7 @@ export class SsidConfigComponent implements OnInit {
           res.broadcastssid = data.result.broadcastssid == 1 ? true : false;
           res.vap_enable = data.result.vap_enable == 1 ? true : false;
           res.l3_roaming = data.result.l3_roaming == 1 ? true : false;
+          res.is_l2_roaming_enabled = data.result.is_l2_roaming_enabled == 1 ? true : false;
           res.band_steering = data.result.band_steering == 1 ? true : false;
           res.authtype = data.result.authtype.toString();
           res.vlan_id = data.result.vlan_id.toString();
@@ -636,6 +677,8 @@ export class SsidConfigComponent implements OnInit {
           res.mac_acl_policy = data.result.mac_acl_policy == 1 ? true : false;
          // res.is_wmm_enabled = data.result.is_wmm_enabled == 1 ? true : false;
           res.is_pmf_enabled = data.result.is_pmf_enabled == 1 ? true : false;
+          this.onMacAclChange(res.mac_acl_type);
+          this.updateMobility(res.is_l2_roaming_enabled);
           if(res.authtype == '5' || res.authtype == 5){
             //this.getaaaDetails();
 
@@ -667,14 +710,14 @@ export class SsidConfigComponent implements OnInit {
           //res.rssi_threshold = data.result.rssi_threshold.toString();
 
           this.editArray = res;
-          console.log(this.editArray)
+          //console.log(this.editArray)
 
           this.ssidForm.setValue(res);
           if (res.authtype == 0 || res.authtype == '0' || res.authtype == '5' || res.authtype == 5) {
             this.ssidForm.get('passphrase').clearValidators();
             // this.ssidForm.get('passphrase').setValue(null);
           } else {
-            this.ssidForm.get('passphrase').setValidators([Validators.required, Validators.minLength(8), Validators.maxLength(64), this.noSpaceatStart, this.noEmoji]);
+            this.ssidForm.get('passphrase').setValidators([Validators.required, Validators.minLength(8), Validators.maxLength(63), this.noSpaceatStart, this.noEmoji]);
           }
           this.auth_type_copy = res.authtype;
           this.passphrase_copy = res.passphrase;
@@ -809,7 +852,7 @@ export class SsidConfigComponent implements OnInit {
               this.ssidForm.value[key] = -parseInt(this.ssidForm.value[key]);
             }
           }
-          if (key == 'l3_roaming' || key == 'broadcastssid' || key == 'vap_enable' || key == 'band_steering' || key == 'is_wmm_enabled' || key == 'is_wmm_power_save_enabled' || key == 'is_pmf_enabled') {
+          if (key == 'l3_roaming' || key == 'is_l2_roaming_enabled' || key == 'broadcastssid' || key == 'vap_enable' || key == 'band_steering' || key == 'is_wmm_enabled' || key == 'is_wmm_power_save_enabled' || key == 'is_pmf_enabled') {
             this.ssidForm.value[key] = this.ssidForm.value[key] == true ? 1 : 0;
           }
           if (key == 'mac_acl_policy') {
@@ -823,7 +866,15 @@ export class SsidConfigComponent implements OnInit {
             }
 
           }
-
+          if(key == 'mac_acl_id' || key == 'mac_acl_type'){
+            //Added for this reqiurement [HFCIWLCD-1577]- when select profile_id set policy as required or send default value while updatingmac_acl_id
+            if(this.ssidForm.value['mac_acl_policy'] == '1'){
+              newJson['mac_acl_id'] = this.ssidForm.value['mac_acl_id'];
+              newJson['mac_acl_policy'] = this.ssidForm.value['mac_acl_policy'] == true ? 1 : 2;
+            }
+            
+          }
+          console.log(newJson);
           newJson[key] = this.ssidForm.value[key];
         }
       }
@@ -933,6 +984,18 @@ export class SsidConfigComponent implements OnInit {
     //console.log(this.groupdetailArr);
     this.notifyPopup.details(this.groupdetailArr);
     return false;
+  }
+  updateMobility(status){
+    if(status == true){
+      this.ssidForm.get('mobility_domain').setValidators([
+        Validators.required,
+        Validators.min(0),
+        Validators.max(65535)
+      ]);
+    }else{
+      this.ssidForm.get('mobility_domain').clearValidators();
+      //this.ssidForm.get('mobility_domain').setValue('');
+    }
   }
 
   getToolTipText(fieldId: string) {

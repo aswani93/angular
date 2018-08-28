@@ -1,2 +1,44 @@
 <div [chart]="chart" *ngIf="noDataMsg ==''"></div>
 <p class="no-data">{{noDataMsg}}</p> 
+
+<div *ngIf="apSelected">
+    <div class="modal-dialog" style="margin-top: -30%">
+        <div class="modal-content">
+            <div class="ap-modal-body" style="height: 100%;padding:auto">
+                <i class="icon icon-router-signal fa-4x" style="color: #5cb85c"></i>
+                <div class="row" style="margin-bottom: 15px">
+                    <div class="col-sm-12">
+                        APs at <strong>{{selectedTime}}</strong> 
+                    </div>
+                </div>
+                <div class="row" style="display: flex">
+                    <div    *ngIf="apData.online_ap.length > 0"
+                            class="col-md" 
+                            style="flex:100%;padding-left: 10px">
+                        <h4 style="color:#5cb85c">Online APs</h4>
+                        <div class="vertical-menu" >
+                            <a *ngFor="let ap of apData.online_ap">{{ap.ap_name}}</a>
+                        </div>
+                    </div>
+                    <div    *ngIf="apData.offline_ap.length > 0"
+                            class="col-md" 
+                            style="flex:100%;padding-left: 10px" >
+                        <h4 style="color:red">Offline APs</h4>
+                        <div class="vertical-menu" >
+                            <a *ngFor="let ap of apData.offline_ap">{{ap.ap_name}}</a>
+                        </div>
+                    </div>
+                </div> 
+                <div class="row"></div>
+
+                
+
+                
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn dismiss-popup" (click)="removeAlert(alert)">Dismiss</button>
+            </div>
+        </div>
+    </div>
+</div>

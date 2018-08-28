@@ -231,7 +231,7 @@ export class AaaServerComponent implements OnInit, AfterViewInit, OnDestroy {
     this.aaaServerForm.controls['secondary_aaa'].disable();
     this.aaaServerForm.get('primary_aaa').statusChanges.subscribe(val => {
       this.checkAnyUpdate();
-      console.log(`status of Primary Server ${val}`);
+     // console.log(`status of Primary Server ${val}`);
       if (val === 'VALID') {
         this.aaaServerForm.controls['secondary_aaa'].enable();
       } else {
@@ -246,16 +246,16 @@ export class AaaServerComponent implements OnInit, AfterViewInit, OnDestroy {
       // console.log(this.editArray);
       // console.log(this.aaaServerForm.value);
       this.btnDisablex = true;
-      console.log('is primary-aaa invalid', this.aaaServerForm.get('primary_aaa').invalid);
-      console.log('is server-name invalid', this.aaaServerForm.get('server_name').invalid);
-      console.log('is btndisable', this.btnDisable);
-      console.log('same object');
+    //  console.log('is primary-aaa invalid', this.aaaServerForm.get('primary_aaa').invalid);
+    //  console.log('is server-name invalid', this.aaaServerForm.get('server_name').invalid);
+    //  console.log('is btndisable', this.btnDisable);
+    //  console.log('same object');
     } else {
       this.btnDisablex = false;
-      console.log('is primary-aaa invalid', this.aaaServerForm.get('primary_aaa').invalid);
-      console.log('is server-name invalid', this.aaaServerForm.get('server_name').invalid);
-      console.log('is btndisable', this.btnDisable);
-      console.log('differnce');
+    //  console.log('is primary-aaa invalid', this.aaaServerForm.get('primary_aaa').invalid);
+    //  console.log('is server-name invalid', this.aaaServerForm.get('server_name').invalid);
+    //  console.log('is btndisable', this.btnDisable);
+    //  console.log('differnce');
 
     }
     this.scrollHelper.scrollToFirst('detailArea');
@@ -458,6 +458,17 @@ export class AaaServerComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
   }
+
+  blockAllChar(event) {
+    return (event.ctrlKey || event.altKey
+      || (47 < event.keyCode && event.keyCode < 58 && event.shiftKey == false)
+      || (95 < event.keyCode && event.keyCode < 106)
+      || (event.keyCode == 8) || (event.keyCode == 9)
+      || (event.keyCode > 34 && event.keyCode <= 40)
+      || (event.keyCode == 46));
+
+  }
+
 
   checkboxClick(eventObject, aaaServer) {
     eventObject.stopPropagation();

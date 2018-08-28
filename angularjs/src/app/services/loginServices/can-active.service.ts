@@ -11,7 +11,6 @@ export class CanActiveService implements CanActivate {
 
   canActivate() {
     this.notifyPopup.hideLoader('');
-    const vrrp_configured = sessionStorage.getItem('vrrp_configured') === 'true' ? true : false;
     if (sessionStorage.getItem('token')) {
       return true;
     }

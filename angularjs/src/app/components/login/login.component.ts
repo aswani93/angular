@@ -69,6 +69,7 @@ export class LoginComponent implements OnInit {
             sessionStorage.setItem('wlc_ip', this.apiResponsePost.wlc_ip);
             sessionStorage.setItem('netmask_wlc', this.apiResponsePost.netmask_wlc);
             sessionStorage.setItem('netmask_vrrp', this.apiResponsePost.netmask_vrrp);
+            sessionStorage.setItem('username',this.apiResponsePost.username);
             this.router.navigate(['/dashboard']);
             this.elRef.nativeElement.ownerDocument.body.style.background = '';
           } else {

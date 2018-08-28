@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Http, Headers, RequestOptions, URLSearchParams, Response} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import {commonUrl} from '../urls/common-url';
-import {HttpClient, HttpRequest} from '@angular/common/http';
+import {HttpClient, HttpRequest,HttpHeaders} from '@angular/common/http';
 import {NotificationService, commonMessages} from '../../services/notificationService/NotificationService';
 
 
@@ -162,6 +162,17 @@ export class WebserviceService {
         );
     });
   }
+  public postWebFilesWithprogress(url: string, body: FormData): any {
+      const req = new HttpRequest('POST', commonUrl.dynamicapi + url, body,{
+        headers: new HttpHeaders({ 'authorization': sessionStorage.getItem('token') }),
+        reportProgress: true,        
+        withCredentials: true
+      });
+      
+      return this.httpClient.request(req);
+    
+   
+  }
 
   public postFiles(url: string, params: FormData) {
     let body = JSON.stringify(params);
@@ -171,6 +182,11 @@ export class WebserviceService {
     headers.set('Authorization', token);
     let options = new RequestOptions({headers: headers, withCredentials: true});
     return this.postWebFiles(url, params, options);
+  }
+  public postFilesProgress(url: string, params: FormData) {
+    let body = JSON.stringify(params);
+   
+    return this.postWebFilesWithprogress(url, params);
   }
 
   public handleError(error: any) {

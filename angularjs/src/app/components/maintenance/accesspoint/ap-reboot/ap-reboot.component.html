@@ -1,13 +1,6 @@
 <!--/======================/WORK AREA/======================/-->
 <div class="page-content-wrapper">
-  <!-- <div class="row">
-    <div class="col-lg-5 col-sm-12">
-        <div class="searchBar">
-            <i class="icon icon-magnifying-glass"></i>
-            <input type="text" placeholder="Search">
-        </div>
-    </div>
-</div> -->
+
   <form action="" (keydown.enter)="$event.preventDefault()" [formGroup]="rogueAPForm">
     <div class="row">
       <div class="col-lg-12 col-sm-12">
@@ -34,26 +27,8 @@
                     </li>
                   </ul>
                   <ul class="table-function-right">
-                    <!-- <li class="posreltive">
-                        <a class="dropdown-toggle" id="dropdownPopup" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">Filter columns
-                            <i aria-hidden="true" class="fa fa-chevron-down"></i>
-                        </a>
-
-                        <div class="drop-checkbox dropdown-menu" aria-labelledby="dropdownPopup" (click)="holdPopup($event)">
-                            <ul>
-                                <li class="dropdown-item" *ngFor="let i of coloumsObjects;let index = index">
-                                    <label class="checkbox">
-                                        <input class="register-check" type="checkbox" checked="i.checked" (change)="selectColoums($event,index)" [disabled]="count == 4 && i.checked == true">
-                                        <div class="check"></div>
-                                        <span class="check-label">{{i.name}}</span>
-                                    </label>
-                                </li>
-
-                            </ul>
-                        </div>
-                    </li> -->
                     <li>
-                      <a href="javascript:void(0);" class="disable-selection" (click)="rebootAP()" id="reboot-btn">
+                      <a href="javascript:void(0);" class="disable-selection" (click)="onSubmit()" id="reboot-btn">
                         <span class="glyphicon glyphicon-off"></span> Reboot </a>
                     </li>
                   </ul>
@@ -149,7 +124,7 @@
                   <!--<tr class="table-body" *ngFor="let item of mf.data;let activeIndex = index;"-->
                   <!--(dblclick)="double_click_event($event,item,activeIndex)">-->
 
-                  <tr class="table-body" *ngFor="let item of mf.data;let activeIndex = index;">
+                  <tr class="table-body" *ngFor="let item of mf.data | paginate: {itemsPerPage: rowsOnPage , currentPage: page} ;let activeIndex = index;">
 
                     <td>
                       <label class="checkbox">
@@ -187,10 +162,25 @@
                       <div class="entry-count text-left" style="float:left;">
                         <span>Showing {{showingfrom}} to {{showingto}} of {{dataLength}} entries</span>
                       </div>
-                      <div class="list-pagination" style="float:right;">
 
-                        <mfBootstrapPaginator></mfBootstrapPaginator>
-                      </div>
+                      <div class="cpagination">
+                            <span *ngIf="data  && data.length > rowsOnPage" [class.button-disabled]="firstarrowStatus"
+                                  class="first" (click)="goToPage(1)"><<</span>
+                        <pagination-controls (pageChange)="getNext($event)" maxSize="9"
+                                             directionLinks="true"
+                                             autoHide="true"
+                                             previousLabel=""
+                                             nextLabel=""
+                                             screenReaderPaginationLabel="Pagination"
+                                             screenReaderPageLabel="page"
+                        ></pagination-controls>
+                        <span *ngIf="data && data.length > rowsOnPage" [class.button-disabled]="lastarrowStatus"
+                              class="last" (click)="goToPage(Math.ceil(data.length/rowsOnPage))">>></span></div>
+
+                      <!--<div class="list-pagination" style="float:right;">-->
+
+                        <!--<mfBootstrapPaginator></mfBootstrapPaginator>-->
+                      <!--</div>-->
                     </td>
                   </tr>
 
@@ -200,171 +190,6 @@
               <!-- /list-out-->
             </div>
           </div>
-        </div>
-        <!-- /portlet-->
-        <!-- <div class="row" *ngIf="false">
-            <div class="col-md-12">
-                <div class="portlet light head">
-                    <div class="portlet-title">
-                        <div class="caption">
-                            <i class="icon icon-router-signal"></i>
-                            <span class="text-bold">AP 5</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
-        <div class="row" *ngIf="roghAPConfigStatus">
-          <div class="col-lg-12 col-xs-12 col-sm-12">
-            <!-- <div class="portlet">
-      <div class="portlet-body">                                              -->
-            <!--/======================/PAGE TAB/======================/-->
-            <!-- <div class="group-config-tabs"> -->
-            <!-- <div class="row justify-content-md-center">
-              <div class="col-lg-12 col-md-12 text-center">
-                  <div style="background: #fff; padding-top: 40px;">
-                      <ul class="tab-links">
-                          <li class="active"><a href="#tab1">2.4 GHz</a></li>
-                          <li><a href="#tab2">5 GHz</a></li>
-                      </ul>
-                  </div>
-              </div>
-          </div> -->
-            <tabset>
-
-              <div class="tab-content" style="padding: 0; background: transparent;">
-                <tab heading="2.4G" #2.4Ghz>
-                  <div id="tab1" class="setting-tab active">
-                    <div class="row">
-                      <div class="col-md-12">
-                        <div class="portlet light">
-                          <div class="portlet-body">
-                            <div class="form-group row">
-                              <label class="col-md-2 col-form-label text-right">Rouge AP</label>
-                              <div class="col-lg-5 col-sm-11">
-                                <label class="switch">
-                                  <input type="checkbox" formControlName="is_rogue_ap_2dot4_enabled">
-                                  <span class="slider round">
-                                                                    <i class="enable switch-status">Enable</i>
-                                                                    <i class="disable switch-status">Disable</i>
-                                                                </span>
-                                </label>
-                              </div>
-                            </div>
-                            <div class="form-group row">
-                              <label class="col-md-2 col-form-label text-right">Policy</label>
-                              <div class="col-lg-2 col-sm-11">
-                                <select name="policy" class="form-control" formControlName="rogue_ap_2dot4_policy">
-                                  <option value="1">1 min</option>
-                                  <option value="5">5 min</option>
-                                  <option value="10">10 min</option>
-                                </select>
-                              </div>
-                            </div>
-                            <!-- <div class="form-group row">
-                                <label class="col-md-2 col-form-label text-right">Known AP List</label>
-                                <div class="col-lg-2 col-sm-11">
-                                    <select name="known-ap-list" class="form-control">
-                                        <option value="merge">Merge</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-md-2 col-form-label text-right">&nbsp;</label>
-                                <div class="col-lg-1 col-sm-11">
-                                    <label class="btn btn-default btn-large" style="margin: 0;">
-                                        Browse
-                                        <input type="file" hidden>
-                                    </label>
-                                </div>
-                                <div class="col-lg-3 col-sm-11">
-                                    <a href="#" class="char-limit">Download Sample</a>
-                                </div>
-                            </div> -->
-                            <div class="form-group row">
-                              <div class="col-lg-6 col-sm-11 col-md-offset-4">
-                                <input type="button" value="Reset" class="btn btn-cancel btn-large"
-                                       style="margin-right: 15px;" (click)="reset()">
-                                <input type="submit" value="Save" class="btn btn-theme btn-large"
-                                       (click)="submitData()">
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </tab>
-                <tab heading="5G">
-                  <div id="tab2" class="setting-tab active">
-                    <div class="row">
-                      <div class="col-md-12">
-                        <div class="portlet light">
-                          <div class="portlet-body">
-                            <div class="form-group row">
-                              <label class="col-md-2 col-form-label text-right">Rouge AP</label>
-                              <div class="col-lg-5 col-sm-11">
-                                <label class="switch">
-                                  <input type="checkbox" formControlName="is_rogue_ap_5_enabled">
-                                  <span class="slider round">
-                                                                    <i class="enable switch-status">Enable</i>
-                                                                    <i class="disable switch-status">Disable</i>
-                                                                </span>
-                                </label>
-                              </div>
-                            </div>
-                            <div class="form-group row">
-                              <label class="col-md-2 col-form-label text-right">Policy</label>
-                              <div class="col-lg-2 col-sm-11">
-                                <select name="policy" class="form-control" formControlName="rogue_ap_5_policy">
-                                  <option value="1">1 min</option>
-                                  <option value="5">5 min</option>
-                                  <option value="10">10 min</option>
-                                </select>
-                              </div>
-                            </div>
-                            <!-- <div class="form-group row">
-                                <label class="col-md-2 col-form-label text-right">Known AP List</label>
-                                <div class="col-lg-2 col-sm-11">
-                                    <select name="known-ap-list" class="form-control">
-                                        <option value="merge">Merge</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-md-2 col-form-label text-right">&nbsp;</label>
-                                <div class="col-lg-1 col-sm-11">
-                                    <label class="btn btn-default btn-large" style="margin: 0;">
-                                        Browse
-                                        <input type="file" hidden>
-                                    </label>
-                                </div>
-                                <div class="col-lg-3 col-sm-11">
-                                    <a href="#" class="char-limit">Download Sample</a>
-                                </div>
-                            </div> -->
-                            <div class="form-group row">
-                              <div class="col-lg-6 col-sm-11 col-md-offset-4">
-                                <input type="button" value="Reset" class="btn btn-cancel btn-large"
-                                       style="margin-right: 15px;" (click)="reset()">
-                                <input type="submit" value="Save" class="btn btn-theme btn-large"
-                                       (click)="submitData()">
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </tab>
-              </div>
-            </tabset>
-            <!-- </div>
-  </div>  -->
-            <!--TAB END-->
-            <!-- </div> -->
-          </div>
-          <!-- /portlet-->
         </div>
       </div>
     </div>

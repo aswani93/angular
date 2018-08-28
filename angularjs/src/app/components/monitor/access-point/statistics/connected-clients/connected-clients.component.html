@@ -25,7 +25,7 @@
               </ul>
 
 
-              <!--Customize column options for AccessPoint Columns Table -->
+              <!--Customize column options for AccessPoint Columns Table-->
               <ul class="table-function-right" >
               <li class="posreltive">
                   <a class="dropdown-toggle"
@@ -62,7 +62,7 @@
               <!--customize column option ends-->
               </ul>
           </div>
-
+          <div class="table-data">
           <table id="example"
           class="display theme table record_table table-striped table-sort text-center"
           cellspacing="0"
@@ -156,6 +156,42 @@
          </mfDefaultSorter>
        </th>
 
+       <th class="tableHeight text-center" *ngIf="(coloumsClientObjects[9].checked) == true">
+        <mfDefaultSorter by="ap_count">
+                                <span>Client Device Type
+                                  <!-- <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': isNoAPASC }"></i>
+                                  <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': isNoAPDSC }"></i> -->
+                            </span>
+        </mfDefaultSorter>
+      </th>
+
+      <th class="tableHeight text-center" *ngIf="(coloumsClientObjects[10].checked) == true">
+        <mfDefaultSorter by="ap_count">
+                                <span>Client IP
+                                  <!-- <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': isNoAPASC }"></i>
+                                  <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': isNoAPDSC }"></i> -->
+                            </span>
+        </mfDefaultSorter>
+      </th>
+
+      <th class="tableHeight text-center" *ngIf="(coloumsClientObjects[11].checked) == true">
+        <mfDefaultSorter by="ap_count">
+                                <span>Client Name
+                                  <!-- <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': isNoAPASC }"></i>
+                                  <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': isNoAPDSC }"></i> -->
+                            </span>
+        </mfDefaultSorter>
+      </th>
+
+      <th class="tableHeight text-center" *ngIf="(coloumsClientObjects[12].checked) == true">
+        <mfDefaultSorter by="ap_count">
+                                <span>Client OS
+                                  <!-- <i class="down icon icon-download-arrow" [ngClass]="{'activeIcon': isNoAPASC }"></i>
+                                  <i class="up icon icon-up-arrow-1" [ngClass]="{'activeIcon': isNoAPDSC }"></i> -->
+                            </span>
+        </mfDefaultSorter>
+      </th>
+
        <th class="tableHeight text-center">
          <span>Client Details</span>
        </th>
@@ -168,32 +204,45 @@
          (click)="showDetails(item.client_mac)">
 
        <td *ngIf="(coloumsClientObjects[0].checked) == true" (click)="showDetails(item.client_mac)">
-         {{item.client_mac}}
+         {{item.client_mac == null?'-':item.client_mac}}
        </td>
        <td *ngIf="(coloumsClientObjects[1].checked) == true" (click)="showDetails(item.client_mac)">
-         {{item.ap_name}}
+         {{item.ap_name== null?'-':item.ap_name}}
        </td>
        <td *ngIf="(coloumsClientObjects[2].checked) == true" (click)="showDetails(item.client_mac)">
-         {{item.ap_mac}}
+         {{item.ap_mac== null?'-':item.ap_mac}}
        </td>
        <td *ngIf="(coloumsClientObjects[3].checked) == true" (click)="showDetails(item.client_mac)">
-         {{item.group_name}}
+         {{item.group_name== null?'-':item.group_name}}
        </td>
        <td *ngIf="(coloumsClientObjects[4].checked) == true" (click)="showDetails(item.client_mac)">
-         {{item.vap_name}}
+         {{item.vap_name== null?'-':item.vap_name}}
        </td>
        <td *ngIf="(coloumsClientObjects[5].checked) == true" (click)="showDetails(item.client_mac)">
-         {{item.rssi}}
+         {{item.rssi== null?'-':item.rssi}}
        </td>
        <td *ngIf="(coloumsClientObjects[6].checked) == true" (click)="showDetails(item.client_mac)">
-         {{item.tx}}
+         {{item.tx== null?'-':item.tx}}
        </td>
        <td *ngIf="(coloumsClientObjects[7].checked) == true" (click)="showDetails(item.client_mac)">
-         {{item.rx}}
+         {{item.rx== null?'-':item.rx}}
        </td>
        <td *ngIf="(coloumsClientObjects[8].checked) == true" (click)="showDetails(item.client_mac)">
-         {{item.online_time}}
+         {{item.online_time== null?'-':item.online_time}}
        </td>
+
+       <td *ngIf="(coloumsClientObjects[9].checked) == true" (click)="showDetails(item.client_mac)">
+        {{item.client_device_type== null?'-':item.client_device_type}}
+      </td>
+      <td *ngIf="(coloumsClientObjects[10].checked) == true" (click)="showDetails(item.client_mac)">
+        {{item.client_ip== null?'-':item.client_ip}}
+      </td>
+      <td *ngIf="(coloumsClientObjects[11].checked) == true" (click)="showDetails(item.client_mac)">
+        {{item.client_name== null?'-':item.client_name}}
+      </td>
+      <td *ngIf="(coloumsClientObjects[12].checked) == true" (click)="showDetails(item.client_mac)">
+        {{item.client_os== null?'-':item.client_os}}
+      </td>
 
        <td>
          <a href="javascript:void(0)" class="stat-btn"
@@ -216,7 +265,8 @@
        </td>
      </tr>
      </tbody>
-   </table>
+           </table>
+          </div>
           </div>
       </div>
   </div>

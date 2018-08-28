@@ -36,6 +36,7 @@ export class RemoteMaintenanceComponent implements OnInit, AfterViewInit {
 
     this.remoteMaintenanceForm = new FormGroup({
       'ssh': new FormControl(false),
+      'https': new FormControl(false)
     });
     this.onChanges();
   }
@@ -90,7 +91,15 @@ export class RemoteMaintenanceComponent implements OnInit, AfterViewInit {
       this.remoteMaintenanceForm.controls['ssh'].patchValue(false);
     //  this.checkAnyUpdate();
     }
+    if (data.https == true) {
+      console.log(data.ssh);
+      this.remoteMaintenanceForm.controls['https'].patchValue(true);
+      // this.checkAnyUpdate();
+    } else {
+      this.remoteMaintenanceForm.controls['https'].patchValue(false);
+      //  this.checkAnyUpdate();
     }
+  }
 
 
   ngAfterViewInit() {
@@ -102,8 +111,10 @@ export class RemoteMaintenanceComponent implements OnInit, AfterViewInit {
 
   createFormObject() {
     const ssh_status = this.remoteMaintenanceForm.get('ssh').value;
+    const https_status = this.remoteMaintenanceForm.get('https').value;
     const formData = {
-      'ssh': ssh_status
+      'ssh': ssh_status,
+      'https': https_status
     };
     return formData;
   }

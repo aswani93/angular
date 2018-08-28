@@ -18,6 +18,8 @@ export class DhcpComponent implements OnInit {
 
     public interval_details;
     public DHCPForm: FormGroup;
+    autoRefreshTable;
+    private autoRefreshTime: Number = 50000;
     netmaskvalue;
     prefixvalue;
     btnDisable = true;
@@ -38,10 +40,11 @@ export class DhcpComponent implements OnInit {
     public _sortOrder;
     public data;
     public editData;
+    public updateGetData;
     @ViewChild('mf') private dhcptable: DataTable;
     invalid = [];
     public selectedVlanArray = [];
-    public groupdetailArr=[];
+    public groupdetailArr = [];
     selectAllFlag;
     newJson;
     public rowsOnPage = 20;
@@ -55,7 +58,7 @@ export class DhcpComponent implements OnInit {
     private numberPattern = /^([0-9])*$/;
     subnetmaskPatern = /^(((255\.){3}(255|254|252|248|240|224|192|128|0+))|((255\.){2}(255|254|252|248|240|224|192|128|0+)\.0)|((255\.)(255|254|252|248|240|224|192|128|0+)(\.0+){2})|((255|254|252|248|240|224|192|128|0+)(\.0+){3}))$/;
     IPpattern = /^(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))$/;
-IPv6Pattern=/^^((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*|((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4})){7}$/;
+    IPv6Pattern = /^^((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*|((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4})){7}$/;
 
     /* pagination declaration variable*/
     page: number = 1;
@@ -70,14 +73,14 @@ IPv6Pattern=/^^((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1
 
         this.notifyPopup.confirmationOk().subscribe((page) => {
             if (page == 'DHCP') {
-              this.deleteDHCP();
+                this.deleteDHCP();
             }
-          });
+        });
         this.notifyPopup.showing().subscribe((page) => {
             if (page == 'DHCP') {
-              this.showSSIDnames();
+                this.showSSIDnames();
             }
-          });
+        });
         // this.netmaskCalculator('31');
         window.scrollTo(0, 0);
         this.DHCPForm = new FormGroup({
@@ -128,21 +131,21 @@ IPv6Pattern=/^^((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1
 
 
     }
-   
+
     deleteData() {
         this.groupdetailArr = [];
         if (this.selectedVlanArray.length > 0) {
-         
-          this.notifyPopup.info(commonMessages.confirm_delete_DHCP);
+
+            this.notifyPopup.info(commonMessages.confirm_delete_DHCP);
         } else {
-          this.notifyPopup.error(commonMessages.selectoneDHCP);
+            this.notifyPopup.error(commonMessages.selectoneDHCP);
         }
-    
-      }
+
+    }
 
     loadData() {
         this.selectedVlanArray = [];
-      //  this.notifyPopup.showLoader('Please wait..');
+        //  this.notifyPopup.showLoader('Please wait..');
         this._service.getWeb('configurations/dhcp-configurations/', '', '').then(_result => {
 
             if (_result) {
@@ -152,13 +155,13 @@ IPv6Pattern=/^^((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1
                 this.notifyPopup.hideLoader('');
                 this.DHCPForm.get('vlan_id').enable();
 
-                this.interval_details = setTimeout(() => {
-                    this.loadData();
-                }, 50000);
-
+                // this.interval_details = setTimeout(() => {
+                //     this.loadData();
+                // }, 50000);
+                this.autoRefreshTable = setInterval(() => this.fetchDataFromServer(), this.autoRefreshTime);
             }
         }).catch((error) => {
-            this.notifyPopup.logoutpop(commonMessages.InternalserverError);
+            // this.notifyPopup.logoutpop("Error");
         });
     }
     public prefixrange(control: FormControl) {
@@ -177,6 +180,19 @@ IPv6Pattern=/^^((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1
         return isValid ? null : { 'invalidLease': true }
     }
 
+    fetchDataFromServer() {
+        this._service.getWeb('configurations/dhcp-configurations/', '', '').then(_result => {
+
+            if (_result) {
+
+                this.data = _result['result'];
+                this.notifyPopup.hideLoader('');
+
+            }
+        }).catch((error) => {
+            this.notifyPopup.logoutpop(commonMessages.InternalserverError);
+        });
+    }
     public validateIPaddress(control: FormControl) {
         let value = control.value;
         let IpvalidateStatus;
@@ -199,7 +215,7 @@ IPv6Pattern=/^^((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1
         if (this.notifyPopup) {
             this.notifyPopup.hideLoader('');
         }
-        clearInterval(this.interval_details);
+        clearInterval(this.autoRefreshTable);
     }
 
 
@@ -217,13 +233,13 @@ IPv6Pattern=/^^((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1
         this._service.putJson('configurations/dhcp-configurations/', this.newJson).then(_result => {
 
             if (_result.status == 1) {
-               
+
                 this.notifyPopup.hideLoader('');
                 this.notifyPopup.success("Settings applied successfully");
-             setTimeout(() => {
-                this.loadData();
-                this.reset();
-             }, 2000);  
+                setTimeout(() => {
+                    this.loadData();
+                    this.reset();
+                }, 2000);
                 this.addButtonDisable = true;
             } else {
                 this.notifyPopup.hideLoader('');
@@ -233,7 +249,7 @@ IPv6Pattern=/^^((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1
                 setTimeout(() => {
                     this.loadData();
                     this.reset();
-                 }, 2000);  
+                }, 2000);
 
             }
         }).catch((error) => {
@@ -255,20 +271,20 @@ IPv6Pattern=/^^((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1
         this._service.postJson('configurations/dhcp-configurations/', this.newJson).then(_result => {
 
             if (_result.status == 1) {
-                
+
                 this.notifyPopup.hideLoader('');
                 this.notifyPopup.success("Settings applied successfully");
                 setTimeout(() => {
                     this.loadData();
                     this.reset();
                 }, 3000);
-              
+
 
 
             } else {
-               
 
-                
+
+
                 this.notifyPopup.hideLoader('');
                 this.btnDisable = true;
                 this.notifyPopup.error(_result.msg);
@@ -278,7 +294,7 @@ IPv6Pattern=/^^((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1
                     this.reset();
 
                 }, 3000);
-              
+
 
             }
         }).catch((error) => {
@@ -321,7 +337,7 @@ IPv6Pattern=/^^((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1
     }
 
     double_click_event(event, dhcpValue, index) {
-       // this.reset();
+        // this.reset();
         this.selectedVlanArray = [];
         this.clickactive = -1;
         //this.elRef.nativeElement.querySelector('#selectAllCheck')['checked'] = false;
@@ -331,12 +347,12 @@ IPv6Pattern=/^^((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1
         }
         this.selectedVlanArray.push(dhcpValue);
         if (this.selectedVlanArray.length == 1) {
-            this.selectedVlan=dhcpValue;
+            this.selectedVlan = dhcpValue;
             this.clickactive = index;
             this.elRef.nativeElement.querySelectorAll('.ssid-check')[index]['checked'] = true;
 
         } else {
-            this.selectedVlanArray =[];
+            this.selectedVlanArray = [];
         }
         this.editDHCP();
     }
@@ -345,47 +361,47 @@ IPv6Pattern=/^^((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1
         if (this.selectedVlanArray.includes("1")) {
             this.notifyPopup.error(commonMessages.default_vlan_error)
             this.selectAllFlag = false;
-            if(this.selectedVlanArray.length ==1){
-            this.selectedVlanArray=[];
+            if (this.selectedVlanArray.length == 1) {
+                this.selectedVlanArray = [];
             }
             this.elRef.nativeElement.querySelector('#selectAllCheck')['checked'] = false;
-           // this.unchekAll();
+            // this.unchekAll();
         } else {
             this.notifyPopup.showLoader(commonMessages.save_systemConfig);
 
             this._service.deleteWeb('configurations/dhcp-configurations/?vlan_id=' + this.selectedVlanArray, '').then(_result => {
                 if (_result.status == '1') {
-                    this.groupdetailArr=[];
+                    this.groupdetailArr = [];
                     if (this.selectedVlanArray.length != _result.random_id.length) {
-                        
+
                         for (let vaps of _result.affected_ssid) {
                             let groupArr = [];
                             for (let i of vaps.ssid_list) {
-                               
-                              let str = {'ssidname': i};
-                              groupArr.push(str);
+
+                                let str = { 'ssidname': i };
+                                groupArr.push(str);
                             }
-                           
-                            let str = {'Profile_name': vaps.profile_name, 'ssidnames': groupArr};
-                            this.groupdetailArr.push({'Profile_name': vaps.profile_name, 'ssidnames': groupArr});
-                           
-                          }
-                          this.notifyPopup.hideLoader('');
-                          this.notifyPopup.error_details(commonMessages.valn_ssid_error);
-                          return false;
-                        } else {
-                          this.notifyPopup.hideLoader('');
-                          this.notifyPopup.success(commonMessages.vlan_delete_success);
-                          setTimeout(() => {
+
+                            let str = { 'Profile_name': vaps.profile_name, 'ssidnames': groupArr };
+                            this.groupdetailArr.push({ 'Profile_name': vaps.profile_name, 'ssidnames': groupArr });
+
+                        }
+                        this.notifyPopup.hideLoader('');
+                        this.notifyPopup.error_details(commonMessages.valn_ssid_error);
+                        return false;
+                    } else {
+                        this.notifyPopup.hideLoader('');
+                        this.notifyPopup.success(commonMessages.vlan_delete_success);
+                        setTimeout(() => {
                             this.reset();
                             this.loadData();
-              
-                          }, 2500);
-                        }
 
-                        
+                        }, 2500);
+                    }
 
-                    
+
+
+
                     // this.notifyPopup.hideLoader('');
                     // this.notifyPopup.success("Settings deleted successfully");
                     // setTimeout(() => {
@@ -396,7 +412,7 @@ IPv6Pattern=/^^((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1
 
 
                 } else {
-                   
+
                     this.notifyPopup.hideLoader('');
                     this.btnDisable = true;
                     this.notifyPopup.error(_result.msg);
@@ -404,7 +420,7 @@ IPv6Pattern=/^^((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1
                     setTimeout(() => {
                         this.loadData();
                         this.reset();
-                     }, 2000);  
+                    }, 2000);
 
                 }
             }).catch((error) => {
@@ -417,7 +433,7 @@ IPv6Pattern=/^^((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1
     showSSIDnames() {
         this.notifyPopup.details(this.groupdetailArr);
         return false;
-      }
+    }
     selectAll(e) {
         this.selectedVlanArray = [];
         var count = Object.keys(this.data).length;
@@ -458,22 +474,23 @@ IPv6Pattern=/^^((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1
             this.notifyPopup.showLoader('Please wait...')
             this._service.getWeb('configurations/dhcp-configurations/' + this.selectedVlan + '/', '', '').then(_result => {
                 this.editData = _result['result'];
+                this.updateGetData= _result['result'];;
                 this.addDHCPStatus = true;
                 this.updateButton = true;
-                this.DHCPForm.get('profile_name').setValue(this.editData.profile_name);
-                this.DHCPForm.get('vlan_id').setValue(this.editData.vlan_id);
-                // this.DHCPForm.get('ipv4_addr').setValue(this.editData.ipv4_addr);
-                // this.DHCPForm.get('netmask').setValue(this.editData.netmask);
-                // this.DHCPForm.get('subnetmask').setValue(this.editData.subnetmask);
-                this.DHCPForm.get('dhcp_type').setValue(this.editData.dhcp_type);
-                this.DHCPForm.get('vlan_id').disable();
-
+                // this.DHCPForm.get('profile_name').setValue(this.editData.profile_name);
+                // this.DHCPForm.get('vlan_id').setValue(this.editData.vlan_id);
+                // this.DHCPForm.get('dhcp_type').setValue(this.editData.dhcp_type);
+                // this.DHCPForm.get('vlan_id').disable();
+                this.DHCPForm.setValue(this.updateGetData);
+                this.checkAnyUpdate();
+                this.scrollHelper.scrollToFirst("detailArea");
                 this.dhcpRelayStatus = false;
-                this.selectedVlanArray=[];
-                if (this.editData.dhcp_type == '2') {
-                    this.DHCPForm.get('remote_server').setValue(this.editData.remote_server);
+                this.selectedVlanArray = [];
+                if (this.updateGetData.dhcp_type == '2') {
+                    this.DHCPForm.get('remote_server').setValue(this.updateGetData.remote_server);
                     this.dhcpRelayStatus = true;
-                    this.selectedVlanArray=[];                }
+                    this.selectedVlanArray = [];
+                }
 
                 this.notifyPopup.hideLoader('');
             });
@@ -504,6 +521,7 @@ IPv6Pattern=/^^((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1
 
 
     ngAfterViewInit() {
+
         this.scrollHelper.doScroll();
         this.dhcptable.onSortChange.subscribe((event: SortEvent) => {
             this._sortBy = event.sortBy;
@@ -514,10 +532,15 @@ IPv6Pattern=/^^((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1
         //     this.netmaskValidation();
 
         // });
+        this.DHCPForm.get('profile_name').valueChanges.subscribe(() => {
 
+            this.checkAnyUpdate();
+        });
         this.DHCPForm.valueChanges.subscribe(() => {
             this.checkAnyUpdate();
         });
+        
+
 
         this.dhcptable.onPageChange.subscribe((x) => {
 
@@ -542,6 +565,7 @@ IPv6Pattern=/^^((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1
 
         let jsonArry = this.DHCPForm.value;
         jsonArry['vlan_id'] = this.DHCPForm.get('vlan_id').value;
+
         jsonArry['ip_type'] = "1";
         if (this.DHCPForm.get('remote_server').value == null) {
             jsonArry['remote_server'] = '';
@@ -550,6 +574,11 @@ IPv6Pattern=/^^((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1
             this.btnDisable = true;
         } else {
             this.btnDisable = false;
+        }
+        if (this.updateButton) {
+            this.DHCPForm.get('vlan_id').disable();
+        } else {
+            this.DHCPForm.get('vlan_id').enable();
         }
         this.scrollHelper.scrollToFirst('detailArea');
     }
@@ -574,6 +603,8 @@ IPv6Pattern=/^^((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1
         this.addButtonDisable = true;
         this.loadData();
     }
+
+
     getIpRangeFromAddressAndNetmask(str) {
         //   console.log("iprange " + str);
         var part = str.split("/"); // part[0] = base address, part[1] = netmask
@@ -634,10 +665,10 @@ IPv6Pattern=/^^((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1
             this.dhcpRelayStatus = false;
             this.dhcptypeStatus = false;
             this.DHCPForm.get('remote_server').clearValidators();
-            if (this.editData.remote_server == '') {
+            if (this.updateGetData.remote_server == '') {
                 this.DHCPForm.get('remote_server').setValue(null);
             } else {
-                this.DHCPForm.get('remote_server').setValue(this.editData.remote_server);
+                this.DHCPForm.get('remote_server').setValue(this.updateGetData.remote_server);
             }
             // this.DHCPForm.get('dns_server1').clearValidators();
             // this.DHCPForm.get('dns_server1').setValue(null);

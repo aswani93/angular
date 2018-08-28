@@ -6,6 +6,7 @@ import {commonUrl} from '../../../../../app/services/urls/common-url';
 import {NotificationService, commonMessages} from '../../../../services/notificationService/NotificationService';
 import { ScrollHelper } from '../../../../helpers/scroll-helper/scrollHelper';
 import 'rxjs/add/operator/catch';
+import { TooltipService } from '../../../../services/tooltip/tooltip.service';
 @Component({
   selector: 'app-auto-rf',
   templateUrl: './auto-rf.component.html',
@@ -13,6 +14,14 @@ import 'rxjs/add/operator/catch';
 })
 
 export class AutoRfComponent implements OnInit, AfterViewInit {
+  public  arrayOfLocations = [];
+  public currentlyEmpty = [];
+  public finalPostData = [];
+  public registeredLocations = [];
+  public ap_location:string = '';
+  public selectedAPLocations:any;
+  public locationFieldValid:boolean = false;
+  public locationList = 'empty';
   public ifEdit: boolean = false;
   public data;
   public currentPage;
@@ -58,10 +67,13 @@ export class AutoRfComponent implements OnInit, AfterViewInit {
   coloumsObjects:any = [];
   count:number = 0;
   showUpdatedAPnames = [];
+  regAPCount: any;
+  dataCopy: any;
   constructor(private _service : WebserviceService,
               private elRef: ElementRef,
               private notifyPopup : NotificationService,
-              private eleRef:ElementRef) {
+              private eleRef:ElementRef,
+              private tooltipService: TooltipService) {
   }
 
   ngOnInit(): void {
@@ -99,10 +111,10 @@ export class AutoRfComponent implements OnInit, AfterViewInit {
 
   generateJSON(){
     this.finalJSON = {
-      ap_macs_2dot4g : [],
-      ap_macs_5g: [],
+      ap_mac:  '',
       autoRF_2dot4g: false,
-      autoRF_5g: false
+      autoRF_5g: false,
+      ap_location: ''
     }
   }
 
@@ -119,6 +131,19 @@ export class AutoRfComponent implements OnInit, AfterViewInit {
       { name:'Status', checked: true}
 
     ];
+    this._service.getWeb('maintenance/system-auto-rf-location-acs/', '', '').then(_data => {
+      if (_data.status == '1') {
+        for(let data of _data.result){
+          if(data.ap_location != null || data.ap_location != ""){
+            this.arrayOfLocations.push(data.ap_location);
+          }
+        }
+      } else {
+        this.arrayOfLocations = [];
+      }
+    }).catch((error) => {
+      this.arrayOfLocations = [];
+    });
 
     
     this.fetchDataFromServer();  
@@ -126,7 +151,7 @@ export class AutoRfComponent implements OnInit, AfterViewInit {
   }
 
   fetchDataFromServer() { 
-
+    this.registeredLocations = [];
     this.showLoaderBoolStatus = true;
     this.hideLoaderBoolStatus = false;
 
@@ -142,6 +167,8 @@ export class AutoRfComponent implements OnInit, AfterViewInit {
 
     if (_data.status == 1) {
       this.data = _data.result['Registered_aps'];
+      this.dataCopy = _data.result['Registered_aps'];
+      this.regAPCount = _data.result['ap_count'];
       this.showLoaderBoolStatus = false;
       
       if (this.hideLoaderBoolStatus)
@@ -155,6 +182,10 @@ export class AutoRfComponent implements OnInit, AfterViewInit {
         }
         if(this.data[ap].is_rogue_ap_5_enabled != 1){
           this.rogue5gDisabled.push(this.data[ap].ap_mac);
+        }
+        if(this.registeredLocations.indexOf(this.data[ap].ap_location) == -1 &&
+               (this.data[ap].ap_location != null || this.data[ap].ap_location != '')){
+          this.registeredLocations.push(this.data[ap].ap_location);
         }
       }
 
@@ -180,6 +211,9 @@ export class AutoRfComponent implements OnInit, AfterViewInit {
     this.isDataChanged = true;
     this.eleRef.nativeElement.querySelector('#selectAllCheck')['checked'] = false;
     this.uncheckAllList();
+    this.selectedAPArray = [];
+    this.selectedAPLocations = [];
+    this.currentlyEmpty = [];
   }
 
   ngOnDestroy() {
@@ -190,12 +224,36 @@ export class AutoRfComponent implements OnInit, AfterViewInit {
   }
 
   search(event) {
+
+    // //client side filtering
+    //   let val = event.target.value;
+    //   let search_columns = ['ap_name', 'ap_ip', 'ap_mac', 'ap_group', 'ap_location', 'ap_model', 'status']
+    //   if(val.length > 2){
+    //     this.autoRefreshTime = 600000;
+    //     this.data = this.dataCopy.filter(function(d){
+    //       let matchFound = false;
+    //       for(let data of search_columns){
+    //         let value = ""+d[data];
+    //         if(value.toLowerCase().indexOf(val) !== -1 || !val){
+    //           matchFound = true;
+    //           break;
+    //         }
+    //       }      
+          
+    //       return matchFound;
+    //     });
+    //   }
+    //   else{
+    //     this.autoRefreshTime = 50000;
+    //     this.data = this.dataCopy;
+    //   }
     
+    //server side filtering
     let val = event.target.value;
     if (val.length > 2) {
       this.selectedAPArray = [];
       clearInterval(this.autoRefreshTable);
-      this._service.getWeb('utils/ap-search/?query=' + val + '', '', '').then(_data => {
+      this._service.getWeb('utils/rogue-ap-search/?query=' + val +'&search_from=autorf'+'', '', '').then(_data => {
         if (_data) {
           if (_data.result.length != 0) {
             this.data = _data.result;
@@ -212,12 +270,13 @@ export class AutoRfComponent implements OnInit, AfterViewInit {
         this.notifyPopup.logoutpop(commonMessages.InternalserverError);
       });
     } else if (val.length == 0) {
-      this.loadData();
+      this.fetchDataFromServer();
     }
 
   }
 
   selectAll(ev) {
+    this.selectedAPArray = [];
     let chkLen = this.elRef.nativeElement.querySelectorAll('.register-table-check').length;
     if (ev.target.checked) {
       for (let i = 0; i < chkLen; i++) {
@@ -248,7 +307,12 @@ export class AutoRfComponent implements OnInit, AfterViewInit {
   checkboxClick(ap, event) {
 
     if (event.target.checked) {
-      this.selectedAPArray.push(ap);
+      let found = this.selectedAPArray.some(function (selAp){
+        return selAp.ap_mac == ap.ap_mac;
+      });
+      if(!found){
+        this.selectedAPArray.push(ap);
+      }
       if (this.selectedAPArray.length == 1) {
         this.AP_name = ap.ap_name;
       } 
@@ -279,13 +343,17 @@ export class AutoRfComponent implements OnInit, AfterViewInit {
   }
 
   EditAp(){
+    this.selectedAPLocations = [];
+    this.currentlyEmpty = [];
     this.isDataChanged = false;
     if(this.selectedAPArray.length == 1){
       this.AP_name = this.selectedAPArray[0].ap_name;
+      this.ap_location = (this.selectedAPArray[0].ap_location == null)?'':this.selectedAPArray[0].ap_location;    
+      this.selectedAPLocations[this.selectedAPArray[0].ap_mac] = this.ap_location;
       this.ifEdit = true;
       this.autoRF_2dot4g = (this.selectedAPArray[0].is_auto_rf_2dot4_enabled == 1)? true: false;
       this.autoRF_5g = (this.selectedAPArray[0].is_auto_rf_5_enabled == 1)? true: false;
-
+      this.setFocus();
     }
     else if(this.selectedAPArray.length > 1){
       this.AP_name = "Edit for selected APs"
@@ -297,6 +365,14 @@ export class AutoRfComponent implements OnInit, AfterViewInit {
       this.autoRF_2dot4g = true;
       this.autoRF_5g = true;
 
+      for(let ap of this.selectedAPArray){
+        this.selectedAPLocations[ap['ap_mac']] = (ap['ap_location'] == null)?'':ap['ap_location'];
+        if(this.selectedAPLocations[ap['ap_mac']] == ''){
+          this.currentlyEmpty.push(ap['ap_mac']);
+        }
+      }
+
+      //This loop may or may not complete looping for all items (efficieny)
       for(let ap of this.selectedAPArray){
         if(checkDefault2dot4g && ap.is_auto_rf_2dot4_enabled != 1){
           this.autoRF_2dot4g = false;
@@ -310,16 +386,18 @@ export class AutoRfComponent implements OnInit, AfterViewInit {
           break;
         }
       }
+      this.setFocus();
     }
     else{
       this.ifEdit = false;
     }
-    this.setFocus();
+    
+    
 
   }
 
   autoRFSwitch(autoRFBtn:string){
-    this.isDataChanged = true;
+    
       if(autoRFBtn === '2dot4g'){
         this.autoRF_2dot4g = !this.autoRF_2dot4g;
       } else if(autoRFBtn == '5g') {
@@ -327,6 +405,7 @@ export class AutoRfComponent implements OnInit, AfterViewInit {
       } else {
 
       }
+      this.checkLocationValidity();
 
   }
 
@@ -375,19 +454,28 @@ export class AutoRfComponent implements OnInit, AfterViewInit {
 
   onSubmit(){
 
-    this.finalJSON['ap_macs_2dot4g'] = [];
-    this.finalJSON['ap_macs_5g'] = [];
+    // this.finalJSON['ap_macs_2dot4g'] = [];
+    // this.finalJSON['ap_macs_5g'] = [];
+    this.finalPostData = [];
     this.showUpdatedAPnames = [];
     this.autoRF_2dot4g_aps = [];
     this.autoRF_5g_aps = [];
+    let offlineAPs:number = 0;
 
     for(let ap of this.selectedAPArray){
+      this.generateJSON();
       this.showUpdatedAPnames.push(ap.ap_name);
+      this.finalJSON['ap_mac'] = ap.ap_mac;
+      this.finalJSON['ap_location'] = this.selectedAPLocations[ap.ap_mac];
+      if(ap.status != 1){
+        offlineAPs += 1;
+      }
 
-      if(this.rogue2dot4gDisabled.indexOf(ap.ap_mac) != -1 || ap.status == 0){
+      if(this.rogue2dot4gDisabled.indexOf(ap.ap_mac) != -1 || ap.status != 1){
         this.autoRF_2dot4g_aps.push(0);
+        this.finalJSON['autoRF_2dot4g'] = false;
       }else{
-        this.finalJSON['ap_macs_2dot4g'].push(ap.ap_mac);
+        this.finalJSON['autoRF_2dot4g'] = this.autoRF_2dot4g;
         if(this.autoRF_2dot4g){
           this.autoRF_2dot4g_aps.push(1);
         } else{
@@ -395,21 +483,21 @@ export class AutoRfComponent implements OnInit, AfterViewInit {
         }
       }
 
-      if(this.rogue5gDisabled.indexOf(ap.ap_mac) != -1 || ap.status == 0){
+      if(this.rogue5gDisabled.indexOf(ap.ap_mac) != -1 || ap.status != 1){
         this.autoRF_5g_aps.push(0);
+        this.finalJSON['autoRF_5g'] = false;
       }else{
-        this.finalJSON['ap_macs_5g'].push(ap.ap_mac);
+        this.finalJSON['autoRF_5g'] = this.autoRF_5g;
         if(this.autoRF_5g){
           this.autoRF_5g_aps.push(1);
         } else{
           this.autoRF_5g_aps.push(0);
         }
       }
-
+      this.finalPostData.push(this.finalJSON);
     }
 
-    this.finalJSON.autoRF_2dot4g = this.autoRF_2dot4g;
-    this.finalJSON.autoRF_5g = this.autoRF_5g;
+
     this.uncheckAllList();
     this.ifEdit = false;
     this.focused = false;
@@ -418,7 +506,7 @@ export class AutoRfComponent implements OnInit, AfterViewInit {
 
     //api to put data
 
-    if(this.finalJSON['ap_macs_2dot4g'].length <=0 && this.finalJSON['ap_macs_2dot4g'].length <= 0){
+    if(this.finalPostData.length == offlineAPs){
       this.notifyPopup.error(commonMessages.offlineAutoRFUpdateError);
     }
     else {
@@ -433,7 +521,7 @@ export class AutoRfComponent implements OnInit, AfterViewInit {
         }
       }, 500);
 
-      this._service.putJson('maintenance/auto-rf-ap-list/',this.finalJSON).then(
+      this._service.putJson('maintenance/auto-rf-ap-list/',this.finalPostData).then(
         _data => {
           if (_data.status == 1) {
             this.scrollHelper.scrollTo(document.getElementsByClassName('apList')[0]);
@@ -457,7 +545,8 @@ export class AutoRfComponent implements OnInit, AfterViewInit {
         this.notifyPopup.logoutpop(commonMessages.InternalserverError);
       });
     }    
-
+    this.locationFieldValid =  false;
+    this.locationList = 'empty';
     this.selectedAPArray = [];
   }
 
@@ -500,5 +589,66 @@ export class AutoRfComponent implements OnInit, AfterViewInit {
     }
       /* pagination method here end*/
   
+    getToolTipText(fieldId: string) {
+        return this.tooltipService.fetchTooltip(fieldId);
+    }
+      
+    checkLocationValidity(){     
+
+      this.isDataChanged = true;
+      if(this.selectedAPArray.length == 1){
+        this.locationFieldValid = (this.ap_location == '' || this.ap_location.length < 3)?false:true;
+        if(this.locationFieldValid){
+          this.selectedAPLocations[this.selectedAPArray[0].ap_mac] = this.ap_location;
+        }
+      } else {
+        let allValid:boolean = true;
+        // let locationArray:string[] = Object.values(this.selectedAPLocations);
+        // for(let ap of locationArray){
+        //   if(ap.length < 3 || ap == '')
+        //     allValid = false;
+        // }
+
+        let locationArray = Object.keys(this.selectedAPLocations);
+        for(let ap of locationArray){
+          if(this.selectedAPLocations[ap].length < 3 || this.selectedAPLocations[ap] == ''){
+            allValid = false;
+            if(this.currentlyEmpty.indexOf(ap) == -1)
+              this.currentlyEmpty.push(ap);
+          }
+        }
+        this.locationFieldValid = allValid;
+      }
+    }
+
+    resetLocationList(){
+      this.currentlyEmpty = [];
+      this.checkLocationValidity();
+    }
+
+    fillLocations(selectedLocation){
+      if(this.locationList == 'empty'){
+        for(let ap of this.currentlyEmpty){
+          this.selectedAPLocations[ap] = selectedLocation;
+        }
+      } else {
+        for(let ap of this.selectedAPArray){
+          this.selectedAPLocations[ap.ap_mac] = selectedLocation;
+        }
+      }
+      this.checkLocationValidity();
+    }
+
+    alphaOnly(event:any) {       
+    
+      var pattern = /^[a-zA-Z\s]*$/; 
+      let inputChar = String.fromCharCode(event.charCode);
+    
+        if (!pattern.test(inputChar)) {
+          // invalid character, prevent input
+          event.preventDefault();
+        }
+      
+    };
     
 }

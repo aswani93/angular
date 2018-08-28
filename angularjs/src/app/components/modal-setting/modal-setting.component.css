@@ -140,3 +140,10 @@
   ::ng-deep .pure-checkbox input[type="checkbox"]+ label:after{
     background-color: #334157 !important;
   }
+
+  ::ng-deep .dropdown-list ul li:first-child {
+    padding-top: 5px!important;
+}
+  ::ng-deep .dropdown-list ul li {
+    padding: 5px 5px!important;   
+}

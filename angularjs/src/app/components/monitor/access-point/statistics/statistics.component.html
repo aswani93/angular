@@ -283,15 +283,43 @@
                                                                 <!-- <li><a class="dropdown-item"  (click)="setScale('downlink','live')">Live Data</a></li> -->
                                                                 <li><a class="dropdown-item"  (click)="setScale('downlink','hour')">Last 1 hour</a></li>
                                                                 <li><a class="dropdown-item"  (click)="setScale('downlink','day')">Last 1 day</a></li>
+                                                                <!-- <li><a class="dropdown-item dropbtn" (click)="show=!show"  >Custom</a>
+                                                                    <ul class="sub-drop" *ngIf="show">
+                                                                       <li>
+
+                                                                           
+                                                                                <div class="form-group row">
+                                                                                    <div class="col-lg-12 col-sm-11">
+                                                                                        <label style="display: block;text-align: left;">Custom Time</label>
+                                                                                        <input [selectMode]="'range'" [owlDateTimeTrigger]="dtPicker3" [owlDateTime]="dtPicker3" class="form-control" [(ngModel)]="g_downlink_time">
+                                                                                        <owl-date-time #dtPicker3></owl-date-time>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-group row" style="margin-bottom: 0px">
+                                                                                <div class="col-lg-12 col-sm-11">
+                                                                                        <div class="text-right">
+                                                                                            <button class="btn btn-theme" (click)="setScale('downlink',g_downlink_time)">Done</button>
+                                                                                            </div> 
+                                                                                    </div>
+                                                                                </div>
+                                                                           
+                                                                       </li>    
+                                                                           
+                                                                    </ul>
+                                                                   
+                                                                
+                                                                </li> -->
                                                             </ul>
+                                                            
                                                         </div>
+                                                        
                                                     </div>
                                                     <div class="dropdown scrollableList graph btn btn-theme-inverse rounded ">
                                                             <li class="selectedOption" (click)="openOptions('down_group_range',$event)">{{rangeText_down_group}}<i class="icon icon-arrow-point-to-down"></i></li>
                                                             <div class="dropdown-menu this-list down_group_options_range" aria-labelledby="dropdownMenuButton">
                                                                 <ul>
                                                                     <li><a class="dropdown-item"  (click)="setRange('down_group','total')">Total</a></li>
-                                                                    <li><a class="dropdown-item"  (click)="setRange('down_group','avg')">Average</a></li>
+                                                                    <!-- <li><a class="dropdown-item"  (click)="setRange('down_group','avg')">Average</a></li> -->
                                                                     <li><a class="dropdown-item"  (click)="setRange('down_group','min')">Minimum</a></li>
                                                                     <li><a class="dropdown-item"  (click)="setRange('down_group','max')">Maximum</a></li>
                                                                 </ul>
@@ -330,7 +358,7 @@
                                                             <div class="dropdown-menu this-list open_ap_options_range" aria-labelledby="dropdownMenuButton">
                                                                 <ul>
                                                                     <li><a class="dropdown-item"  (click)="setRange('open_ap','total')">Total</a></li>
-                                                                    <li><a class="dropdown-item"  (click)="setRange('open_ap','avg')">Average</a></li>
+                                                                    <!-- <li><a class="dropdown-item"  (click)="setRange('open_ap','avg')">Average</a></li> -->
                                                                     <li><a class="dropdown-item"  (click)="setRange('open_ap','min')">Minimum</a></li>
                                                                     <li><a class="dropdown-item"  (click)="setRange('open_ap','max')">Maximum</a></li>
                                                                 </ul>
@@ -348,7 +376,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-8">
-                                        <div class="portlet light custom-portlet">
+                                        <div class="portlet light custom-portlet ">
                                             <div class="portlet-title custom-title">
                                                 <div class="caption">
                                                     <span>Access Points (Top 5)</span>
@@ -365,7 +393,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="portlet-body" style="padding: 0">
+                                            <div class="portlet-body portlet-body-graph">
                                                 <app-top-aps></app-top-aps>
                                             </div>
                                         </div>
@@ -377,7 +405,7 @@
                                                     <span>Access Points Model</span>
                                                 </div>
                                             </div>
-                                            <div class="portlet-body" style="padding: 25px">
+                                            <div class="portlet-body portlet-body-graph">
                                                <app-ap-model></app-ap-model>
                                             </div>
                                         </div>
@@ -794,7 +822,7 @@
                                         </div>
                                     </div>
                                    <div class="col-md-4">
-                                        <div class="portlet light">
+                                        <div class="portlet light" style="border-radius: 8px;">
                                             <div class="portlet-body" style="padding: 13px;">
                                                 <app-ap-total-clients></app-ap-total-clients>
                                             </div>
@@ -1110,7 +1138,7 @@
                                                         <div class="dropdown-menu this-list downlink_ssid_2_options_range" aria-labelledby="dropdownMenuButton">
                                                             <ul>
                                                                 <li><a class="dropdown-item"  (click)="setRange('downlink_ssid_2','total')">Total</a></li>
-                                                                <li><a class="dropdown-item"  (click)="setRange('downlink_ssid_2','avg')">Average</a></li>
+                                                                <!-- <li><a class="dropdown-item"  (click)="setRange('downlink_ssid_2','avg')">Average</a></li> -->
                                                                 <li><a class="dropdown-item"  (click)="setRange('downlink_ssid_2','min')">Minimum</a></li>
                                                                 <li><a class="dropdown-item"  (click)="setRange('downlink_ssid_2','max')">Maximum</a></li>
                                                             </ul>
@@ -1146,7 +1174,7 @@
                                                         <div class="dropdown-menu this-list downlink_ssid_5_options_range" aria-labelledby="dropdownMenuButton">
                                                             <ul>
                                                                 <li><a class="dropdown-item"  (click)="setRange('downlink_ssid_5','total')">Total</a></li>
-                                                                <li><a class="dropdown-item"  (click)="setRange('downlink_ssid_5','avg')">Average</a></li>
+                                                                <!-- <li><a class="dropdown-item"  (click)="setRange('downlink_ssid_5','avg')">Average</a></li> -->
                                                                 <li><a class="dropdown-item"  (click)="setRange('downlink_ssid_5','min')">Minimum</a></li>
                                                                 <li><a class="dropdown-item"  (click)="setRange('downlink_ssid_5','max')">Maximum</a></li>
                                                             </ul>

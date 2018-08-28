@@ -146,7 +146,7 @@ input[type=number]::-webkit-outer-spin-button {
  }
  .disabled{
     cursor: default;
-    opacity: .4;
+    /* opacity: .4; */
    pointer-events:none;
  }
  

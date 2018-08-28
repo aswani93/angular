@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Input,Output,EventEmitter } from '@angular/core';
 import {WebserviceService} from '../../../../services/commonServices/webservice.service';
 import { Chart } from 'angular-highcharts';
 import { Router } from '@angular/router';
@@ -18,13 +18,30 @@ export class AlarmStatusComponent implements OnInit {
      majorTabActive:boolean = false;
      minorTabActive:boolean = false;
       alive:boolean = true;
-    timerInterval:number = 20000;
+    timerInterval:number = 60000;
+    initialtimerInterval:number = 60000;
     timer:any;
+    showDialogsetting:boolean = false;
+    titleText:any;
+   @Input()set visibleStatus(value: boolean) {
+     if(value){
+        this.loadData();
+        this.setIntervalForChart();  
+     }
+
+   }  
+   @Input()
+ set data(data: any) {
+     if(data){
+     this.initialtimerInterval=data.refresh_interval;
+     this.timerInterval = data.refresh_interval;
+     }
+   } 
+@Output() deleteWidget: EventEmitter<any> = new EventEmitter<any>();
+ 
   constructor(private _service: WebserviceService,private _router: Router) { }
 
   ngOnInit() {
-    this.loadData();
-    this.setIntervalForChart();
   }
 
   loadData(){
@@ -72,4 +89,27 @@ gotoAlaramPage(data){
      if(this.timer)
     this.timer.unsubscribe(); 
   }
+
+   /*........Setting Popup Method......*/
+  openSetting(title){
+     this.titleText = title;
+     this.showDialogsetting = true;
+
+}
+   closeSettingPopup(event){
+    this.showDialogsetting = event;
+}
+
+  modelSettingFun(event){
+      this.timerInterval = event.timer;
+     this.loadData();
+  }
+
+    /*---------delete widget-----*/
+  delete(val){
+    if(this.timer)
+    this.timer.unsubscribe(); 
+   this.deleteWidget.emit({id:val});
+  }
+
 }

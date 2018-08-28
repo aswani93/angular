@@ -3,7 +3,7 @@ import {Chart} from 'angular-highcharts';
 import {WebserviceService} from '../../../../../../services/commonServices/webservice.service';
 import {Ng4LoadingSpinnerService} from 'ng4-loading-spinner';
 import { NotificationService,commonMessages} from '../../../../../../services/notificationService/NotificationService';
-import 'rxjs/add/operator/catch'; 
+import 'rxjs/add/operator/catch';
 @Component({
   selector: 'app-downlink-taffic',
   templateUrl: './downlink-taffic.component.html',

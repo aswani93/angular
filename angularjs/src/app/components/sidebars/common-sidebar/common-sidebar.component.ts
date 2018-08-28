@@ -1,7 +1,7 @@
 import {Component, OnInit, ElementRef} from '@angular/core';
 import {ActivatedRoute, Router, Event, NavigationEnd} from '@angular/router';
 import * as $ from 'jquery';
-import { NotificationService,commonMessages } from '../../../services/notificationService/NotificationService';
+import {NotificationService, commonMessages} from '../../../services/notificationService/NotificationService';
 
 
 @Component({
@@ -15,7 +15,7 @@ export class CommonSidebarComponent implements OnInit {
   private activeMenuComponent: string;
   private strLength;
 
-  constructor(private route: ActivatedRoute, private router: Router, private eleRef: ElementRef,private notifyPopup : NotificationService) {
+  constructor(private route: ActivatedRoute, private router: Router, private eleRef: ElementRef, private notifyPopup: NotificationService) {
     this.activeMenu = this.route.snapshot.data['activeSideMenu'];
     let parentArray = [
       {
@@ -52,7 +52,7 @@ export class CommonSidebarComponent implements OnInit {
         ]
       },
       {
-        name:'captivePortalConfiguration',
+        name: 'captivePortalConfiguration',
         parent: [
           {
 
@@ -109,6 +109,20 @@ export class CommonSidebarComponent implements OnInit {
         ]
       },
       {
+        name: 'packetCapture',
+        parent: [
+          {
+            name: 'ap',
+            parent: [
+              {
+                name: 'maintenance',
+                parent: []
+              }
+            ]
+          }
+        ]
+      },
+      {
         name: 'apReboot',
         parent: [
           {
@@ -123,7 +137,64 @@ export class CommonSidebarComponent implements OnInit {
         ]
       },
       {
+        name: 'schedule',
+        parent: [
+          {
+            name: 'ap',
+            parent: [
+              {
+                name: 'maintenance',
+                parent: []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        name: 'system_autoRF',
+        parent: [
+          {
+            name: 'System',
+            parent: [
+              {
+                name: 'maintenance',
+                parent: []
+              }
+            ]
+          }
+        ]
+      },
+    
+      {
+        name: 'diagonstic',
+        parent: [
+          {
+            name: 'mon_system',
+            parent: [
+              {
+                name: 'monitor',
+                parent: []
+              }
+            ]
+          }
+        ]
+      },
+      {
         name: 'rogueAP',
+        parent: [
+          {
+            name: 'ap',
+            parent: [
+              {
+                name: 'maintenance',
+                parent: []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        name: 'apRemoteMaintenance',
         parent: [
           {
             name: 'ap',
@@ -263,6 +334,20 @@ export class CommonSidebarComponent implements OnInit {
         ]
       },
       {
+        name: 'logsys',
+        parent: [
+          {
+            name: 'mon_system',
+            parent: [
+              {
+                name: 'monitor',
+                parent: []
+              }
+            ]
+          }
+        ]
+      },
+      {
         name: 'rogueAPMonitoring',
         parent: [
           {
@@ -370,8 +455,21 @@ export class CommonSidebarComponent implements OnInit {
             ]
           }
         ]
-      }
-      ,
+      },
+      {
+        name: 'vrrp',
+        parent: [
+          {
+            name: 'system',
+            parent: [
+              {
+                name: 'configuration',
+                parent: []
+              }
+            ]
+          }
+        ]
+      },
       {
         name: 'userAccount',
         parent: [
@@ -417,6 +515,20 @@ export class CommonSidebarComponent implements OnInit {
       },
       {
         name: 'autoRFMonitoring',
+        parent: [
+          {
+            name: 's_accesspoint',
+            parent: [
+              {
+                name: 'monitor',
+                parent: []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        name: 'logs',
         parent: [
           {
             name: 's_accesspoint',
@@ -498,7 +610,7 @@ export class CommonSidebarComponent implements OnInit {
           }
           $('#' + val).addClass('active');
         }
-        else{
+        else {
           this.notifyPopup.hideLoader('');
         }
       }

@@ -8,9 +8,7 @@ import 'rxjs/add/operator/catch';
 
 import {commonMessages, NotificationService} from '../../../../services/notificationService/NotificationService';
 import {WebserviceService} from '../../../../services/commonServices/webservice.service';
-import {ScrollHelper} from '../../../../helpers/scroll-helper/scrollHelper';
 import {TooltipService} from '../../../../services/tooltip/tooltip.service';
-import {commonUrl} from '../../../../services/urls/common-url';
 
 
 @Component({
@@ -45,6 +43,7 @@ export class IpconfigComponent implements OnInit, DoCheck, AfterViewInit, OnDest
 
   iperrorStatus = false;
   data: any;
+  api_data_status = '0';
   copyData: any;
 
   sameActiveIP = false;
@@ -54,7 +53,8 @@ export class IpconfigComponent implements OnInit, DoCheck, AfterViewInit, OnDest
 
   TableConfigArray: any = [];
   tableViewSwitchCase;
-
+  dhcpPrimaryCheck = false;
+  dhcpSecondaryCheck = false;
 
   NetworkregIPVal = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
   subnetmaskPatern = /^(((255\.){3}(255|254|252|248|240|224|192|128+))|((255\.){2}(255|254|252|248|240|224|192|128+)\.0)|((255\.)(255|254|252|248|240|224|192|128+)(\.0+){2})|((255|254|252|248|240|224|192|128+)(\.0+){3}))$/;
@@ -75,6 +75,7 @@ export class IpconfigComponent implements OnInit, DoCheck, AfterViewInit, OnDest
 
 
   ngOnInit() {
+    this.callforAnyEdit();
     this.notifyPopup.confirmationOk().subscribe((page) => {
       if (page === 'ipconfig') {
         this.submitData();
@@ -82,7 +83,6 @@ export class IpconfigComponent implements OnInit, DoCheck, AfterViewInit, OnDest
     });
     this.notifyPopup.showLoader('Loading Configurations.');
     this.loadData();
-    this.callforAnyEdit();
 
     this.ipConfigForm = new FormGroup({
 
@@ -202,7 +202,7 @@ export class IpconfigComponent implements OnInit, DoCheck, AfterViewInit, OnDest
 
 
   public restrictedGatewayIP(control: FormControl) {
-    // // console.log(control.value);
+    // console.log(control.value);
     const value = control.value;
     const result = value.split('.');
     const isValid = (result[0] == '197' || result[0] == '224' || result[0] == '0' || result[0] == '4' || result[0] == '8' || result[0] == '127' || result[0] == '5' || result[0] == '255' || result[0] == '00' || result[0] == '000');
@@ -210,7 +210,7 @@ export class IpconfigComponent implements OnInit, DoCheck, AfterViewInit, OnDest
   }
 
   public restrictedIP(control: FormControl) {
-    // // console.log(control.value);
+    // console.log(control.value);
     const value = control.value;
     const result = value.split('.');
     const isValid = (result[0] == '192' && result[1] == '0' && result[2] == '2') || (result[0] == '224' || result[0] == '0' || result[0] == '4' || result[0] == '8' || result[0] == '127' || result[0] == '5' || result[0] == '255' || result[0] == '00' || result[0] == '000');
@@ -218,15 +218,15 @@ export class IpconfigComponent implements OnInit, DoCheck, AfterViewInit, OnDest
   }
 
   public restrictedDNS(control: FormControl) {
-    // // console.log(control.value);
+    // console.log(control.value);
     const value = control.value;
     const result = value.split('.');
-    const isValid = (result[0] == '192' && result[1] == '0' && result[2] == '2') || (result[0] == '224' || result[0] == '0' || result[0] == '127' || result[0] == '5' || result[0] == '255' || result[0] == '00' || result[0] == '000');
+    const isValid = (result[0] == '192' && result[1] == '0' && result[2] == '2') || (result[0] == '224' || result[0] == '127' || result[0] == '5' || result[0] == '255' || result[0] == '00' || result[0] == '000');
     return isValid ? {'restrictedIP': true} : null;
   }
 
   public restrictedNetMask(control: FormControl) {
-    // // console.log(control.value);
+    // console.log(control.value);
     const value = control.value;
     const result = value.split('.');
     const isValid = (result[0] == '255' && result[1] == '255' && result[2] == '255' && result[3] == '255') || (result[0] == '0' || result[0] == '4' || result[0] == '8' || result[0] == '127' || result[0] == '5' || result[0] == '00' || result[0] == '000');
@@ -241,19 +241,18 @@ export class IpconfigComponent implements OnInit, DoCheck, AfterViewInit, OnDest
   }
 
   ngDoCheck() {
-    this.ipConfigForm.get('r_config.r_end_ip').disable();
+    // this.ipConfigForm.get('r_config.r_end_ip').disable();
     // console.log('Do check!!');
   }
 
   onChanges(): void {
 
 
-    this.ipConfigForm.get('ip_prefix').disable();
-    this.ipConfigForm.controls['end_ip'].disable();
-    this.ipConfigForm.get('r_config.r_end_ip').disable();
-    this.ipConfigForm.controls['ip'].disable();
-    this.ipConfigForm.controls['ipv4_config'].disable();
+    // this.ipConfigForm.get('ip_prefix').disable();
+    // this.ipConfigForm.controls['ip'].disable();
+    // this.ipConfigForm.controls['ipv4_config'].disable();
 
+    this.dhcpPrimaryCheck = true;
     this.ipConfigForm.get('configure_standby').valueChanges.subscribe(val => {
       // console.log('configure_standby', val);
       if (val === true) {
@@ -277,37 +276,56 @@ export class IpconfigComponent implements OnInit, DoCheck, AfterViewInit, OnDest
         this.TableConfigArray[0] = true;
 
         this.showTableFlag = false;
-        this.ipConfigForm.get('ip_prefix').disable();
-        this.ipConfigForm.controls['ip'].disable();
-        this.ipConfigForm.controls['ipv4_config'].disable();
+        if (this.ipConfigForm.get('ipv4_config').invalid ||
+          this.ipConfigForm.get('ip').invalid ||
+          this.ipConfigForm.get('ip_prefix').invalid) {
+          this.btnDisable = true;
+        }
+        // this.ipConfigForm.get('ip_prefix').disable();
+        //  this.ipConfigForm.controls['ip'].disable();
+        // this.ipConfigForm.controls['ipv4_config'].disable();
+        this.dhcpPrimaryCheck = true;
+        // console.log('obj_comp_btn', this.btnDisablex);
+        // console.log('ip_btn', this.btnDisableonIP);
+        // console.log('primary section invalid', this.ipConfigForm.get('ipv4_config').invalid);
+        // console.log('primary ip invalid', this.ipConfigForm.get('ip').invalid);
+        // console.log('primary prifix invalid', this.ipConfigForm.get('ip_prefix').invalid);
 
       } else {
         this.TableConfigArray[0] = false;
 
         this.showTableFlag = true;
-        this.ipConfigForm.get('ip_prefix').enable();
-        this.ipConfigForm.controls['ip'].enable();
-        this.ipConfigForm.controls['ipv4_config'].enable();
+        this.dhcpPrimaryCheck = false;
+        //  this.ipConfigForm.get('ip_prefix').enable();
+        // this.ipConfigForm.controls['ip'].enable();
+        // this.ipConfigForm.controls['ipv4_config'].enable();
+
+
+     // console.log('obj_comp_btn', this.btnDisablex);
+     // console.log('ip_btn', this.btnDisableonIP);
+     // console.log('primary section invalid', this.ipConfigForm.get('ipv4_config').invalid);
+     // console.log('primary ip invalid', this.ipConfigForm.get('ip').invalid);
+     // console.log('primary prifix invalid', this.ipConfigForm.get('ip_prefix').invalid);
       }
     });
 
-    this.ipConfigForm.get('r_config.r_end_ip').disable();
     this.ipConfigForm.get('r_dhcp').valueChanges.subscribe(val => {
-      // // console.log('r_config.r_dhcp');
+      // console.log('r_config.r_dhcp');
       if (val === true) {
         this.TableConfigArray[2] = true;
 
         this.showTableFlag = false;
-        this.ipConfigForm.get('r_config.r_ip_prefix').disable();
-        this.ipConfigForm.get('r_config').disable();
+        this.dhcpSecondaryCheck = true;
+        // this.ipConfigForm.get('r_config.r_ip_prefix').disable();
+        // this.ipConfigForm.get('r_config').disable();
       } else {
 
         this.TableConfigArray[2] = false;
 
         this.showTableFlag = true;
-        this.ipConfigForm.get('r_config.r_end_ip').disable();
-        this.ipConfigForm.get('r_config.r_ip_prefix').enable();
-        this.ipConfigForm.get('r_config').enable();
+        this.dhcpSecondaryCheck = false;
+        // this.ipConfigForm.get('r_config.r_ip_prefix').enable();
+        // this.ipConfigForm.get('r_config').enable();
 
       }
     });
@@ -337,12 +355,9 @@ export class IpconfigComponent implements OnInit, DoCheck, AfterViewInit, OnDest
 
   generateEndIPforActive(netmaskPrefix, ipAddress, wlctype) {
     // http://192.168.103.124:8000/api/utils/ip-range-list/?start_ip=192.168.103.2&netmask=24&wlc_type=2
-    // console.log('netmaskPrefix', netmaskPrefix);
-    // console.log('ipAddress', ipAddress);
-    // console.log('wlctype', wlctype);
     this._service.getWeb('utils/ip-range-list/?start_ip=' + ipAddress + '&netmask=' + netmaskPrefix + '&wlc_type=' + wlctype, '', '').then(_result => {
       if (_result.status == '1') {
-        //   console.log(_result);
+        // console.log(_result);
         const newEndIP = _result.result[0];
         // const wlcType = _result.result[1];
 
@@ -363,15 +378,12 @@ export class IpconfigComponent implements OnInit, DoCheck, AfterViewInit, OnDest
 
   generateEndIPforStandby(netmaskPrefix, ipAddress, wlctype) {
     // http://192.168.103.124:8000/api/utils/ip-range-list/?start_ip=192.168.103.2&netmask=24&wlc_type=2
-    // console.log('netmaskPrefix', netmaskPrefix);
-    // console.log('ipAddress', ipAddress);
-    // console.log('wlctype', wlctype);
 
     this._service.getWeb('utils/ip-range-list/?start_ip=' + ipAddress + '&netmask=' + netmaskPrefix + '&wlc_type=' + wlctype, '', '').then(_result => {
 
-      //  console.log(_result);
+      // console.log(_result);
       if (_result.status == '1') {
-        //    console.log(_result);
+        // console.log(_result);
         const newEndIP = _result.result[0];
         const wlcType = _result.result[1];
 
@@ -400,14 +412,69 @@ export class IpconfigComponent implements OnInit, DoCheck, AfterViewInit, OnDest
 
   }
 
+  customFormReset() {
+    this.ipConfigForm.patchValue({'ip': ''});
+    this.ipConfigForm.patchValue({'ip_prefix': ''});
+    this.ipConfigForm.patchValue({'end_ip': ''});
+    this.ipConfigForm.patchValue({'ipv4_config': {'subnet_mask': ''}});
+    this.ipConfigForm.patchValue({'ipv4_config': {'gateway': ''}});
+    this.ipConfigForm.patchValue({'ipv4_config': {'primary_dns': ''}});
+    this.ipConfigForm.patchValue({'ipv4_config': {'secondary_dns': ''}});
+
+
+    // this.ipConfigForm.patchValue({'r_config': {'r_ip': ''}});
+    // this.ipConfigForm.patchValue({'r_config': {'r_ip_prefix': ''}});
+    // this.ipConfigForm.patchValue({'r_config': {'r_end_ip': ''}});
+    // this.ipConfigForm.patchValue({'r_config': {'r_netmask': ''}});
+    // this.ipConfigForm.patchValue({'r_config': {'r_gateway': ''}});
+    // this.ipConfigForm.patchValue({'r_config': {'r_primary_dns': ''}});
+    // this.ipConfigForm.patchValue({'r_config': {'r_secondary_dns': ''}});
+
+    //  this.ipConfigForm.get('r_config.r_ip').setValidators(this.sameAsStandByIP);
+    //  this.ipConfigForm.get('ip').setValidators(this.sameAsActiveIP);
+
+    this.ipConfigForm.controls['dhcp'].patchValue(false);
+
+    this.TableConfigArray[0] = false;
+
+    this.showTableFlag = true;
+    this.ipConfigForm.get('ip_prefix').enable();
+    this.ipConfigForm.controls['ip'].enable();
+    // this.ipConfigForm.controls['ipv4_config'].enable();
+    this.dhcpPrimaryCheck = false;
+    this.ipConfigForm.controls['configure_standby'].patchValue(false);
+
+    this.TableConfigArray[1] = false;
+    this.submitButtonCondition = true;
+
+
+    this.ipConfigForm.controls['r_dhcp'].patchValue(false);
+
+    this.TableConfigArray[2] = false;
+
+    this.showTableFlag = true;
+    this.ipConfigForm.get('r_config.r_ip_prefix').enable();
+    this.ipConfigForm.get('r_config').enable();
+
+    // this.redundancySlider();
+
+
+  }
 
   onReset() {
-    // this.ipConfigForm.reset();
-    this.patchValueInForm(this.data);
-    this.IpvalidateStatus = false;
-    this.iperrorStatus = false;
-    this.activeIPCallError = false;
-    this.standByIPCallError = false;
+    // console.log(this.api_data_status);
+    if (this.api_data_status === '1') {
+      this.patchValueInForm(this.data);
+      this.IpvalidateStatus = false;
+      this.iperrorStatus = false;
+      this.activeIPCallError = false;
+      this.standByIPCallError = false;
+     // console.log('if');
+    } else {
+      this.customFormReset();
+      this.ipConfigForm.markAsUntouched();
+      // console.log('else');
+    }
   }
 
   validateIP(event) {
@@ -433,16 +500,16 @@ export class IpconfigComponent implements OnInit, DoCheck, AfterViewInit, OnDest
     {
       this.sameActiveIP = false;
       const activeIP = this.ipConfigForm.get('ip').value;
-      //  // console.log('primary IP');
-      //  // console.log(activeIP.length);
+      // console.log('primary IP');
+      // console.log(activeIP.length);
 
       if (activeIP.length !== 0) {
         if (typeof standByIP == 'string' && typeof activeIP == 'string' && activeIP === standByIP) {
-          //   // console.log('match');
+          // console.log('match');
           this.sameStandByIP = true;
           this.btnDisableonIP = true;
         } else {
-          //   // console.log('not match');
+          // console.log('not match');
           this.sameStandByIP = false;
           this.btnDisableonIP = false;
         }
@@ -457,16 +524,16 @@ export class IpconfigComponent implements OnInit, DoCheck, AfterViewInit, OnDest
     {
       this.sameStandByIP = false;
       const StandByIP = this.ipConfigForm.get('r_config.r_ip').value;
-      //  // console.log('primary IP');
-      //   // console.log(activeIP.length);
+      // console.log('primary IP');
+      // console.log(activeIP.length);
 
       if (activeIP.length !== 0) {
         if (typeof StandByIP == 'string' && typeof activeIP == 'string' && activeIP === StandByIP) {
-          //   // console.log('match');
+          // console.log('match');
           this.sameActiveIP = true;
           this.btnDisableonIP = true;
         } else {
-          //   // console.log('not match');
+          // console.log('not match');
           this.sameActiveIP = false;
           this.btnDisableonIP = false;
         }
@@ -476,27 +543,6 @@ export class IpconfigComponent implements OnInit, DoCheck, AfterViewInit, OnDest
     }
 
   }
-
-
-  // focusIsWorking() {
-  //   // console.log('yes yes');
-  // case '0':
-  //   return this.ipConfigForm.patchValue({'ipv4_config': {'subnet_mask': '0.0.0.0'}});
-  // case '1':
-  //   return this.ipConfigForm.patchValue({'ipv4_config': {'subnet_mask': '128.0.0.0'}});
-  // case '2':
-  //   return this.ipConfigForm.patchValue({'ipv4_config': {'subnet_mask': '192.0.0.0'}});
-  // case '3':
-  //   return this.ipConfigForm.patchValue({'ipv4_config': {'subnet_mask': '224.0.0.0'}});
-  // case '4':
-  //   return this.ipConfigForm.patchValue({'ipv4_config': {'subnet_mask': '240.0.0.0'}});
-  // case '5':
-  //   return this.ipConfigForm.patchValue({'ipv4_config': {'subnet_mask': '248.0.0.0'}});
-  // case '6':
-  //   return this.ipConfigForm.patchValue({'ipv4_config': {'subnet_mask': '252.0.0.0'}});
-  // case '7':
-  //   return this.ipConfigForm.patchValue({'ipv4_config': {'subnet_mask': '254.0.0.0'}});
-  // }
 
   netmaskValidation(invokedSource) {
     if (invokedSource === 'ip_active_prefix') {
@@ -620,8 +666,11 @@ export class IpconfigComponent implements OnInit, DoCheck, AfterViewInit, OnDest
 
   callforAnyEdit() {
     this._service.getWeb('configurations/ip-configuration/', '', '').then(_result => {
-      if (_result.status === '1') {
+      if (_result.status == '1') {
+        // console.log('cpy data');
         this.copyData = _result.result;
+        // console.log('cpy data', this.copyData);
+
         delete this.copyData.ip_active.vm_details;
         delete this.copyData.ip_standby.vm_details;
         delete this.copyData.redundancy_state;
@@ -634,8 +683,9 @@ export class IpconfigComponent implements OnInit, DoCheck, AfterViewInit, OnDest
   loadData() {
     this._service.getWeb('configurations/ip-configuration/', '', '').then(_result => {
       if (_result.status === '1') {
+        this.api_data_status = _result.status;
         this.data = _result.result;
-        console.log(this.data);
+        // console.log(this.data);
         this.activeArray = this.data.ip_active.vm_details;
         // console.log(this.data.ip_active);
         // console.log(this.data);
@@ -663,8 +713,9 @@ export class IpconfigComponent implements OnInit, DoCheck, AfterViewInit, OnDest
           this.notifyPopup.logoutpop(commonMessages.InternalserverError);
         }
       } else {
-        this.notifyPopup.logoutpop(commonMessages.InternalserverError);
+        this.customFormReset();
         this.disableResetButton = true;
+        this.notifyPopup.logoutpop(commonMessages.InternalserverError);
       }
     });
   }
@@ -705,10 +756,10 @@ export class IpconfigComponent implements OnInit, DoCheck, AfterViewInit, OnDest
       this.TableConfigArray[0] = true;
 
       this.showTableFlag = false;
-      this.ipConfigForm.get('ip_prefix').disable();
-      this.ipConfigForm.controls['ip'].disable();
-      this.ipConfigForm.controls['ipv4_config'].disable();
-
+      // this.ipConfigForm.get('ip_prefix').disable();
+      // this.ipConfigForm.controls['ip'].disable();
+      // this.ipConfigForm.controls['ipv4_config'].disable();
+      this.dhcpPrimaryCheck = true;
       // console.log('1');
 
     } else {
@@ -717,10 +768,10 @@ export class IpconfigComponent implements OnInit, DoCheck, AfterViewInit, OnDest
       this.TableConfigArray[0] = false;
 
       this.showTableFlag = true;
-      this.ipConfigForm.get('ip_prefix').enable();
-      this.ipConfigForm.controls['ip'].enable();
-      this.ipConfigForm.controls['ipv4_config'].enable();
-
+      // this.ipConfigForm.get('ip_prefix').enable();
+      //  this.ipConfigForm.controls['ip'].enable();
+      this.dhcpPrimaryCheck = false;
+      //  this.ipConfigForm.controls['ipv4_config'].enable();
       // console.log('1- false');
     }
 
@@ -751,11 +802,10 @@ export class IpconfigComponent implements OnInit, DoCheck, AfterViewInit, OnDest
       this.ipConfigForm.controls['r_dhcp'].patchValue(true);
 
       this.TableConfigArray[2] = true;
-
-
       this.showTableFlag = false;
-      this.ipConfigForm.get('r_config.r_ip_prefix').disable();
-      this.ipConfigForm.get('r_config').disable();
+      this.dhcpSecondaryCheck = true;
+      // this.ipConfigForm.get('r_config.r_ip_prefix').disable();
+      // this.ipConfigForm.get('r_config').disable();
 
       // this.submitButtonCondition = true;
       // console.log('3');
@@ -765,14 +815,16 @@ export class IpconfigComponent implements OnInit, DoCheck, AfterViewInit, OnDest
       this.TableConfigArray[2] = false;
 
       this.showTableFlag = true;
-      this.ipConfigForm.get('r_config.r_end_ip').disable();
-      this.ipConfigForm.get('r_config.r_ip_prefix').enable();
-      this.ipConfigForm.get('r_config').enable();
+      this.dhcpSecondaryCheck = false;
+      // this.ipConfigForm.get('r_config.r_end_ip').disable();
+      // this.ipConfigForm.get('r_config.r_ip_prefix').enable();
+      // this.ipConfigForm.get('r_config').enable();
 
       //  this.submitButtonCondition = false;
 
       // console.log('3- false');
     }
+    this.btnDisable = true;
     this.redundancySlider();
 
 
@@ -820,7 +872,7 @@ export class IpconfigComponent implements OnInit, DoCheck, AfterViewInit, OnDest
   }
 
   ngAfterViewInit() {
-    console.log('After view Init!');
+   // console.log('After view Init!');
     this.ipConfigForm.statusChanges.subscribe((val) => {
       // console.log('primary valid', this.ipConfigForm.get('ipv4_config').status );
       // console.log('secondary valid', this.ipConfigForm.get('r_config').status );
@@ -886,15 +938,15 @@ export class IpconfigComponent implements OnInit, DoCheck, AfterViewInit, OnDest
 
   checkAnyUpdate() {
     const formValue = this.createFormObject();
-    // console.log(this.copyData);
-    // console.log(formValue);
+   // console.log('copydata', this.copyData);
+   // console.log('formvalue', formValue);
     if (_.isEqual(this.copyData, formValue)) {
       // console.log('objects are same');
       this.btnDisablex = true;
     } else {
       // console.log('here 2');
       this.btnDisablex = false;
-      // console.log('objects are not same');
+     // console.log('objects are not same');
     }
 
   }
@@ -902,18 +954,21 @@ export class IpconfigComponent implements OnInit, DoCheck, AfterViewInit, OnDest
   submitData() {
     const formData = this.createFormObject();
     // console.log(formData);
-    this.notifyPopup.hideLoader('');
-    // this.notifyPopup.showLoader('Please wait applying IP configurations...');
+    // this.notifyPopup.hideLoader('');
     this.notifyPopup.showLoader('System is undergoing a reboot for the latest IP configurations...');
-
     this._service.postJson('configurations/ip-configuration/', formData).then(_result => {
       if (_result.status === '1') {
-        //   this.notifyPopup.success('Settings applied successfully, system rebooting....');
-        //   // this.loadData();
+        this.notifyPopup.showLoader('System is undergoing a reboot for the latest IP configurations...');
+        // this.notifyPopup.success('Settings applied successfully, system rebooting....');
+        this.btnDisable = true;
+        //  this.loadData();
         //
         // } else {
         //   this.notifyPopup.error(commonMessages.serverError);
         //   this.notifyPopup.hideLoader('');
+      } else {
+        this.notifyPopup.logoutpop(commonMessages.InternalserverError);
+        this.btnDisable = false;
       }
     });
   }

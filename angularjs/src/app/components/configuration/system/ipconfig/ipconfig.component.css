@@ -47,21 +47,7 @@
   margin-top: -5px;
   border-top: none;
 }
-::ng-deep .bs-datepicker table td {
-  padding: 0 !important;
-}
-::ng-deep .bs-datepicker-container{
-  padding:  0 !important;
-}
-::ng-deep .bs-datepicker-body{
-  padding:  0 !important;
-}
-::ng-deep .bs-datepicker-body table th{
-  color: #fff !important;
-}
-::ng-deep timepicker table td {
-  padding: 0 !important;
-}
+
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
@@ -75,4 +61,12 @@ input[type=number] {
 
 .text-danger {
   padding-top: 3px;
+}
+
+input:-moz-read-only {
+  cursor: not-allowed;
+}
+
+input:read-only {
+  cursor: not-allowed;
 }

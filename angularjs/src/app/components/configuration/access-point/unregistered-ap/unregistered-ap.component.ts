@@ -182,6 +182,7 @@ export class UnregisteredApComponent implements OnInit, AfterViewInit {
       this.gpErrFlg = true;
     }else{
       this.modalService.hide(1);
+      document.querySelector('.bodyscroll').classList.remove('modal-open');
       this.gpErrFlg = false;
       this.finalpostData = [];
       this.macArray = [];

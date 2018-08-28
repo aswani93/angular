@@ -1,5 +1,5 @@
 <!--/======================/WORK AREA/======================/-->
-<div class="page-content-wrapper">
+<div class="page-content-wrapper apList">
     <!-- <div class="row">
       <div class="col-lg-5 col-sm-12">
           <div class="searchBar">
@@ -8,6 +8,14 @@
           </div>
       </div>
   </div> -->
+  <div class="row">
+        <div class="col-lg-5 col-sm-12">
+          <div class="searchBar">
+            <i class="icon icon-magnifying-glass"></i>
+            <input type="text" placeholder="Search"  (keyup)="search($event)">
+          </div>
+        </div>
+      </div>
   <form action="" (keydown.enter)="$event.preventDefault()" [formGroup]="rogueAPForm">
     <div class="row">
         <div class="col-lg-12 col-sm-12">
@@ -203,7 +211,7 @@
                     </div>
                 </div>
             </div> -->
-            <div class="row" *ngIf="roghAPConfigStatus">
+            <div class="row regApList" *ngIf="roghAPConfigStatus">
                 <div class="col-lg-12 col-xs-12 col-sm-12">
                     <!-- <div class="portlet">
               <div class="portlet-body">                                              -->

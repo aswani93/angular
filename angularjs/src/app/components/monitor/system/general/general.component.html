@@ -38,6 +38,9 @@
                 <span>IP Address</span>
               </th>
               <th>
+                  <span>VRRP IP Address</span>
+                </th>
+              <th>
                 <span>MAC Address</span>
               </th>
               <th>
@@ -60,6 +63,7 @@
             <tr class="table-body" *ngFor="let item of mf.data">
               <td>{{item.system_name}}</td>
               <td>{{item.system_ip_address}}</td>
+              <td style="text-align: center">{{item.vrrp_ip_address}}</td>
               <td>{{item.system_mac_address}}</td>
               <td>{{item.serial_no}}</td>
               <td>{{item.system_version}}</td>

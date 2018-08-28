@@ -151,6 +151,10 @@ export class ConnectedClientsComponent implements OnInit, OnDestroy, AfterViewIn
       {name: 'Uplink', checked: false},
       {name: 'Downlink', checked: false},
       {name: 'Online Time', checked: false},
+      {name: 'Client Device Type', checked: false},
+      {name: 'Client IP', checked: false},
+      {name: 'Client Name', checked: false},
+      {name: 'Client OS', checked:false}
     ];
   }
 

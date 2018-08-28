@@ -105,6 +105,9 @@ export class TooltipService {
   system_aaa_server_s_aaa_ip = 'Server IP address';
   system_aaa_server_s_aaa_port = 'Server port number (1-65535)';
   system_aaa_server_s_aaa_passphrase = 'Passphrase (8-32 chars)';
+  catpure_interface = "Capture Interface";
+  packet_capture_size = "Capture File Size between 64 - 4096 KB";
+  packet_capure_duration = "Packet Capture Duration (10 - 3600) Seconds";
 
 
   default = 'lorem ipsum dolor sit';
@@ -125,6 +128,13 @@ export class TooltipService {
     } else if (text_id === 'system_ems_snmp_snmp_version') {
       return this.system_ems_snmp_snmp_version;
 
+      // Packet Capture
+    }else if(text_id == 'catpure_interface'){
+      return this.catpure_interface
+    }else if(text_id == 'packet_capture_size'){
+      return this.packet_capture_size
+    }else if(text_id == 'packet_capure_duration'){
+      return this.packet_capure_duration
       // add group page helper text.
 
     } else if (text_id === 'group_configuration_add_group_2_transmit_power') {

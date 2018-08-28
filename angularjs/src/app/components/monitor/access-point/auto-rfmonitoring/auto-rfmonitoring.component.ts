@@ -22,7 +22,7 @@ export class AutoRfmonitoringComponent implements OnInit, AfterViewInit {
   public currentPage;
   public rowsOnPage = 20;
   public dataLength;
-  public selectedApname = '';
+  public selectedAp;
   private url = commonUrl.dynamicsocket;
   private socket;
   public _sortBy;
@@ -49,12 +49,8 @@ export class AutoRfmonitoringComponent implements OnInit, AfterViewInit {
   public graphClicked: boolean = false;
   private autoRefreshTime: Number = 50000;
   
-  AutoRFAPChart:any;
   public titleText = null;
-  public graphColors = [];
   public selectedGraphChannel = 0;
-  public selectedGraphMac = 0;
-  public chartEmpty: boolean = false;
 
   coloumsObjects:any = [];
   count:number = 0;
@@ -95,7 +91,6 @@ export class AutoRfmonitoringComponent implements OnInit, AfterViewInit {
     this.showLoaderBoolStatus = true;
     this.hideLoaderBoolStatus = false;
     this.fetchDataFromServer();  
-    this.autoRefreshGraph = setInterval(() => this.fetchGraphData(), this.autoRefreshTime);
 
     this.autoRefreshTable = setInterval(() => this.fetchDataFromServer(), this.autoRefreshTime);
   }
@@ -114,7 +109,6 @@ export class AutoRfmonitoringComponent implements OnInit, AfterViewInit {
     }, 500);
 
     this._service.getWeb('statistics/auto-rf-enabled-ap-list/', '', '').then(_data => {
-    console.log(_data);
     if (_data.status == 1) {
 
       this.data = _data.result['Registered_aps'];
@@ -145,7 +139,7 @@ export class AutoRfmonitoringComponent implements OnInit, AfterViewInit {
     let val = event.target.value;
     if (val.length > 2) {
       clearInterval(this.autoRefreshTable);
-      this._service.getWeb('utils/ap-search/?query=' + val + '', '', '').then(_data => {
+      this._service.getWeb('utils/rogue-ap-search/?query=' + val +'&search_from=autorf'+'', '', '').then(_data => {
         if (_data) {
           if (_data.result.length != 0) {
             this.data = _data.result;
@@ -167,46 +161,12 @@ export class AutoRfmonitoringComponent implements OnInit, AfterViewInit {
 
 
   double_click_event(event,ap,index){
-    this.selectedApname = ap.ap_name;
-    this.graphColors = [];
+    this.autoRefreshTime = 300000;
+    this.selectedAp = ap;
     this.selectedGraphChannel = 0;
-    this.selectedGraphMac = ap.ap_mac;
-    this.fetchGraphData();
-    this.graphClicked = true;
-
-    
+    this.graphClicked = true;   
 
   }
-
-  fetchGraphData(){
-    this.chartEmpty = false;
-    this._service.getWeb('statistics/auto-rf-channel-utilization/?ap_mac='+this.selectedGraphMac+'&radio='+this.selectedGraphChannel,'','')
-      .then(_data => {
-        console.log(_data);
-        if(_data.result.length > 0){
-          let channelInfoObject = _data.result[0].channels_info;
-          let keys = Object.keys(channelInfoObject);
-          let utilizationData = [];
-          let utilization;
-          for(let key of keys){
-            utilization = {
-             name: 'channel '+key,
-             y: channelInfoObject[key].channel_utilization,
-             color: this.getRandomColor()
-            }
-            utilizationData.push(utilization);
-          }
-        this.graphDrawFunction('AutoRFAPChart',keys,utilizationData);
-
-        } else {
-          this.chartEmpty = true;
-        }       
-
-      }).catch((error) => {
-        this.chartEmpty = true;
-      });
-  }
-
 
   ngAfterViewInit() {
     
@@ -273,77 +233,24 @@ export class AutoRfmonitoringComponent implements OnInit, AfterViewInit {
       /* pagination method here end*/
  
       
-    
-    graphDrawFunction(str,keys,utilizationData){
-      this.AutoRFAPChart= new Chart({
-            chart: {
-              type: 'column'
-            },
-            title: {
-              text: ''
-             },
-            legend: {
-                enabled: false
-            },
-            credits: {
-              enabled: false
-            },
-             xAxis: {
-            categories: keys,
-             lineWidth: 0,
-           minorGridLineWidth: 0,
-           lineColor: 'transparent',         
-           labels: {
-               enabled: true
-           },
-           minorTickLength: 0,
-           tickLength: 0,
-             title: {
-                text: 'AP Channels'
-            }
-            },
-             yAxis: {
-            allowDecimals: false,
-            title: {
-                text: 'Utilization'
-            }
-        },
-                series: [{
-                name: 'AP',
-                data:utilizationData,
-               
-            }]
-          });
-   }
 
-   getRandomColor() {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    if(this.graphColors.indexOf(color) != -1){
-      color = this.getRandomColor();
-    }
-    else{
-      this.graphColors.push(color);
-      return color;
-    }    
-  }       
+   
         
   changeGraphValues(channel){
     
     if(channel == 1){
       this.selectedGraphChannel = 1;
-      this.fetchGraphData();
+      // this.fetchGraphData();
     }else{
       this.selectedGraphChannel = 0;
-      this.fetchGraphData();
+      // this.fetchGraphData();
     }
   }
 
   goBack(){
+    this.autoRefreshTime = 50000;
     this.graphClicked = false;
+    this.fetchDataFromServer();
   }
 
 }

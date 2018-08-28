@@ -99,7 +99,7 @@
 .portlet.light>.portlet-title {
     padding: 5px 20px 2px 0;
   }
-  
+
   .custom-title{
     background-color: #334157;
     border-radius: 8px 8px 0 0;
@@ -108,10 +108,10 @@
    color: #fff;
   }
   .custom-title  .btn-theme-inverse {
-  background-color: #fff; 
+  background-color: #fff;
     color:  #111;
     border-color: #111;
-   
+
   }
   .custom-title  .dropdown.btn-theme-inverse ul li a {
     color: #111 !important;
@@ -149,7 +149,7 @@
 
 ::ng-deep .highcharts-container{
     width: 1000px;
-} 
+}
 ::ng-deep i.icon.icon-router1.title-icon {
     font-size: 2.2em;
     text-align: center;
@@ -160,7 +160,7 @@
 
 .tab {
     float: left;
-   
+
 }
 .tabDiv{
     margin-bottom: 15px;
@@ -182,13 +182,13 @@
     margin-right: 15px;
 }
 .s1{
-    background-color: #ff5050;
+    background-color: #EA2027;
 }
 .s2{
-    background-color: #ff9141;
+    background-color: #e67e22;
 }
 .s3{
-    background-color: #ffcf0f;
+    background-color: #f6b93b;
 }
 .tabDiv p{
     cursor: pointer;
@@ -212,7 +212,7 @@
   margin-left: 2px;
 }
 div.tab button.s1:hover {
-    background-color: #d42525;
+    background-color: #ff5050;
 }
 div.tab button.s2:hover {
     background-color: #e87724fa;
@@ -234,8 +234,7 @@ div.tab button.s3:hover {
 }
 .ovr-flw-200 .row{
     border-bottom:solid 1px #EEE;
-    padding:10px 0px; 
+    padding:10px 0px;
 }
 .ovr-flw-200 .row p{margin-bottom: 0px;}
 
- 

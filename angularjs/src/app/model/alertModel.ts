@@ -13,6 +13,7 @@ export enum AlertType {
     details,
     Logout,
     Success_details,
-    autorf_success_details
+    autorf_success_details,
+    rogueap_success_details
    
 }

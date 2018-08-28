@@ -4,11 +4,11 @@ import {Observable} from 'rxjs';
 import {Subject} from 'rxjs/Subject';
 import {Alert, AlertType} from '../../model/alertModel';
 
-export class commonMessages { 
+export class commonMessages {
   static offlineAutoRFUpdateError = 'The selected AP/APs are offline';
   static autoRFShowData = 'Loading all APs...';
   static updatingAutoRFConfiguration = 'Updating AutoRF setting...';
-  static autoRFUpdate = 'Auto RF configuration settings updated'; 
+  static autoRFUpdate = 'Auto RF configuration settings updated';
   static registerShowData = 'Loading all registered APs...';
   static unregisterShowData = 'Loading all unregistered APs...';
   static groupShowData = 'Loading group configurations...';
@@ -18,6 +18,10 @@ export class commonMessages {
   static confirm_delete_SSID = 'Are you sure to delete this SSID?';
   static confirm_delete_DHCP = 'Are you sure to delete this DHCP profile?';
   static confirm_delete_AAA = 'Are you sure to delete this AAA Server?';
+
+  static confirm_packet_start = "Start Packet Capture, Are you Sure ?";
+  static packet_capture_initial = 'Packet Capture Initiated..';
+  static packet_stopped = "Packet Capture Stopped....";
   
   static delete_AP = 'Unregistering APs';
 
@@ -39,7 +43,7 @@ export class commonMessages {
   static maintenance_AP_upgrade = 'Data upgrading now...';
   static maintenance_system_update = 'Updating data , Please wait...';
   static maintenance_system_restore = 'Restoring data , Please wait...';
-  static imgUpgrade = 'Please select both AP Model and Group Name.';
+  static imgUpgrade = 'Please select AP Model, Group Name and Board Type.';
   static apModelSelectionError = 'Please select AP Model';
   static groupSelectionError = 'Please select Group Name';
   static upgrade_type = 'Please select upgrade Type';
@@ -80,13 +84,14 @@ export class commonMessages {
   static AP_update_msg = 'Your data updated successfully';
   static AP_error_update_msg = 'Something went wrong,Please try again...';
   static AP_updating_msg = 'Please wait , Updating the AP....';
-  static AP_edit_select = 'Please select One AP for Edit';
+  static AP_edit_select = 'Please select atleast one AP for Edit';
   static radioChannels_text = 'Please select all radio channels';
   static ssid_name_exists = 'SSID name already exists';
   static aaa_name_exists = 'AAA name already exists';
   static aaa_ip_exists = 'AAA server with IP already exists';
   static ssid_save_success = 'SSID saved sucessfully';
   static aaa_save_success = 'AAA Server saved sucessfully';
+  static save_success="Settings applied successfully";
   static ssid_update_success = 'SSID update sucessfully';
   static useraccount_update_success = 'UserAccount update sucessfully';
   static aaa_update_success = 'AAA server updated sucessfully';
@@ -101,6 +106,7 @@ export class commonMessages {
   static unable_delete_allssid = 'Unable to delete all ssid';
   static not_disable_all = 'Atleast one radio should be enabled';
   static InternalserverError = 'Internal server error, Please try again later...';
+  static ipOutOfVrrpRange = 'VRRIP is out of WLC Range IP';
   static ssid_failed = 'Failed to create ssid';
   static ssid_failed_update = 'Failed to update ssid';
   static ssid_failed_delete = 'Failed to delete the selected ssid';
@@ -109,7 +115,7 @@ export class commonMessages {
   static grp_save_failed = 'Failed to create group';
   static grp_update_failure = 'Failed to update group';
   static edit_reg_page = 'Loading data...';
-  
+
 };
 
 
@@ -165,6 +171,10 @@ export class NotificationService {
     this.alert(AlertType.autorf_success_details, message, keepAfterRouteChange);
   }
 
+  rogueap_success_detials(message:any, keepAfterRouteChange =false){
+    this.alert(AlertType.rogueap_success_details, message, keepAfterRouteChange);
+  }
+
   logoutpop(message: any, keepAfterRouteChange = false) {
     this.alert(AlertType.Logout, message, keepAfterRouteChange);
   }
@@ -198,7 +208,7 @@ export class NotificationService {
     this.message.next(page[page.length - 1]);
   }
 
-  showeddetails(ev) {    
+  showeddetails(ev) {
     this.clear();
     var path = document.URL;
     var page = path.split('/');

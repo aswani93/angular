@@ -270,6 +270,6 @@ input[type=number]::-webkit-outer-spin-button {
     font-size: 12px;
 }
 ::ng-deep .ng5-slider {
-    margin-top: 12px;
-    margin-bottom: 20px;
+    margin-top: 12px !important;
+    margin-bottom: 20px !important;
 }

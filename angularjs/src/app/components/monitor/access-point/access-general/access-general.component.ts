@@ -44,12 +44,13 @@ export class AccessGeneralComponent implements OnInit, AfterViewInit, AfterViewI
   @ViewChild('mf2')
   private ap_dataTable: DataTable;
 
- /* pagination declaration variable*/
-   page: number = 1;
-  Math:any = Math;
-  firstarrowStatus:boolean = true;
-  lastarrowStatus:boolean = false;
-    /*pagination declaration variable end */
+  /* pagination declaration variable*/
+  page: number = 1;
+  Math: any = Math;
+  firstarrowStatus: boolean = true;
+  lastarrowStatus: boolean = false;
+
+  /*pagination declaration variable end */
   constructor(private _service: WebserviceService, private notifyPopup: NotificationService) {
   }
 
@@ -74,12 +75,10 @@ export class AccessGeneralComponent implements OnInit, AfterViewInit, AfterViewI
     // });
 
 
-
     this.grp_dataTable.onSortChange.subscribe((event: SortEvent) => {
       this._sortBy = event.sortBy;
       this._sortOrder = event.sortOrder;
     });
-
 
 
     $('.upgrade-tabs .tab-links a').on('click', function (e) {
@@ -110,7 +109,7 @@ export class AccessGeneralComponent implements OnInit, AfterViewInit, AfterViewI
     this._service.getWeb('configurations/registered-ap/', '', '').then(_data => {
       if (_data.status == 1) {
         this.ap_data = _data.result['Registered_aps'];
-        //console.log('' + JSON.stringify(this.ap_data));
+        // console.log('' + JSON.stringify(this.ap_data));
 
       }
     });
@@ -203,14 +202,13 @@ export class AccessGeneralComponent implements OnInit, AfterViewInit, AfterViewI
 
         }
       });
-    }
-    else {
+    } else {
       this.isApSelected = !this.isApSelected;
       this.selector_name = obj.ap_name;
       this._service.getWeb('configurations/ap-details/?ap_mac=' + obj.ap_mac, '', '').then(_data => {
         if (_data.status == 1) {
           this.AP_details = _data.results;
-          console.log('' + JSON.stringify(_data));
+          console.log(_data.results);
 
         }
       });
@@ -227,34 +225,33 @@ export class AccessGeneralComponent implements OnInit, AfterViewInit, AfterViewI
     else if (obj == 'accessPoint') {
       this.apiVal = 'ap-search';
       this.searchKey = 'Search AP\'s here..';
-       setTimeout(() => {
-      this.ap_dataTable.onPageChange.subscribe((x) => {
-      this.currentPage = x.activePage;
-      this.dataLength2 = x.dataLength; 
-      this.pageModulus = this.dataLength2 % x.rowsOnPage;
-      console.log( x.rowsOnPage +"////////"+this.pageModulus +"//////"+this.currentPage +"//////"+this.dataLength2)
-
-      
-        if (x.rowsOnPage * this.currentPage > x.dataLength) {
-        this.showingto2 = (x.rowsOnPage * (this.currentPage - 1)) + this.pageModulus;
-        console.log( this.showingto2 +"////////"+this.pageModulus +"//////"+this.currentPage +"//////"+this.dataLength2)
-
-        this.showingfrom2 = (this.showingto2 - this.pageModulus) + 1;
-      } else {
-        this.showingto2 = x.rowsOnPage * this.currentPage;
-        this.showingfrom2 = (this.showingto2 - x.rowsOnPage) + 1;
-      }
-    });
+      setTimeout(() => {
+        this.ap_dataTable.onPageChange.subscribe((x) => {
+          this.currentPage = x.activePage;
+          this.dataLength2 = x.dataLength;
+          this.pageModulus = this.dataLength2 % x.rowsOnPage;
+          console.log(x.rowsOnPage + '////////' + this.pageModulus + '//////' + this.currentPage + '//////' + this.dataLength2);
 
 
+          if (x.rowsOnPage * this.currentPage > x.dataLength) {
+            this.showingto2 = (x.rowsOnPage * (this.currentPage - 1)) + this.pageModulus;
+            console.log(this.showingto2 + '////////' + this.pageModulus + '//////' + this.currentPage + '//////' + this.dataLength2);
 
-    this.ap_dataTable.onSortChange.subscribe((event: SortEvent) => {
-      this._sortBy = event.sortBy;
-      this._sortOrder = event.sortOrder;
-    });
+            this.showingfrom2 = (this.showingto2 - this.pageModulus) + 1;
+          } else {
+            this.showingto2 = x.rowsOnPage * this.currentPage;
+            this.showingfrom2 = (this.showingto2 - x.rowsOnPage) + 1;
+          }
+        });
 
-    },50);
-      
+
+        this.ap_dataTable.onSortChange.subscribe((event: SortEvent) => {
+          this._sortBy = event.sortBy;
+          this._sortOrder = event.sortOrder;
+        });
+
+      }, 50);
+
     }
     this.searchLoad(this.apiVal);
   }
@@ -315,23 +312,25 @@ export class AccessGeneralComponent implements OnInit, AfterViewInit, AfterViewI
   }
 
   /* pagination method here*/
-   getNext(page){
-         this.page = page;
-      if(this.page == 1){
-        this.firstarrowStatus = true;
-        this.lastarrowStatus = false; 
-      }else if(this.page == this.Math.ceil(this.ap_data.length/this.rowsOnPage))
-        { 
-          this.lastarrowStatus = true;
-           this.firstarrowStatus = false; 
-        }
-           else{
-            this.firstarrowStatus = false;
-             this.lastarrowStatus = false;
-           }}
-    goToPage(num){
-      this.getNext(num);
+  getNext(page) {
+    this.page = page;
+    if (this.page == 1) {
+      this.firstarrowStatus = true;
+      this.lastarrowStatus = false;
+    } else if (this.page == this.Math.ceil(this.ap_data.length / this.rowsOnPage)) {
+      this.lastarrowStatus = true;
+      this.firstarrowStatus = false;
     }
-      /* pagination method here end*/
+    else {
+      this.firstarrowStatus = false;
+      this.lastarrowStatus = false;
+    }
+  }
+
+  goToPage(num) {
+    this.getNext(num);
+  }
+
+  /* pagination method here end*/
 
 }

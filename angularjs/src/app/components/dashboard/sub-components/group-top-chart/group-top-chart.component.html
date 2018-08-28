@@ -19,7 +19,7 @@
           </li> -->
           <li>
             <div class="dropdown">
-              <a href="javascript:void(0)" class="dropdown-toggle selectedOption" (click)="openSetting('WLC Uplink Downlink Traffic',selectedScale)"><i class="icon icon-settings"></i></a>
+              <a href="javascript:void(0)" class="dropdown-toggle selectedOption" (click)="openSetting('WLC Uplink Downlink Traffic')"><i class="icon icon-settings"></i></a>
               <!--<div class="dropdown-menu this-list" aria-labelledby="dropdownMenuButton">
                   <ul>
                       <li><a class="dropdown-item" href="#">Setting 1</a></li>
@@ -34,14 +34,14 @@
 
           </li>
           <li>
-            <a href="#"><i class="icon icon-cancel"></i></a>
+            <a href="javascript:void(0)" (click)="delete(11)"><i class="icon icon-cancel"></i></a>
           </li>
         </ul>
       </div>
     </div>
     <div class="portlet-body groupsTop">
       <div style="height: 250px;" [chart]="groupsTop" *ngIf="chartBoolStatus"></div>
-      <div style="height: 250px;" id="groupsTop" *ngIf="!chartBoolStatus"><p class="no-data" style="font-size: 13px;">No Data Available</p></div>
+      <div style="height: 240px;" id="groupsTop" style="font-size: 13px;" *ngIf="!chartBoolStatus"><p class="no-data" style="font-size: 13px;">No Data Available</p></div>
     </div>
 
 
@@ -51,9 +51,9 @@
 
 <app-modal-dialog [(visible)]="showDialog" (visibleChange)="visibleChange()" [headerName]="titleText">
   <div class="graphClass"  [chart]="groupsTop" *ngIf="showDialog && graphdata =='groupsTop' "></div>
-  <!--<div class="graphClass"  [chart]="groupsTop" *ngIf="showDialog && graphdata =='groupsTop' "></div>-->
+  <div class="graphClass"><p class="no-data" *ngIf="!chartBoolStatus && showDialog && graphdata =='groupsTop' ">No Data Available</p></div>
 </app-modal-dialog>
 
-<app-modal-setting [visible]="showDialogsetting" (visibleDisable)="closeSettingPopup($event)" [headerName]="titleText"  [selectedScale]="initialselectedScale" [slectedVM]="initialslectedVM" (modelSettingFun)="modelSettingFun($event)">
+<app-modal-setting [visible]="showDialogsetting" (visibleDisable)="closeSettingPopup($event)" [headerName]="titleText"  [selectedScale]="initialselectedScale" [slectedVM]="initialslectedVM" [upLinkColor]="initialuplinkColor" [downLinkColor]="initialdownlinkColor" (modelSettingFun)="modelSettingFun($event)">
 
 </app-modal-setting>

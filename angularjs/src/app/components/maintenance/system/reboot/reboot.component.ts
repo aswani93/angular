@@ -25,9 +25,19 @@ export class RebootComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.notifyPopup.confirmationOk().subscribe((page) => {
+      if (page === 'reboot') {
+        this.rebootSystem();
+      }
+    });
   }
 
-  onReboot() {
+  onSubmit() {
+    // console.log('clicked');
+    this.notifyPopup.info('Are you sure to reboot AP?');
+  }
+
+  rebootSystem() {
     // maintenance/wlc-system-reboot/
     this.notifyPopup.showLoader('Please wait system is rebooting...');
     this._service.postJson('maintenance/wlc-system-reboot/', '').then(_result => {

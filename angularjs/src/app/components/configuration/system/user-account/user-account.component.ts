@@ -1,11 +1,12 @@
-import { Component, OnInit, ElementRef,ViewChild,Renderer } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Renderer } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms'
 import { Http } from '@angular/http';
 import { WebserviceService } from '../../../../services/commonServices/webservice.service';
 import { NotificationService, commonMessages } from '../../../../services/notificationService/NotificationService';
 import { TooltipService } from '../../../../services/tooltip/tooltip.service';
 import * as _ from 'lodash';
-import {ScrollHelper} from '../../../../../app/helpers/scroll-helper/scrollHelper';
+import { ScrollHelper } from '../../../../../app/helpers/scroll-helper/scrollHelper';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-account',
@@ -14,11 +15,14 @@ import {ScrollHelper} from '../../../../../app/helpers/scroll-helper/scrollHelpe
 })
 export class UserAccountComponent implements OnInit {
   public userAccountForm: FormGroup;
+  loginedInusername;
   private pattern = /^[-a-zA-Z0-9-()]+([_@./#&+]+[-a-zA-Z0-9-()]+)*$/;
   isText;
   addUserStatus = false;
+  focused = false;
   private scrollHelper: ScrollHelper = new ScrollHelper();
   data;
+  editUsername;
   editData;
   updateJSON;
   userID;
@@ -29,12 +33,13 @@ export class UserAccountComponent implements OnInit {
   addbuttondisabled = true;
   btnDisabled;
   updatebtnDisabled = true;
-  
+  focusInterval;
+
   passwordmismatch;
   constructor(private elRef: ElementRef, private http: Http,
     private _service: WebserviceService,
     private notifyPopup: NotificationService,
-    private tooltipService: TooltipService,private renderer:Renderer) {
+    private tooltipService: TooltipService, private renderer: Renderer, private router: Router) {
   }
   loadData() {
     window.scrollTo(0, 0);
@@ -47,20 +52,23 @@ export class UserAccountComponent implements OnInit {
         // this.data['confirmPassword'] = _result.result[0].password;
         // this.data['user_type'] = _result.result[0].user_type;
         this.data = _result.result;
-        console.log(JSON.stringify(this.data))
         this.notifyPopup.hideLoader('');
+        //  let idx = this.data.indexOf(sessionStorage.getItem('username'));
+        //   this.data.splice(idx, 1);
+        //   console.log(this.data)
         //  this.userAccountForm.setValue(this.data);
       }
     });
   }
 
   ngOnInit() {
+    this.loginedInusername = sessionStorage.getItem('username');
     this.loadData();
     this.userAccountForm = new FormGroup({
 
       'user_name': new FormControl('', [
         Validators.required,
-        Validators.minLength(8),
+        Validators.minLength(2),
         Validators.maxLength(32),
         Validators.pattern(this.pattern)
       ]),
@@ -87,36 +95,49 @@ export class UserAccountComponent implements OnInit {
       this.updateJSON = _result.result;
       this.userAccountForm.get('user_name').setValue(this.editData.user_name);
       this.userAccountForm.get('user_type').setValue(this.editData.user_type);
+      this.editUsername = this.editData.user_email;
       this.userAccountForm.get('password').setValidators([
         Validators.minLength(8),
         Validators.maxLength(32),
         Validators.pattern(this.pattern)]);
       this.userAccountForm.get('confirmPassword').clearValidators();
       this.confirmPasswordStatus = false;
-      console.log(this.userAccountForm)
-
+      this.setFocus();
     });
   }
   update() {
     let json = {};
-    if(this.editData['user_name']!=this.userAccountForm.get('user_name').value){
+    if (this.editData['user_name'] != this.userAccountForm.get('user_name').value) {
       json['user_name'] = this.userAccountForm.get('user_name').value;
     }
-   if(this.editData['user_type']!=this.userAccountForm.get('user_type').value){
-    json['user_type'] = this.userAccountForm.get('user_type').value;
-   }
-    
+    if (this.editData['user_type'] != this.userAccountForm.get('user_type').value) {
+      json['user_type'] = this.userAccountForm.get('user_type').value;
+    }
+
     this.notifyPopup.showLoader(commonMessages.save_systemConfig)
+    json['user_email'] = this.editData['user_email'];
     if (this.userAccountForm.get('password').value != null) {
       json['password'] = this.userAccountForm.get('password').value;
     }
     this._service.putJson('accounts/user-list/' + this.userID, json).then(_result => {
+
       if (_result.status == '1') {
+
         this.notifyPopup.hideLoader('');
         this.notifyPopup.success(commonMessages.useraccount_update_success);
 
         setTimeout(() => {
           this.reset();
+          if (this.editUsername == this.loginedInusername) {
+            sessionStorage.setItem('token', '');
+            sessionStorage.setItem('vrrp_configured', '-');
+            sessionStorage.setItem('netmask_vrrp', '-');
+            sessionStorage.setItem('netmask_wlc', '-');
+            sessionStorage.setItem('wlc_ip', '-');
+            sessionStorage.setItem('vrrp_configured', '-');
+            this.router.navigate(['/login']);
+            document.cookie = 'session_key=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+          }
         }, 3000);
       } else {
         this.notifyPopup.hideLoader('');
@@ -127,18 +148,19 @@ export class UserAccountComponent implements OnInit {
       }
     }).catch(() => {
       this.notifyPopup.logoutpop(commonMessages.InternalserverError);
+      this.reset();
     });
 
   }
-  delete(userID, userName) {
+  delete(userID, useremail) {
     this.notifyPopup.showLoader("Please wait...");
-    this._service.deleteWeb('accounts/user-list/' + userID + '?user_name=' + userName, '').then(_result => {
+    this._service.deleteWeb('accounts/user-list/' + userID + '?user_email=' + useremail, '').then(_result => {
       if (_result.status == '1') {
-        this.notifyPopup.showLoader(commonMessages.useraccount_delete);
+        this.notifyPopup.success(commonMessages.useraccount_delete);
         setTimeout(() => {
           this.reset();
         }, 3000);
-      }else{
+      } else {
         this.notifyPopup.hideLoader('');
         this.notifyPopup.error(commonMessages.InternalserverError);
         setTimeout(() => {
@@ -153,28 +175,32 @@ export class UserAccountComponent implements OnInit {
 
     if (this.userAccountForm.get('password').value != this.userAccountForm.get('confirmPassword').value) {
       this.passwordmismatch = true;
-      this.btnDisabled=true;
+      this.btnDisabled = true;
     } else {
       this.passwordmismatch = false;
-      this.btnDisabled=false;
+      this.btnDisabled = false;
 
     }
 
   }
 
   ngAfterViewInit() {
-    this.scrollHelper.doScroll();
-    window.scrollTo(0, 0);
+    if (!this.focused) {
+      this.scrollHelper.doScroll();
+    }
+
     this.userAccountForm.valueChanges.subscribe(() => {
       this.checkAnyUpdate();
     });
   }
 
   OpenEditModel() {
-    this.scrollHelper.scrollToFirst('detailArea');
     this.addUserStatus = true;
     this.savebuttonstatus = true;
     this.updateButtonStatus = false;
+    this.addbuttondisabled = false;
+    this.setFocus();
+    this.userAccountForm.get('user_type').setValue('0');
     this.userAccountForm.get('password').setValidators([
       Validators.minLength(8),
       Validators.maxLength(32),
@@ -184,6 +210,7 @@ export class UserAccountComponent implements OnInit {
       Validators.minLength(8),
       Validators.maxLength(32),
       Validators.pattern(this.pattern)]);
+
 
   }
 
@@ -228,19 +255,21 @@ export class UserAccountComponent implements OnInit {
     let data = this.userAccountForm.value;
     this.newJson = {};
 
-
+    // this.setFocus();
     for (let key in data) {
       if (data[key] != this.data[key]) {
         this.newJson[key] = data[key];
       }
     }
-    if (this.editData.user_name == this.userAccountForm.get('user_name').value && this.editData.user_type == this.userAccountForm.get('user_type').value && this.userAccountForm.get('password').value == null) {
-      this.updatebtnDisabled = true;
-      // alert("fff")
-    }
-    else {
-      // alert("ff")
-      this.updatebtnDisabled = false;
+    if (this.updateButtonStatus) {
+      if (this.editData.user_name == this.userAccountForm.get('user_name').value && this.editData.user_type == this.userAccountForm.get('user_type').value && this.userAccountForm.get('password').value == null) {
+        this.updatebtnDisabled = true;
+        // alert("fff")
+      }
+      else {
+        // alert("ff")
+        this.updatebtnDisabled = false;
+      }
     }
 
     let count = Object.keys(this.newJson).length;
@@ -253,6 +282,17 @@ export class UserAccountComponent implements OnInit {
     if (this.userAccountForm.get('password').value != this.userAccountForm.get('confirmPassword').value) {
       this.btnDisabled = true;
     }
+
+  }
+
+  setFocus() {
+    this.scrollHelper.scrollToFirst("detailArea");
+    this.focusInterval = setTimeout(() => {
+      this.focused = true;
+      //console.log(2);form-group row
+    }, 500);
+
+    //$('#group_name').focus();
   }
   reset() {
     this.addbuttondisabled = true;
@@ -263,8 +303,8 @@ export class UserAccountComponent implements OnInit {
     this.userAccountForm.reset();
     this.savebuttonstatus = true;
     this.updateButtonStatus = false;
-    this.confirmPasswordStatus=true;
-   
+    this.confirmPasswordStatus = true;
+
   }
   ngOnDestroy() {
     if (this.notifyPopup) {

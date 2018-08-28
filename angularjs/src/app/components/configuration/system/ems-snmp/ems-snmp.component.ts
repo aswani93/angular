@@ -123,7 +123,7 @@ export class EmsSnmpComponent implements OnInit {
     if (result[0].length == 0) {
       this.iperrorStatus = true;
       this.btnDisable = true;
-    } else if (result[0] == "127" || result[0] == "8" || result[0] == "4" || result[1] == "0") {
+    } else if (result[0] == "127" || result[0] == "8" || result[0] == "4" ||(result[1] == "0" && result[2] == "2")) {
       this.iperrorStatus = true;
       this.btnDisable = true;
     } else if (result[0] < 224 && result[0] >= 1 && result[3] < 255) {

@@ -9,7 +9,7 @@
             </a>
           </div>
           <div class="caption">
-            <i class="icon icon-smartphone-call"></i> <span class="text-bold">Client Name</span>
+            <i class="icon icon-smartphone-call"></i> <span class="text-bold">{{clientDetails.client_name}}</span>
           </div>
           <!-- <div class="text-right pull-right">
               <div class="dropdown scrollableList graph btn btn-theme-inverse rounded">
@@ -38,52 +38,62 @@
             <tr>
               <th class="border-bottom">Client Name</th>
               <td width="10%">&nbsp;</td>
-              <td>-</td>
+              <td>{{clientDetails.client_name==null?'-':clientDetails.client_name}}</td>
             </tr>
             <tr>
               <th class="border-bottom">MAC Address</th>
               <td width="10%">&nbsp;</td>
-              <td>{{clientDetails.client_mac}}</td>
+              <td>{{clientDetails.client_mac==null?'-':clientDetails.client_mac}}</td>
             </tr>
             <tr>
               <th class="border-bottom">IP Address</th>
               <td width="10%"> &nbsp;</td>
-              <td>-</td>
+              <td>{{clientDetails.client_ip==null?'-':clientDetails.client_ip}}</td>
+            </tr>
+            <tr>
+              <th class="border-bottom">Client Device Type</th>
+              <td width="10%"> &nbsp;</td>
+              <td>{{clientDetails.client_device_type==null?'-':clientDetails.client_device_type}}</td>
+            </tr>
+            <tr>
+              <th class="border-bottom">Client OS</th>
+              <td width="10%"> &nbsp;</td>
+              <td>{{clientDetails.client_os==null?'-':clientDetails.client_os}}</td>
             </tr>
             <tr>
               <th class="border-bottom">Connected SSID Name</th>
               <td width="10%">&nbsp;</td>
-              <td>{{clientDetails.vap_name}}</td>
+              <td>{{clientDetails.vap_name==null?'-':clientDetails.vap_name}}</td>
             </tr>
             <tr>
               <th class="border-bottom">Connected AP Name</th>
               <td width="10%"></td>
-              <td>{{clientDetails.ap_name}}</td>
+              <td>{{clientDetails.ap_name==null?'-':clientDetails.ap_name}}</td>
             </tr>
             <tr>
               <th class="border-bottom">Connected Group Name</th>
               <td width="10%"></td>
-              <td>{{clientDetails.group_name}}</td>
+              <td>{{clientDetails.group_name==null?'-':clientDetails.group_name}}</td>
             </tr>
             <tr>
               <th class="border-bottom">Total Uplink</th>
               <td width="10%">&nbsp;</td>
-              <td>{{clientDetails.tx}}</td>
+              <td>{{clientDetails.tx==null?'-':clientDetails.tx}}</td>
             </tr>
             <tr>
               <th class="border-bottom">Total Downlink</th>
               <td width="10%">&nbsp;</td>
-              <td>{{clientDetails.rx}}</td>
+              <td>{{clientDetails.rx==null?'-':clientDetails.rx}}</td>
             </tr>
             <tr>
               <th class="border-bottom">RSSI</th>
               <td width="10%">&nbsp;</td>
-              <td>{{clientDetails.rssi}}</td>
+              <td>{{clientDetails.rssi==null?'-':clientDetails.rssi}}</td>
             </tr>
             <tr>
               <th>Online Time</th>
               <td width="10%">&nbsp;</td>
-              <td class="status"> {{clientDetails.online_time}}
+              <td class="status"> {{clientDetails.online_time==null?'-':clientDetails.online_time}}
                 <!-- <span class="online">Online</span> -->
               </td>
             </tr>

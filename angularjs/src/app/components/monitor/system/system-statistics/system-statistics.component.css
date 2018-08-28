@@ -12,12 +12,31 @@
 ;
 }
 
-portlet.light .portlet-title .caption  {
+.portlet.light .portlet-title .caption  {
   color: #fff;
+}
+
+.portlet.light>.portlet-title {
+  padding: 5px 20px 2px 0;
+}
+
+.scrollableList .selectedOption {
+  display: block;
+  height: 30px;
+  color: inherit;
+  line-height: 30px;
 }
 
 .portlet {
   border-radius: 8px 8px 0 0;
+}
+
+.portlet-title {
+  margin-bottom: 0px;
+}
+
+.no-data{
+  margin-bottom: 0px;
 }
 
 .custom-portlet{
@@ -38,4 +57,20 @@ portlet.light .portlet-title .caption  {
 .dropdown.btn-theme-inverse ul li a:hover {
   background-color: #334157;
   color: white;
+}
+
+.custom_right {
+  text-align:right;
+}
+
+.custom-padding {
+  padding-top: 0px !important;
+  padding-left: 0px !important;
+}
+::ng-deep p.no-data {
+  font-size: 16px;
+  color: #111;
+  margin-left: 18px !important;
+  margin-top: 10px !important;
+  padding-top: 10px  !important;
 }

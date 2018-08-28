@@ -33,12 +33,15 @@ export class OnlineApComponent implements OnInit {
     public noDataMsg = '';
     public timestamp;
     selectedScale;
-    timeInterval  = 300000;;
+    timeInterval  = 300000;
+    public selectedTime: any;
+    public apData;
+    public apSelected:boolean = false;
     number_points = 12;
     steps = 1;
     public selectedRange = 'total';
     constructor(private _service: WebserviceService, private elRef: ElementRef,private spinnerService: Ng4LoadingSpinnerService, private notifyPopup : NotificationService) { }
-    init(timeFlag) {console.log('here')
+    init(timeFlag) {
         var t = this;
         this.chart = new Chart({
           chart: {
@@ -143,7 +146,39 @@ export class OnlineApComponent implements OnInit {
                 lineColor: null,
                 radius: 6,
                 symbol: 'circle'
+            },
+            point: {
+              events: {
+                click: function(){          
+                  let apSearchType = this.series['name'];
+
+                  //remove this after backend is ready
+                  if(this.series['name'] != 'Online'){
+                    console.log("not online");
+                  }       
+                  else{
+                  t._service.getWeb('statistics/group-ap-details/?group_id='+t.selectedMac+'&time='+t.xlabel[this.x]+'&apSearchType='+apSearchType+'','','')
+                    .then(
+                      _data => {
+                        if(_data.status != 0){
+                        t.selectedTime = t.convertTime(t.xlabel[this.x]);
+                        t.apSelected = true;
+                        t.apData = _data.result;
+                        } else {
+                          t.apSelected = false;                
+                        }
+                      }
+                    ).catch((error) => {
+                      this.notifyPopup.error(commonMessages.InternalserverError);
+                    });
+                  }
+                  return true;
             }
+              } 
+
+                
+              }
+            
             },
             line: {
               lineWidth: 1,
@@ -168,7 +203,7 @@ export class OnlineApComponent implements OnInit {
         });
       }
    
-      ngOnChanges(changes: {[propKey: string]: SimpleChange}) {console.log('here');
+      ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
         if(changes.apMac){
           this.selectedMac = changes.apMac.currentValue;
         }else{
@@ -216,7 +251,7 @@ export class OnlineApComponent implements OnInit {
    
     }
 
-    loadData(param, status) {console.log(this.selectedRange,'range');
+    loadData(param, status) {
      // this.spinnerService.show();
         this._service.getWeb('statistics/online-aps-per-group/?group=' + this.selectedMac + '&scale='+param+'', '', '').then(_data => {
           if (_data.status!=0) {
@@ -291,5 +326,8 @@ export class OnlineApComponent implements OnInit {
         //if(this.spinnerService){
         //  this.spinnerService.hide();
        // }
+      }
+      removeAlert(){
+        this.apSelected = false;
       }
 }

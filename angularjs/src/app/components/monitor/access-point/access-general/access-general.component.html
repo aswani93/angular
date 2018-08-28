@@ -124,7 +124,7 @@
                       </ul>-->
 
                       <!--Customize column options for Group Table -->
-                      <ul class="table-function-right" >
+                      <ul class="table-function-right">
                         <li class="posreltive">
                           <a class="dropdown-toggle"
                              id="dropdownPopup"
@@ -167,11 +167,12 @@
                       [mfData]="grp_data"
                       #mf="mfDataTable"
                       *ngIf="!isGroupSelected"
-                     >
+                    >
                       <thead>
                       <tr class="table-head customRowHeight" style="text-align:  center;">
 
-                        <th class="text-left tableHeight " style="text-align:  center;" *ngIf="(coloumsGroupObjects[0].checked) == true">
+                        <th class="text-left tableHeight " style="text-align:  center;"
+                            *ngIf="(coloumsGroupObjects[0].checked) == true">
                           <mfDefaultSorter by="group_name">
                                             <span>Group Name
                                                 <i class="down icon icon-download-arrow"
@@ -218,7 +219,8 @@
                       </tr>
                       </thead>
                       <tbody>
-                      <tr class="table-body table-clickable customRowHeight " style="text-align:  center;" *ngFor="let item of mf.data   | paginate: {itemsPerPage: rowsOnPage , currentPage: page};"
+                      <tr class="table-body table-clickable customRowHeight " style="text-align:  center;"
+                          *ngFor="let item of mf.data   | paginate: {itemsPerPage: rowsOnPage , currentPage: page};"
                           (dblclick)="openDetailsPage(item,'group')">
                         <td *ngIf="(coloumsGroupObjects[0].checked) == true">{{item.group_name}}</td>
                         <td *ngIf="(coloumsGroupObjects[1].checked) == true">{{item.vap_count}}</td>
@@ -252,7 +254,7 @@
                                     screenReaderPageLabel="page"
                       ></pagination-controls>
                       <span *ngIf="data && data.length > rowsOnPage" [class.button-disabled]="lastarrowStatus" class="last" (click)="goToPage(Math.ceil(data.length/rowsOnPage))">>></span></div>
-                     
+
                         </td>
                       </tr>-->
 
@@ -298,14 +300,41 @@
                                     <!-- <span class="time">8YHRT2</span> -->
                                   </tr>
                                   <tr>
+                                    <th class="border-bottom">Board Type</th>
+                                    <td width="10%">&nbsp;</td>
+                                    <td>{{AP_details.board_type}}</td>
+                                  </tr>
+                                  <tr>
+                                    <th class="border-bottom">AP MAC</th>
+                                    <td width="10%">&nbsp;</td>
+                                    <td>{{AP_details.ap_mac}}</td>
+                                  </tr>
+                                  <tr>
+                                    <th class="border-bottom">Status</th>
+                                    <td width="10%">&nbsp;</td>
+                                    <td>{{AP_details.status ? 'Online': 'Offline'}}</td>
+                                  </tr>
+                                  <tr>
                                     <th class="border-bottom">IP Address</th>
                                     <td width="10%">&nbsp;</td>
-                                    <td>{{AP_details.ip_address}}</td>
+                                    <td>{{AP_details.ip_address }}</td>
                                   </tr>
                                   <tr>
                                     <th class="border-bottom">No. of Connected Clients</th>
                                     <td width="10%">&nbsp;</td>
                                     <td>{{AP_details.client}}</td>
+                                  </tr>
+
+                                  <tr>
+                                    <th class="border-bottom">Group Name</th>
+                                    <td width="10%">&nbsp;</td>
+                                    <td>{{AP_details.group_name}}</td>
+                                  </tr>
+
+                                  <tr>
+                                    <th class="border-bottom">No. of SSIDs</th>
+                                    <td width="10%">&nbsp;</td>
+                                    <td>{{AP_details.no_of_ssid}}</td>
                                   </tr>
                                   <tr>
                                     <th class="border-bottom">Uptime</th>
@@ -317,6 +346,7 @@
                                     <td width="10%">&nbsp;</td>
                                     <td>{{AP_details.timezone}}</td>
                                   </tr>
+
                                   <tr>
                                     <th class="border-bottom">2.4 GHz Channel</th>
                                     <td width="10%">&nbsp;</td>
@@ -400,7 +430,7 @@
                              [mfData]="ap_data"
                              #mf2="mfDataTable"
                              *ngIf="!isApSelected"
-                            >
+                      >
                         <thead>
 
                         <tr class="table-head customRowHeight">
@@ -472,7 +502,8 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr class="table-body table-clickable customRowHeight" *ngFor="let item2 of mf2.data  | paginate: {itemsPerPage: rowsOnPage , currentPage: page};"
+                        <tr class="table-body table-clickable customRowHeight"
+                            *ngFor="let item2 of mf2.data  | paginate: {itemsPerPage: rowsOnPage , currentPage: page};"
                             (dblclick)="openDetailsPage(item2,'accessPoint')">
                           <td style="text-align:  center;" *ngIf="(coloumsAPObjects[0].checked) == true">
                             {{item2.ap_name}}
@@ -511,17 +542,21 @@
                             <div class="entry-count text-left" style="float:left;"><span *ngIf="dataLength2>0">Showing {{showingfrom2}} to {{showingto2}} of {{dataLength2}} entries</span>
                             </div>
                             <div class="cpagination">
-                                      <span *ngIf="ap_data  && ap_data.length > rowsOnPage" [class.button-disabled]="firstarrowStatus" class="first" (click)="goToPage(1)"><<</span>
-                                      <pagination-controls (pageChange)="getNext($event)" maxSize="9"
-                                    directionLinks="true"
-                                    autoHide="true"
-                                    previousLabel=""
-                                    nextLabel=""
-                                    screenReaderPaginationLabel="Pagination"
-                                    screenReaderPageLabel="page"
-                      ></pagination-controls>
-                      <span *ngIf="ap_data && ap_data.length > rowsOnPage" [class.button-disabled]="lastarrowStatus" class="last" (click)="goToPage(Math.ceil(ap_data.length/rowsOnPage))">>></span></div>
-                     
+                              <span *ngIf="ap_data  && ap_data.length > rowsOnPage"
+                                    [class.button-disabled]="firstarrowStatus" class="first"
+                                    (click)="goToPage(1)"><<</span>
+                              <pagination-controls (pageChange)="getNext($event)" maxSize="9"
+                                                   directionLinks="true"
+                                                   autoHide="true"
+                                                   previousLabel=""
+                                                   nextLabel=""
+                                                   screenReaderPaginationLabel="Pagination"
+                                                   screenReaderPageLabel="page"
+                              ></pagination-controls>
+                              <span *ngIf="ap_data && ap_data.length > rowsOnPage"
+                                    [class.button-disabled]="lastarrowStatus" class="last"
+                                    (click)="goToPage(Math.ceil(ap_data.length/rowsOnPage))">>></span></div>
+
                           </td>
                         </tr>
                         </tbody>

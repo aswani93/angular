@@ -47,17 +47,19 @@
                                     <tbody>
                                         <tr class="table-body" *ngFor="let useraccount of data; let i = index;" [ngSwitch]="useraccount.user_type">
                                             <td>{{i+1}}</td>
-                                            <td style="text-align: center">{{useraccount.user_name}}</td>
+                                            <td style="text-align: center">{{useraccount.user_email}} <span *ngIf="useraccount.user_email == loginedInusername">( Active user )</span></td>
                                             <!-- <td class="password">***************</td> -->
-                                            <td *ngSwitchCase="0" style="text-align: center">Admin</td>
+                                           
+                                            <td  *ngSwitchCase="0" style="text-align: center">Read Only</td>
                                             <td  *ngSwitchCase="1" style="text-align: center">Read-Write</td>
-                                            <td  *ngSwitchCase="2" style="text-align: center">Read Only</td>
-                                            <td style="text-align: center">{{useraccount.last_logged_at}}</td>
+                                            <td *ngSwitchCase="2" style="text-align: center">Admin</td>
+                                           
+                                            <td style="text-align: center">{{useraccount.last_logged_at | date:'yyyy-MM-dd HH:mm:ss'}}</td>
                                             <td style="text-align: left">
                                                 <div class="table-function">
                                                     <ul class="table-function-right">
-                                                        <li ><a href="javascript:void(0);" class="" (click)="editUseraccount(useraccount.user_id)"><i class="icon icon-edit"></i> Edit</a></li>
-                                                        <li><a href="javascript:void(0);" class="" (click)="delete(useraccount.user_id,useraccount.user_name)" data-toggle="modal" data-target="#delete" ><i class="icon icon-rubbish-bin"></i> Delete</a></li>
+                                                        <li ><a href="javascript:void(0);" class="" (click)="editUseraccount(useraccount.user_id)" ><i class="icon icon-edit"></i> Edit</a></li>
+                                                        <li><a href="javascript:void(0);" class="" (click)="delete(useraccount.user_id,useraccount.user_email)" *ngIf="useraccount.user_email != loginedInusername" data-toggle="modal" data-target="#delete" ><i class="icon icon-rubbish-bin"></i> Delete</a></li>
                                                     </ul>
                                                     <!-- Modal -->
                                                     <div class="modal fade text-center" id="delete1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -82,7 +84,9 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                                                           
+                                        <tr class="table-body" *ngIf="data.length == 0">
+                                            <td colspan="6" style="text-align: center;">No data found</td>
+                                        </tr>                              
                                     </tbody>
                                 </table>
                                 <div class="text-right"><a  class="btn btn-theme" (click)="OpenEditModel()" *ngIf="addbuttondisabled">Add User</a></div>
@@ -92,26 +96,30 @@
                 </div>
             </div>
         </div>
-        <div class="row detailArea" *ngIf="addUserStatus">
+        <div class="row " *ngIf="addUserStatus">
+            <div class="detailArea"></div>
             <form action="" (keydown.enter)="$event.preventDefault()" [formGroup]="userAccountForm" (ngSubmit)="onSubmit()">
             <div class="col-lg-12 col-xs-12 col-sm-12">
                 <div class="portlet light bordered">
                     <div class="portlet-title">
-                        <div class="caption">
+                        <div class="caption" *ngIf="savebuttonstatus">
                             <span>Add User</span>
+                        </div>
+                        <div class="caption" *ngIf="updateButtonStatus">
+                            <span>{{editData.user_name}}</span>
                         </div>
                     </div>
                     <div class="portlet-body">                                             
                         <div class="form-group row">
                             <label class="col-md-2 col-form-label text-right">Username</label>
                             <div class="col-lg-2 col-sm-11">
-                                <input type="text" class="form-control" required  formControlName="user_name" #username id="username">
+                                <input type="text" class="form-control" required  autocomplete="off" formControlName="user_name" #username id="username" maxlength="32" minlength="1">
                                 <div *ngIf="userAccountForm.get('user_name').invalid && (userAccountForm.get('user_name').dirty || userAccountForm.get('user_name').touched)">
                                     <div class="text-danger pull-left" *ngIf="userAccountForm.get('user_name').errors.required">
                                         User Name is required.
                                     </div>
                                     <div class="text-danger pull-left" *ngIf="userAccountForm.get('user_name').errors.minlength">
-                                        Minimum 8 character required.
+                                        Minimum 2 character required.
                                     </div>
                                     <div class="text-danger pull-left" *ngIf="userAccountForm.get('user_name').errors.maxlength">
                                        Maximum 32 characters allowed.
@@ -123,13 +131,14 @@
                                  </div>
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <div class="form-group row detailArea">
                             <label class="col-md-2 col-form-label text-right">Access</label>
                             <div class="col-lg-2 col-sm-11">
                                 <select name="access" class="form-control" formControlName="user_type">
-                                    <option value="0">Admin</option>
-                                    <option value="1">Read Only</option>
-                                    <option value="2">Read-Write</option>
+                                    <option value="0">Read Only</option>
+                                    <option value="1">Read-Write</option>
+                                    <option value="2">Admin</option>
+                                   
                                 </select>
                             </div>
                         </div>
@@ -137,7 +146,7 @@
                             <label class="col-md-2 col-form-label text-right">Password</label>
                             <div class="col-lg-2 col-sm-11">
                                 <div class="input-field">
-                                    <input  type="{{ isText ? 'text' : 'password' }}" class="form-control"  formControlName="password" [disabled]="confirmPasswordStatus" id="password">
+                                    <input  type="{{ isText ? 'text' : 'password' }}" autocomplete="off" class="form-control"  formControlName="password" [disabled]="confirmPasswordStatus" id="password">
                                     <i class="icon icon-hide icon-right" (click)="showpassword()"></i>
                                 </div>
                                 <div *ngIf="userAccountForm.get('password').invalid && (userAccountForm.get('password').dirty || userAccountForm.get('password').touched)">
@@ -180,7 +189,7 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-6 col-sm-11 col-md-offset-4">
-                                <input type="reset" value="reset" class="btn btn-cancel btn-large" (click)="reset()" style="margin-right: 15px;">
+                                <input type="reset" value="Reset" class="btn btn-cancel btn-large" (click)="reset()" style="margin-right: 15px;">
                                 <input type="submit" value="Save" class="btn btn-theme btn-large" [disabled]="btnDisabled || !userAccountForm.valid" *ngIf="savebuttonstatus">
                                 <input type="submit" value="Update" class="btn btn-theme btn-large" (click)="update()" [disabled]="updatebtnDisabled || !userAccountForm.valid" *ngIf="updateButtonStatus">
                             </div>

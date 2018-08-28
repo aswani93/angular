@@ -1,8 +1,8 @@
-<div>
+<div class="memoryUtilizationTop">
   <div class="portlet light bordered stats custom-portlet">
     <div class="portlet-title custom-title">
       <div class="caption">
-        <span>WLC Memory Utilization</span>
+        <span>WLC Memory Utilization (Top 5)</span>
       </div>
       <div class="text-right pull-right top-btns-right">
         <ul>
@@ -19,7 +19,7 @@
           </li> -->
           <li>
             <div class="dropdown">
-              <a href="javascript:void(0)" class="dropdown-toggle selectedOption" (click)="openSetting('WLC Memory Utilization (Top 5)',selectedScale)"><i class="icon icon-settings"></i></a>
+              <a href="javascript:void(0)" class="dropdown-toggle selectedOption" (click)="openSetting('WLC Memory Utilization (Top 5)')"><i class="icon icon-settings"></i></a>
               <!--<div class="dropdown-menu this-list" aria-labelledby="dropdownMenuButton">
                 <ul>
                   <li><a class="dropdown-item" href="#">Setting 1</a></li>
@@ -34,22 +34,24 @@
               <i class="fa fa-arrows-alt icon"></i></a>
           </li>
           <li>
-            <a href="#"><i class="icon icon-cancel"></i></a>
+            <a href="javascript:void(0)" (click)="delete(7)"><i class="icon icon-cancel"></i></a>
           </li>
         </ul>
       </div>
     </div>
-    <div class="portlet-body memoryUtilizationTop">
+    <div class="portlet-body">
       <div style="height: 250px;" [chart]="memoryUtilizationTop" *ngIf="chartBoolStatus"></div>
       <div style="height: 240px;" *ngIf="!chartBoolStatus"><p class="no-data" style="font-size: 13px;">No Data Available</p></div>
     </div>
   </div>
 </div>
 
-<app-modal-dialog [(visible)]="showDialog" (visibleChange)="visibleChange()">
+<app-modal-dialog [(visible)]="showDialog" (visibleChange)="visibleChange()" [headerName]="titleText" >
   <div class="graphClass"  [chart]="memoryUtilizationTop" *ngIf="showDialog && graphdata =='memoryUtilizationTop' "></div>
+  <div class="graphClass"><p class="no-data" style="font-size: 13px;" *ngIf="!chartBoolStatus && showDialog && graphdata =='memoryUtilizationTop' ">No Data Available</p></div>
+
 </app-modal-dialog>
 
-<app-modal-setting [visible]="showDialogsetting" (visibleDisable)="closeSettingPopup($event)" [headerName]="titleText"  [selectedScale]="initialselectedScale" [slectedVM]="initialslectedVM" (modelSettingFun)="modelSettingFun($event)">
+<app-modal-setting [visible]="showDialogsetting" (visibleDisable)="closeSettingPopup($event)" [headerName]="titleText"  [selectedScale]="initialselectedScale" [slectedVM]="initialslectedVM" [Color]="initialcolor" (modelSettingFun)="modelSettingFun($event)">
 
 </app-modal-setting>

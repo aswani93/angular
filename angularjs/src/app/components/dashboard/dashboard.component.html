@@ -37,9 +37,9 @@
                 formControlName="vrrp_ip"
                 class="form-control"
                 oninput="this.value = this.value.replace(/[^0-9.]/g, '');"
-                (keyup)="checkVrrpIP(vrrpIP.value, $event)">
+                (keyup)="checkButtonInput()">
 
-              <!-- (blur)="checkVrrpIP(vrrpIP.value, $event)"-->
+              <!-- (keyup)="checkVrrpIP(vrrpIP.value, $event)"-->
              <div *ngIf="!apiError">
                <div
                 *ngIf="vrrpForm.get('vrrp_ip').invalid && (vrrpForm.get('vrrp_ip').dirty || vrrpForm.get('vrrp_ip').touched)">
@@ -63,7 +63,7 @@
               </div>
              </div>
               <div class="text-danger" *ngIf="apiError">
-                VRRP IP is out of WLC's network
+                {{ apiErrorMessage }}
               </div>
             </div>
 
@@ -77,8 +77,9 @@
 
           <div class="form-row custom-align">
 
-            <button (click)="onSubmit()" class="btn btn-cancel btn-large" [disabled]="vrrpForm.invalid || btnDisable">Submit</button>
             <button (click)="onReset()" class="btn btn-cancel btn-large">Reset</button>
+            <button (click)="onSubmit()" class="btn btn-cancel btn-large btnalign" [disabled]="vrrpForm.invalid">Submit</button>
+            <!--<button (click)="onSubmit()" class="btn btn-cancel btn-large" [disabled]="vrrpForm.invalid || btnDisable">Submit</button>-->
 
           </div>
 
@@ -92,43 +93,31 @@
 
 
 <div class="page-content-wrapper page-content-stats">
-<!--
 
-<div id="div1"  (drop)="drop($event)" (dragover)="allowDrop($event)">
-        <img id="drag1" src="img_logo.gif" draggable="true"  (dragstart)="drag($event)" width="336" height="69">
-    </div>
-    <br>
-    <div id="div2" (drop)="drop($event)" (dragover)="allowDrop($event)">
-        <img id="drag2" src="img_logo.gif" draggable="true"  (dragstart)="drag($event)" width="236" height="49">
-    </div>
-     <div id="div3" (drop)="drop($event)" (dragover)="allowDrop($event)">
-        <img id="drag3" src="https://images.pexels.com/photos/658687/pexels-photo-658687.jpeg?auto=compress&cs=tinysrgb&h=350" draggable="true"  (dragstart)="drag($event)" width="236" height="49">
-    </div>-->
   <div class="wrapper">
-    <div class="row">
+      <div class="row" id="main">
 
-        <div class="wrapper">
-            <div class="row">
+      <div class="col-lg-6 col-xs-12 col-sm-6 widget_pos"  id="apStatus"  (drop)="drop($event)" (dragover)="allowDrop($event)"><div  id="drag0" draggable="true"  (dragstart)="drag($event)"><span [ngClass]="apStatus"><ap-status-chart [visibleStatus]="apStatus_bool" [data]="apStatusData" (deleteWidget)="deleteWidget($event)"></ap-status-chart></span></div></div>
+      <div  class="col-lg-6 col-xs-12 col-sm-6 widget_pos" id="alarm"  (drop)="drop($event)" (dragover)="allowDrop($event)"><div  id="drag1" draggable="true"  (dragstart)="drag($event)"><span  [ngClass]="alarm"><alarm-status [visibleStatus]="alarm_bool" [data]="alarmData" (deleteWidget)="deleteWidget($event)"></alarm-status></span></div></div>
 
-           <div class="col-lg-6 col-xs-12 col-sm-6"  id="div1"  (drop)="drop($event)" (dragover)="allowDrop($event)"><div  id="drag1" draggable="true"  (dragstart)="drag($event)"><ap-status-chart ></ap-status-chart></div></div>
-           <div  class="col-lg-6 col-xs-12 col-sm-6" id="div2"  (drop)="drop($event)" (dragover)="allowDrop($event)"><div  id="drag2" draggable="true"  (dragstart)="drag($event)"><alarm-status></alarm-status></div></div>
+      <div  class="col-lg-6 col-xs-12 col-sm-6 widget_pos" id="accessPoint"  (drop)="drop($event)" (dragover)="allowDrop($event)"><div   id="drag2" draggable="true"  (dragstart)="drag($event)"><span [ngClass]="accessPoint"><access-point-chart [visibleStatus]="accessPoint_bool" (deleteWidget)="deleteWidget($event)"></access-point-chart></span></div></div>
+      <div  class="col-lg-6 col-xs-12 col-sm-6 widget_pos" id="clientTop"  (drop)="drop($event)" (dragover)="allowDrop($event)"><div   id="drag3" draggable="true"  (dragstart)="drag($event)"><span [ngClass]="clientTop"><client-top-charts [visibleStatus]="clientTop_bool" (deleteWidget)="deleteWidget($event)"></client-top-charts></span></div></div>
 
-            <div  class="col-lg-6 col-xs-12 col-sm-6" id="div3"  (drop)="drop($event)" (dragover)="allowDrop($event)"><div   id="drag3" draggable="true"  (dragstart)="drag($event)"><access-point-chart></access-point-chart></div></div>
-            <div  class="col-lg-6 col-xs-12 col-sm-6" id="div4"  (drop)="drop($event)" (dragover)="allowDrop($event)"><div   id="drag4" draggable="true"  (dragstart)="drag($event)"><client-top-charts></client-top-charts></div></div>
+        <div  class="col-lg-6 col-xs-12 col-sm-6 widget_pos" id="apTraffic"  (drop)="drop($event)" (dragover)="allowDrop($event)"><div  id="drag4" draggable="true"  (dragstart)="drag($event)"> <span [ngClass]="apTraffic"><aptraffic-chart [visibleStatus]="apTraffic_bool" (deleteWidget)="deleteWidget($event)"></aptraffic-chart></span></div></div>
+        <div  class="col-lg-6 col-xs-12 col-sm-6 widget_pos" id="groupTraffic"  (drop)="drop($event)" (dragover)="allowDrop($event)"><div id="drag5" draggable="true"  (dragstart)="drag($event)"><span [ngClass]="groupTraffic"><group-traffic-chart [visibleStatus]="groupTraffic_bool" (deleteWidget)="deleteWidget($event)"></group-traffic-chart></span></div></div>
 
-             <div  class="col-lg-6 col-xs-12 col-sm-6" id="div5"  (drop)="drop($event)" (dragover)="allowDrop($event)"><div  id="drag5" draggable="true"  (dragstart)="drag($event)"> <span  [ngClass]="apTraffic"><aptraffic-chart [visibleStatus]="apTraffic_bool"></aptraffic-chart></span></div></div>
-              <div  class="col-lg-6 col-xs-12 col-sm-6" id="div6"  (drop)="drop($event)" (dragover)="allowDrop($event)"><div id="drag6" draggable="true"  (dragstart)="drag($event)"><span  [ngClass]="apTraffic"><group-traffic-chart [visibleStatus]="apTraffic_bool"></group-traffic-chart></span></div></div>
+        <div  class="col-lg-6 col-xs-12 col-sm-6 widget_pos" id="cpuUtilizationTop"  (drop)="drop($event)" (dragover)="allowDrop($event)"><div id="drag6" draggable="true"  (dragstart)="drag($event)"> <span  [ngClass]="cpuUtilizationTop"><cpu-utilization-chart [visibleStatus]="cpuUtilizationTop_bool" [data]="wlcCPUData" (deleteWidget)="deleteWidget($event)"></cpu-utilization-chart></span></div></div>
+        <div  class="col-lg-6 col-xs-12 col-sm-6 widget_pos" id="memoryUtilizationTop"  (drop)="drop($event)" (dragover)="allowDrop($event)"><div id="drag7" draggable="true"  (dragstart)="drag($event)"><span  [ngClass]="memoryUtilizationTop"><memory-utilization-chart [visibleStatus]="memoryUtilizationTop_bool"  [data]="wlcMemory" (deleteWidget)="deleteWidget($event)"></memory-utilization-chart></span></div></div>
 
-              <div  class="col-lg-6 col-xs-12 col-sm-6" id="div7"  (drop)="drop($event)" (dragover)="allowDrop($event)"><div id="drag7" draggable="true"  (dragstart)="drag($event)"> <span  [ngClass]="cpuUtilizationTop"><cpu-utilization-chart [visibleStatus]="cpuUtilizationTop_bool"></cpu-utilization-chart></span></div></div>
-              <div  class="col-lg-6 col-xs-12 col-sm-6" id="div8"  (drop)="drop($event)" (dragover)="allowDrop($event)"><div id="drag8" draggable="true"  (dragstart)="drag($event)"><span  [ngClass]="cpuUtilizationTop"><memory-utilization-chart [visibleStatus]="cpuUtilizationTop_bool"></memory-utilization-chart></span></div></div>
+        <div  class="col-lg-6 col-xs-12 col-sm-6 widget_pos" id="clientsGroup"  (drop)="drop($event)" (dragover)="allowDrop($event)"><div id="drag8" draggable="true"  (dragstart)="drag($event)"><span  [ngClass]="clientsGroup"><clients-group-chart [visibleStatus]="clientsGroup_bool" [data]="clientGroupData" (deleteWidget)="deleteWidget($event)"></clients-group-chart></span></div></div>
+        <div  class="col-lg-6 col-xs-12 col-sm-6 widget_pos" id="clientssid"  (drop)="drop($event)" (dragover)="allowDrop($event)"><div id="drag9" draggable="true"  (dragstart)="drag($event)"><span [ngClass]="clientssid"><clients-ssidchart [visibleStatus]="clientssid_bool"  [data]="clientSSIDData" (deleteWidget)="deleteWidget($event)"></clients-ssidchart></span></div></div>
 
-             <div  class="col-lg-6 col-xs-12 col-sm-6" id="div9"  (drop)="drop($event)" (dragover)="allowDrop($event)"><div id="drag9" draggable="true"  (dragstart)="drag($event)"><span  [ngClass]="clientsGroup"><clients-group-chart [visibleStatus]="clientsGroup_bool"></clients-group-chart></span></div></div>
-             <div  class="col-lg-6 col-xs-12 col-sm-6" id="div10"  (drop)="drop($event)" (dragover)="allowDrop($event)"><div id="drag10" draggable="true"  (dragstart)="drag($event)"> <span  [ngClass]="clientsGroup"> <clients-ssidchart [visibleStatus]="clientsGroup_bool"></clients-ssidchart></span></div></div>
+      <div  class="col-lg-6 col-xs-12 col-sm-6 widget_pos" id="wlcInfo"  (drop)="drop($event)" (dragover)="allowDrop($event)"><div id="drag10" draggable="true"  (dragstart)="drag($event)"><span  [ngClass]="wlcInfo"><wlc-info-chart  [visibleStatus]="wlcInfo_bool" [data]="wlcInfoData" (deleteWidget)="deleteWidget($event)"></wlc-info-chart></span></div></div>
+      <div  class="col-lg-6 col-xs-12 col-sm-6 widget_pos" id="groupsTop"  (drop)="drop($event)" (dragover)="allowDrop($event)"><div id="drag11" draggable="true"  (dragstart)="drag($event)"><span [ngClass]="groupsTop"><group-top-chart [visibleStatus]="groupsTop_bool" [data]="wlcNetworkData" (deleteWidget)="deleteWidget($event)"></group-top-chart></span></div></div>
+    </div>
 
-            <div  class="col-lg-6 col-xs-12 col-sm-6" id="div11"  (drop)="drop($event)" (dragover)="allowDrop($event)"><div id="drag11" draggable="true"  (dragstart)="drag($event)"><span  [ngClass]="groupsTop"><wlc-info-chart  [visibleStatus]="groupsTop_bool"></wlc-info-chart></span></div></div>
-            <div  class="col-lg-6 col-xs-12 col-sm-6" id="div12"  (drop)="drop($event)" (dragover)="allowDrop($event)"><div id="drag12" draggable="true"  (dragstart)="drag($event)"><span  [ngClass]="groupsTop"><group-top-chart [visibleStatus]="groupsTop_bool"></group-top-chart></span></div></div>
-         </div>
-       </div>
+    </div>
+     
         <!--<div class="row">
             <ap-status-chart></ap-status-chart>
             <alarm-status></alarm-status>

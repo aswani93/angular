@@ -70,7 +70,11 @@
               <tr class="table-head">
                 <th>
                   <label class="checkbox">
-                    <input type="checkbox" class="ssid-all-check" (click)="selectAllSSID($event)" id="selectAllCheck">
+                    <input type="checkbox"
+                           class="ssid-all-check"
+                           (click)="selectAllSSID($event)"
+                           id="selectAllCheck">
+
                     <div class="check"></div>
                   </label>
                 </th>
@@ -247,7 +251,7 @@
                         <div class="form-group row">
                           <label class="col-md-2 col-form-label text-right">SSID Name</label>
                           <div class="col-lg-2 col-sm-11">
-                            <input type="text" class="form-control" formControlName="ssid" id="ssid" maxlength="25" minlength="2" #ssidname>
+                            <input type="text" class="form-control" formControlName="ssid" id="ssid" maxlength="32" minlength="2" #ssidname>
                             <div *ngIf="ssidForm.get('ssid').invalid && (ssidForm.get('ssid').dirty || ssidForm.get('ssid').touched)">
                               <div class="text-danger pull-left" *ngIf="ssidForm.get('ssid').errors.required">
                                 SSID Name is required.
@@ -358,7 +362,7 @@
                                   </ul>
                               </div>
                           </div>
-                         
+
                       </div>
                       <div class="form-group row" *ngIf="ssidForm.get('aaa_type').value=='2' && ssidForm.get('authtype').value==5">
                         <label class="col-md-2 col-form-label text-right">External Server List</label>
@@ -367,13 +371,13 @@
                               <select class="form-control" formControlName="aaa_id" id="aaa_id" >
                                   <option value="-1" >Please select </option>
                                   <option *ngFor="let item of aaaserverDetails;let idx = index" value="{{idx}}">{{item.aaa_server_name}}</option>
-                                 
+
                                 </select>
                           </div>
                           <div  *ngIf="aaaserverDetails==undefined">
                               <select class="form-control" formControlName="aaa_id" id="aaa_id" >
                                 <option value="-1" >Please select </option>
-                                 
+
                                 </select>
                           </div>
 
@@ -392,7 +396,7 @@
                             <label class="col-md-2 col-form-label text-right">Passphrase</label>
                             <div class="col-lg-2 col-sm-11">
                               <div class="input-group">
-                                <input type="{{ isText ? 'text' : 'password' }}" class="form-control"  maxlength="64"  minlength="8" name="passphrase" formControlName="passphrase">
+                                <input type="{{ isText ? 'text' : 'password' }}" class="form-control"  maxlength="63"  minlength="8" name="passphrase" formControlName="passphrase">
                                 <div class="input-group-btn">
                                   <button type="button" class="btn btn-default btn-eye" (click)="showpassword()">
                                     <!-- <i class="icon icon-hide icon-right eye-icon"></i> -->
@@ -402,7 +406,7 @@
                               </div>
                               <div *ngIf="ssidForm.get('passphrase').invalid && (ssidForm.get('passphrase').dirty || ssidForm.get('passphrase').touched)" class="row" style="clear: both;">
                                 <div class="text-danger pull-left pull-custom1" *ngIf="ssidForm.get('passphrase').errors.required && !ssidForm.get('passphrase').errors.spaceatstart">Please enter the Passphrase</div>
-                                <div class="text-danger pull-left pull-custom1" *ngIf="ssidForm.get('passphrase').errors.maxlength ">Maximum length allowed is 64</div>
+                                <div class="text-danger pull-left pull-custom1" *ngIf="ssidForm.get('passphrase').errors.maxlength ">Maximum length allowed is 63</div>
                                 <div class="text-danger pull-left pull-custom1" *ngIf="ssidForm.get('passphrase').errors.spaceatstart">Should not start with space</div>
                                 <div class="text-danger pull-left pull-custom1" *ngIf="ssidForm.get('passphrase').errors.emoji && !ssidForm.get('passphrase').errors.spaceatstart"> Should not allow symbols.</div>
                                 <div class="text-danger pull-left pull-custom1" *ngIf="ssidForm.get('passphrase').errors.minlength && !ssidForm.get('passphrase').errors.spaceatstart && !ssidForm.get('passphrase').errors.emoji">Minimum length should be 8</div>
@@ -484,10 +488,10 @@
                                    (keydown)="blockAllChar($event)"> -->
                                    <select class="form-control" formControlName="vlan_id" id="vlan_id" #vLan>
                                     <option *ngFor="let i of vlanArr" value="{{i}}">{{i}}</option>
-        
+
                                   </select>
 
-                         
+
                             <div *ngIf="ssidForm.get('vlan_id').invalid && (ssidForm.get('vlan_id').dirty || ssidForm.get('vlan_id').touched)">
                               <div class="text-danger pull-left" *ngIf="ssidForm.get('vlan_id').errors.required">
                                 VLAN is required.
@@ -503,7 +507,36 @@
                           </div>
 
                         </div>
-
+                        <div class="form-group row">
+                            <label class="col-md-2 col-form-label text-right">L2 Roaming</label>
+                            <div class="col-lg-1 col-sm-11">
+                              <label class="switch">
+                                <input type="checkbox" formControlName="is_l2_roaming_enabled" id="is_l2_roaming_enabled" (change)="updateMobility($event.target.checked)">
+                                <span class="slider round"><i class="enable switch-status">Enable</i><i class="disable switch-status">Disable</i></span>
+                              </label>
+                            </div>
+                            <div style="margin-left: 126px; display: inline-block" class="pull-left">
+                              <app-right-tooltip  [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_l3_roaming')"></app-right-tooltip>
+                            </div>
+                        </div>
+                        <div class="form-group row" *ngIf="ssidForm.get('is_l2_roaming_enabled').value==true">
+                            <label class="col-md-2 col-form-label text-right">Mobility</label>
+                            <div class="col-lg-2 col-sm-11">
+                            <input type="text" class="form-control" placeholder="Mobility"  formControlName="mobility_domain" id="mobility_domain" max="65335" min="0"  maxlength="5"   (keydown)="blockAllChar($event)">
+                            <div *ngIf="ssidForm.get('mobility_domain').invalid && (ssidForm.get('mobility_domain').dirty || ssidForm.get('mobility_domain').touched)">
+                            <div class="text-danger pull-left" *ngIf="ssidForm.get('mobility_domain').errors.required">
+                                    Mobility required.
+                            </div>
+                            <div class="text-danger pull-left" *ngIf="ssidForm.get('mobility_domain').errors.min || ssidForm.get('mobility_domain').errors.max">
+                                Please enter a valid mobility value.
+                              </div>
+                            </div>
+                        
+                            </div>
+                            <div>
+                            <app-right-tooltip [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_ssid_name')"></app-right-tooltip>
+                            </div>
+                        </div>
                         <div class="form-group row">
                           <label class="col-md-2 col-form-label text-right">L3 Roaming</label>
                           <div class="col-lg-1 col-sm-11">
@@ -548,7 +581,7 @@
                               <div class="text-danger pull-left" *ngIf="(ssidForm.get('rssi_threshold').errors.min || ssidForm.get('rssi_threshold').errors.max || ssidForm.get('rssi_threshold').errors.minlength ) && !ssidForm.get('rssi_threshold').errors.required">
                                 Enter valid RSSI Threshold value.
                               </div>
-                              
+
                             </div>
                           </div>
                           <div>
@@ -584,21 +617,21 @@
                             <ul class="radio-out">
                               <li>
                                 <label>
-                                  <input type="radio" name="mac_acl_type" formControlName="mac_acl_type" value="0">
+                                  <input type="radio" name="mac_acl_type" formControlName="mac_acl_type" value="0" (click)="onMacAclChange($event.target.value)">
                                   <i>Disable</i>
                                   <span class="check">&nbsp;</span>
                                 </label>
                               </li>
                               <li>
                                 <label>
-                                  <input type="radio" name="mac_acl_type" value="1"  formControlName="mac_acl_type" checked>
+                                  <input type="radio" name="mac_acl_type" value="1"  formControlName="mac_acl_type" (click)="onMacAclChange($event.target.value)">
                                   <i>Local MAC ACL</i>
                                   <span class="check">&nbsp;</span>
                                 </label>
                               </li>
                               <li>
                                 <label>
-                                  <input type="radio" name="mac_acl_type" value="2" formControlName="mac_acl_type" disabled>
+                                  <input type="radio" name="mac_acl_type" value="2" formControlName="mac_acl_type" (click)="onMacAclChange($event.target.value)" disabled>
                                   <i>Radius MAC ACL</i>
                                   <span class="check">&nbsp;</span>
                                 </label>
@@ -614,6 +647,7 @@
                             <label class="col-md-2 col-form-label text-right">MAC ACL Profile</label>
                             <div class="col-lg-2 col-sm-11">
                               <select class="form-control" name="mac_acl_id" formControlName="mac_acl_id">
+                                <option value="-1" >Please select </option>
                                 <option value="{{option.mac_acl_profile_id}}" *ngFor="let option of macAclArr;let idx = index;" >{{option.mac_acl_profile_name}}</option>
                               </select>
                             </div>
@@ -621,7 +655,7 @@
                               <app-right-tooltip  [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_vap')"></app-right-tooltip>
                             </div>
                           </div>
-                         
+
                         </div>
                         <!-- <div class="form-group row">
                           <label class="col-md-2 col-form-label text-right">Radius MAC ACL</label>
@@ -635,11 +669,11 @@
                             <app-right-tooltip  [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_vap')"></app-right-tooltip>
                           </div>
                         </div> -->
-                        <div class="form-group row">
+                        <div class="form-group row" *ngIf="ssidForm.get('mac_acl_type').value == 1 && macAclArr.length>0">
                           <label class="col-md-2 col-form-label text-right">MAC ACL Policy</label>
                           <div class="col-lg-1 col-sm-11">
-                            <label class="switch">
-                              <input type="checkbox" formControlName="mac_acl_policy" name="mac_acl_policy">
+                            <label class="switch" [ngClass]="{'disabled': ssidForm.get('mac_acl_type').value == 0}">
+                              <input type="checkbox" formControlName="mac_acl_policy" name="mac_acl_policy" >
                               <span class="slider round"><i class="enable switch-status">Allow</i><i class="disable switch-status">Deny</i></span>
                             </label>
                           </div>
@@ -667,7 +701,7 @@
                                   </label>
                                 </li>
                               </ul>
-                              
+
                             </div>
                             <div style="display: inline-block" class="pull-left">
                               <app-right-tooltip  [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_vap')"></app-right-tooltip>
@@ -725,7 +759,7 @@
                             <label class="col-md-2 col-form-label text-right">PMF</label>
                             <div class="col-lg-1 col-sm-11">
                               <label class="switch">
-                                <input type="checkbox" formControlName="is_pmf_enabled" name="is_pmf_enabled">
+                                <input type="checkbox" formControlName="is_pmf_enabled" name="is_pmf_enabled" >
                                 <span class="slider round"><i class="enable switch-status">Enable</i><i class="disable switch-status">Disable</i></span>
                               </label>
                             </div>
@@ -796,7 +830,13 @@
                         <div class="form-group row">
                           <label class="col-md-2 col-form-label text-right">Rate Limit Upload</label>
                           <div class="col-lg-2 col-sm-11">
-                            <input type="text" class="form-control" placeholder="64 Mbps" disabled>
+                            <input type="text" class="form-control" placeholder="64 Mbps" formControlName="upload_rate_limit_in_mbps"  max="1024" min="1"  maxlength="4"   (keydown)="blockAllChar($event)">
+                            <div *ngIf="ssidForm.get('upload_rate_limit_in_mbps').invalid && (ssidForm.get('upload_rate_limit_in_mbps').dirty || ssidForm.get('upload_rate_limit_in_mbps').touched)">
+                               
+                              <div class="text-danger pull-left" *ngIf="ssidForm.get('upload_rate_limit_in_mbps').errors.min || ssidForm.get('upload_rate_limit_in_mbps').errors.max">
+                                  Please enter a valid upload rate value.
+                                </div>
+                            </div>
                           </div>
                           <div style="display: inline-block" class="pull-left">
                             <app-right-tooltip  [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_vap')"></app-right-tooltip>
@@ -805,7 +845,13 @@
                         <div class="form-group row">
                           <label class="col-md-2 col-form-label text-right">Rate Limit Download</label>
                           <div class="col-lg-2 col-sm-11">
-                            <input type="text" class="form-control" placeholder="64 Mbps" disabled>
+                            <input type="text" class="form-control" placeholder="64 Mbps" formControlName="download_rate_limit_in_mbps" max="1024" min="1"  maxlength="4"   (keydown)="blockAllChar($event)">
+                            <div *ngIf="ssidForm.get('download_rate_limit_in_mbps').invalid && (ssidForm.get('download_rate_limit_in_mbps').dirty || ssidForm.get('download_rate_limit_in_mbps').touched)">
+                               
+                              <div class="text-danger pull-left" *ngIf="ssidForm.get('download_rate_limit_in_mbps').errors.min || ssidForm.get('download_rate_limit_in_mbps').errors.max">
+                                  Please enter a valid download rate value.
+                                </div>
+                            </div>
                           </div>
                           <div style="display: inline-block" class="pull-left">
                             <app-right-tooltip  [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_vap')"></app-right-tooltip>
@@ -835,7 +881,7 @@
                             <app-right-tooltip  [toolTipText]="getToolTipText('group_ssid_configuration_add_ssid_vap')"></app-right-tooltip>
                           </div>
                         </div>
-                       
+
                         <div class="form-group row">
                           <div class="col-lg-6 col-sm-11 col-md-offset-4">
                             <input type="button" (click)="formReset()" value="Cancel" class="btn btn-cancel btn-large" style="margin-right: 15px;">

@@ -19,7 +19,7 @@
           </li> -->
           <li>
             <div class="dropdown">
-              <a href="javascript:void(0)" class="dropdown-toggle selectedOption" (click)="openSetting('WLC CPU Utilization (Top 5)',selectedScale)"><i class="icon icon-settings"></i></a>
+              <a href="javascript:void(0)" class="dropdown-toggle selectedOption" (click)="openSetting('WLC CPU Utilization (Top 5)')"><i class="icon icon-settings"></i></a>
               <!--<div class="dropdown-menu this-list" aria-labelledby="dropdownMenuButton">
                 <ul>
                   <li><a class="dropdown-item" href="#">Setting 1</a></li>
@@ -34,7 +34,7 @@
               class="fa fa-arrows-alt icon"></i></a>
           </li>
           <li>
-            <a href="#"><i class="icon icon-cancel"></i></a>
+            <a href="javascript:void(0)" (click)="delete(6)"><i class="icon icon-cancel"></i></a>
           </li>
         </ul>
       </div>
@@ -48,8 +48,10 @@
 
 <app-modal-dialog [(visible)]="showDialog" (visibleChange)="visibleChange()" [headerName]="titleText">
   <div class="graphClass" [chart]="cpuUtilizationTop" *ngIf="showDialog && graphdata =='cpuUtilizationTop' "></div>
+ <div class="graphClass"><p class="no-data" style="font-size: 13px;" *ngIf="!chartBoolStatus && showDialog && graphdata =='cpuUtilizationTop' ">No Data Available</p></div>
+
 </app-modal-dialog>
 
-<app-modal-setting [visible]="showDialogsetting" (visibleDisable)="closeSettingPopup($event)" [headerName]="titleText"  [selectedScale]="initialselectedScale" [slectedVM]="initialslectedVM" (modelSettingFun)="modelSettingFun($event)">
+<app-modal-setting [visible]="showDialogsetting" (visibleDisable)="closeSettingPopup($event)" [headerName]="titleText"  [selectedScale]="initialselectedScale" [slectedVM]="initialslectedVM" [Color]="initialcolor" (modelSettingFun)="modelSettingFun($event)">
 
 </app-modal-setting>

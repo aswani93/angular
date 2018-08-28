@@ -6,7 +6,9 @@ import {Ng4LoadingSpinnerService} from 'ng4-loading-spinner';
 import {AlertService} from 'ngx-alerts';
 import {NotificationService, commonMessages} from '../../../../services/notificationService/NotificationService';
 import {TooltipService} from '../../../../services/tooltip/tooltip.service';
-
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
+import { FileSizePipe } from '../../../../services/filters/filesizepipe'
 @Component({
   selector: 'app-imageupgrade',
   templateUrl: './imageupgrade.component.html',
@@ -28,6 +30,7 @@ export class ImageupgradeComponent implements OnInit {
   inputType: any = 'password';
   apModelStr: any = 'Please select';
   groupName = '-1';
+  upgradeboard = '-1';
   uploadType: any = 'local';
   upgrade_type: any = 'upgrade_group';
   upgrade_time: any = 'Please select';
@@ -240,6 +243,7 @@ export class ImageupgradeComponent implements OnInit {
     this.image_name = '';
     this.upgradeTableStatus = false;
     this.saveBtnStatus = false;
+    this.upgradeboard = '-1';
   }
 
   OnChangeUpgradeGroupId(event) {
@@ -287,8 +291,8 @@ export class ImageupgradeComponent implements OnInit {
   }
 
   callingApi(radBtn) {
-    if (this.upgradeGroupName != '-1' && this.upgradeApModel != 'Please select') {
-      this._service.getWeb('utils/ap-mac-search/?ap_model=' + this.upgradeApModel + '&group_id=' + this.upgradeGroupName, '', '').then(_data => {
+    if (this.upgradeGroupName != '-1' && this.upgradeApModel != 'Please select' && this.upgradeboard != '-1') {
+      this._service.getWeb('utils/ap-mac-search/?ap_model=' + this.upgradeApModel + '&group_id=' + this.upgradeGroupName + '&board=' + this.upgradeboard, '', '').then(_data => {
         console.log(_data);
         this.APModelList = [];
         if (_data.status == 1) {
@@ -382,11 +386,12 @@ export class ImageupgradeComponent implements OnInit {
       $('#uploadButton').removeClass('disabled');
     }
   }
-
+  fileSizeByte;
   fileupload(event) {
     var files = event.target.files;   
     this.filelist=files; 
-    console.log("////////"+this.filelist[0].size); 
+    console.log(files);
+    this.fileSizeByte = this.filelist[0].size;
     this.filename=this.filelist[0].name;
     this.uploadbuttondisabled=false;
     let file:File=this.filelist[0];
@@ -419,6 +424,7 @@ export class ImageupgradeComponent implements OnInit {
     if (this.notifyPopup) {
       this.notifyPopup.hideLoader('');
     }
+    this.hideModal();
   }
   
   openModalPopup(){
@@ -473,8 +479,15 @@ export class ImageupgradeComponent implements OnInit {
     this.upgrade_boolStatus = true;
     this.notifyPopup.info(commonMessages.upgrade_msg);
   }
+  progressVal;
+  progressWidth;
+  progressSecond;
+  fileName;
 
   upgradeFiles() {
+    this.fileName  = this.filelist[0].name;
+    console.log(this.fileName)
+    // this.notifyPopup.showLoader(commonMessages.maintenance_AP_upload_upgrade);
     if(this.checkStatus == 1)
     this.notifyPopup.showLoader(commonMessages.maintenance_AP_upgrade);
     else
@@ -513,26 +526,56 @@ export class ImageupgradeComponent implements OnInit {
     else
       formdata.append('group_id', null);
     // console.log(formdata+"///////"+this.apModelVal+"////"+this.uploadType +""+this.checkStatus+"/////"+this.groudId);
+    this.notifyPopup.success(commonMessages.upgrade_with_upload);
+    let started_at = new Date();
+    this._service.postFilesProgress('maintenance/ap-image-upgrade/?X-Progress-ID=1213', formdata).subscribe(_data => {
+      this.showModal();
+    
+      //this.notifyPopup.hideLoader('');
+      
+      this.progressVal =  Math.round(100 * _data.loaded / _data.total);
+      let seconds_elapsed =   ( new Date().getTime() - started_at.getTime() )/1000;
+      let bytes_per_second =  seconds_elapsed ?  _data.loaded / seconds_elapsed : 0 ;
+      let Kbytes_per_second = bytes_per_second / 1000 ;
+      let remaining_bytes =   _data.total - _data.loaded;
+      this.progressSecond = seconds_elapsed ? remaining_bytes / bytes_per_second : 'calculating' ;
+      this.progressSecond = this.progressSecond.toFixed(2);
+      // if(_data.loaded  == _data.total){
+      //   this.hideModal();
+      //   if (this.checkStatus == 1)
+      //   this.notifyPopup.success(commonMessages.upgrade_with_upload);
+      // else
+      //   this.notifyPopup.success(commonMessages.upload_only);
 
-    this._service.postFiles('maintenance/ap-image-upgrade/', formdata).then(_data => {
-      console.log('///' + _data.json().msg);
-      this.notifyPopup.hideLoader('');
-      if (_data.json().status == 1) {
-        if (this.checkStatus == 1)
-          this.notifyPopup.success(commonMessages.upgrade_with_upload);
-        else
-          this.notifyPopup.success(commonMessages.upload_only);
+      // this.reset();
+      // }
+     
+      //
 
-        this.reset();
-      } else {
-        this.notifyPopup.error(_data.json().msg);
+      // if (_data) {
+        // if (this.checkStatus == 1)
+        //   this.notifyPopup.success(commonMessages.upgrade_with_upload);
+        // else
+        //   this.notifyPopup.success(commonMessages.upload_only);
 
-      }
+        // this.reset();
+      // } else {
+      //   this.notifyPopup.error(_data.json().msg);
+
+      // }
 
 
     });
   }
+  public isModalShown: boolean = false;
+  showModal(): void {
+    this.isModalShown = true;
+  }
 
+  hideModal(): void {
+    this.isModalShown = false;
+  }
+  
 
   reset() {
     this.apModelStr = 'Please select';

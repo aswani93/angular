@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, SimpleChange, OnChanges, OnDestroy} from '@angular/core';
+import {Component, OnInit, Input, SimpleChange, OnChanges, OnDestroy,Output,EventEmitter} from '@angular/core';
 import {WebserviceService} from '../../../../services/commonServices/webservice.service';
 import {Chart} from 'angular-highcharts';
 import {Observable} from 'rxjs';
@@ -46,6 +46,10 @@ export class GroupTopChartComponent implements OnInit {
   selectedScale = 'live';
   initialslectedVM = 'HOST';
   selectedVM = 'HOST';
+  initialuplinkColor="#ffb822";
+  uplinkColor="#ffb822";
+  initialdownlinkColor="#00c5dc";
+  downlinkColor = "#00c5dc";
   showDialogsetting:boolean = false;
   timeInterval = 10000;
   // timeInterval = 10000;
@@ -62,6 +66,21 @@ export class GroupTopChartComponent implements OnInit {
 
     }
   }
+
+  @Input()
+ set data(data: any) {
+    if(data){
+     this.initialselectedScale = data.graph_period;
+     this.selectedScale = data.graph_period;
+     this.initialslectedVM=data.vm_host;
+     this.selectedVM = data.vm_host;
+     this.initialuplinkColor = data.colour_options[0];
+     this.uplinkColor = data.colour_options[0];
+     this.initialdownlinkColor = data.colour_options[1];
+     this.downlinkColor = data.colour_options[1];
+    }
+   } 
+@Output() deleteWidget: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(private _service: WebserviceService) {
     this.alive = true;
@@ -81,13 +100,13 @@ export class GroupTopChartComponent implements OnInit {
 
             // console.log('Chart events :load:  method is fired of network graph');
             // if (t.liveFlag == true) {
-            console.log(this.series);
+           
             // series is an array of plotting datas on the graph so thats why it is [0] [1] [2]
             const series1 = this.series[0];  // series for the uplink
             const series2 = this.series[1];  // series for the downlink
             const series3 = this.series[2];  // series for the
             // var c = this;
-
+             console.log( series2);
             let x1, // for up link (tx)
               x2,  //  for down link (rx)
               // x3,  //  for total uplink and downlink (tx + rx) but , as of now it is not needed.
@@ -113,7 +132,7 @@ export class GroupTopChartComponent implements OnInit {
                 //   clearInterval(t.timerVar);
                 // }
                 // if (_data.status !== 0)
-
+                 if (_data && _data.result &&  _data.result.length > 0) {
                 t.apiResult = _data.result;
                 const apiLength = t.apiResult[0].length;
 
@@ -126,7 +145,6 @@ export class GroupTopChartComponent implements OnInit {
 
                 // x3 = parseFloat(t.apiResult
                 //   [t.selectedRange === 'avg' ? 3 : t.selectedRange === 'avg' ? 6 : t.selectedRange === 'min' ? 9 : 12][apiLength - 1]);
-                if(apiLength > 0){
                   y = parseFloat(t.apiResult[0][apiLength - 1]);
 
                   // console.log(` x1 : ${x1}  x2 : ${x2}`);
@@ -148,9 +166,9 @@ export class GroupTopChartComponent implements OnInit {
                   series1.addPoint([t.convertTime(y), x1], true, shift);
                   series2.addPoint([t.convertTime(y), x2], true, shift);
                   // series3.addPoint([t.convertTime(y), x3], true, shift);
-
-                  series1.update({name: '<i class=\'up icon icon-up-arrow-1\'></i> Uplink (' + x1 + ' ' + u + ')'});
-                  series2.update({name: '<i class=\'down icon icon-download-arrow\'></i> Downlink (' + x2 + ' ' + u + ')'});
+                  series1.update({name: '<i class=\'down icon icon-download-arrow\'></i> Downlink (' + x1 + ' ' + u + ')'});
+                  series2.update({name: '<i class=\'up icon icon-up-arrow-1\'></i> Uplink (' + x2 + ' ' + u + ')'});
+                  
                   // series3.update({name: '<i class=\'up icon icon-up-arrow-1\'></i> Uplink (' + x3 + ' ' + u + ')'});
 
                   t.tempData = this.apiResult;
@@ -256,14 +274,14 @@ export class GroupTopChartComponent implements OnInit {
           ' ' +
           this.unit + ')',
           data: this.downlinkData,
-          color: '#00c5dc'
+          color: this.downlinkColor
         },
         {
           name: '<i class="up icon icon-up-arrow-1"></i> Uplink (' +
           this.uplinkData[this.uplinkData.length - 1] +
           ' ' + this.unit + ')',
           data: this.uplinkData,
-          color: '#ffb822'
+          color: this.uplinkColor
         }]
     });
   }
@@ -384,6 +402,8 @@ export class GroupTopChartComponent implements OnInit {
   modelSettingFun(event){
     this.selectedScale = event.period;
     this.selectedVM = event.vm;
+    this.uplinkColor = event.uplinkcolor;
+    this.downlinkColor = event.downlinkcolor;
     if(event.period == 'live')
       this.timeInterval = 10000
     else
@@ -392,6 +412,12 @@ export class GroupTopChartComponent implements OnInit {
     console.log(event.period+"/////"+event.vm+"//////"+this.timeInterval);
 
     this.loadData(event.period,event.vm);
+  }
+
+      /*---------delete widget-----*/
+  delete(val){
+    clearInterval(this.timerVar);
+   this.deleteWidget.emit({id:val});
   }
 
 

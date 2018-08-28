@@ -27,7 +27,7 @@ export class AlarmsettingComponent implements OnInit, AfterViewInit {
   public sampleDataWCL =  {
     'enable': true ,
     'description': 'Description 321',
-    'priority': 'normal',
+    'priority': 'minor',
     'source': 'wlc',
     'type': 'Audit',
     'percentage': 34

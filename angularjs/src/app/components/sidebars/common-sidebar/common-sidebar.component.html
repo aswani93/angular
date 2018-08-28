@@ -13,6 +13,7 @@
           <ul class="inner sub-inner">
             <li id="confbasic"><a [routerLink]="'/configuration/system/confbasic'">Basic</a></li>
             <li id="ipconfig"><a [routerLink]="'/configuration/system/ipconfig'">IP Configuration</a></li>
+            <li id="vrrp"><a [routerLink]="'/configuration/system/vrrp'">VRRP</a></li>
             <li id='emssnmp'><a [routerLink]="'/configuration/system/emssnmp'">EMS/SNMP</a></li>
             <li id='redundancy'><a [routerLink]="'/configuration/system/redundancy'">Redundancy</a></li>
             <li><a [routerLink]="">WAG</a></li>
@@ -28,7 +29,8 @@
               Configuration</a></li>
             <li id="ssidConfiguration"><a [routerLink]="'/configuration/group/ssidConfiguration'">SSID Configuration</a>
             </li>
-            <li id="captivePortalConfiguration"><a [routerLink]="'/configuration/group/captivePortalConfiguration'">Captive Portal</a></li>
+            <li id="captivePortalConfiguration"><a [routerLink]="'/configuration/group/captivePortalConfiguration'">Captive
+              Portal</a></li>
             <li id="macAclConfiguration"><a [routerLink]="'/configuration/group/macAclConfiguration'">MAC ACL</a></li>
           </ul>
         </li>
@@ -49,9 +51,9 @@
           <ul class="inner sub-inner">
             <li id="general"><a [routerLink]="'/monitor/system/general'">General</a></li>
             <li id="vm"><a [routerLink]="'/monitor/system/vm'">VM</a></li>
-            <li><a [routerLink]="">Logs</a></li>
+            <li id="logsys"><a [routerLink]="'/monitor/system/logsys'">Logs</a></li>
             <li id="systemstatistics"><a [routerLink]="'/monitor/system/systemstatistics'">Statistics</a></li>
-            <li><a [routerLink]="">Diagnostic</a></li>
+            <li id="diagonstic"><a [routerLink]="'/monitor/system/diagonstic'">Diagnostic</a></li>
             <li id="alarm"><a [routerLink]="'/monitor/system/alarm'">Alarm</a></li>
 
           </ul>
@@ -60,12 +62,12 @@
           <a [routerLink]="" class="toggle" id="s_accesspoint_a">Access Point</a>
           <ul class="inner sub-inner">
             <li id="access_general"><a [routerLink]="'/monitor/ap/access_general'">General</a></li>
-            <li><a [routerLink]="">Logs</a></li>
+            <li id="logs"><a [routerLink]="'/monitor/ap/logs'">Logs</a></li>
             <li id="statistics"><a [routerLink]="'/monitor/ap/statistics'">Statistics</a></li>
             <li id="airQuality"><a [routerLink]="'/monitor/ap/airQuality'">Air Quality</a></li>
             <li id="autoRFMonitoring"><a [routerLink]="'/monitor/ap/autoRFMonitoring'">Auto RF</a></li>
             <li id="rogueAPMonitoring"><a [routerLink]="'/monitor/ap/rogueAPMonitoring'">Rogue AP</a></li>
-            <li><a [routerLink]="">Diagnostic</a></li>
+            <li id="diagonstic"><a [routerLink]="'/monitor/ap/diagonstic'">Diagnostic</a></li>
           </ul>
         </li>
       </ul>
@@ -81,17 +83,23 @@
             <li id="reboot"><a [routerLink]="'/maintenance/system/reboot'">Reboot</a></li>
             <li id="backupRestore"><a [routerLink]="'/maintenance/system/backupRestore'">Backup &amp; Restore</a></li>
             <li id="alarmsetting"><a [routerLink]="'/maintenance/system/alarmsetting'">Alarm </a></li>
-            <li id="remoteMaintenance"><a [routerLink]="'/maintenance/system/remoteMaintenance'">Remote Management</a></li>
+            <li id="system_autoRF"><a [routerLink]="'/maintenance/system/system_autoRF'">Auto RF</a></li>
+            <li id="remoteMaintenance"><a [routerLink]="'/maintenance/system/remoteMaintenance'">Remote Management</a>
+            </li>
           </ul>
         </li>
         <li id="ap">
           <a [routerLink]="" class="toggle">Access Point</a>
           <ul class="inner sub-inner">
             <li id="imageupgrade"><a [routerLink]="'/maintenance/ap/imageupgrade'">Upgrade</a></li>
+            <li id="schedule"><a [routerLink]="'/maintenance/ap/schedule'">Schedule</a></li>
+            <li id="packetCapture"><a [routerLink]="'/maintenance/ap/packetCapture'">Packet Capture</a></li>
             <li id="apReboot"><a [routerLink]="'/maintenance/ap/apReboot'">Reboot</a></li>
             <li id="rogueAP"><a [routerLink]="'/maintenance/ap/rogueAP'">Rogue AP</a></li>
             <li id="autoRF"><a [routerLink]="'/maintenance/ap/autoRF'">Auto RF</a></li>
-            <li><a [routerLink]="">Remote Management</a></li>
+            <li id="schedule"><a [routerLink]="'/maintenance/ap/schedule'">Schedule</a></li>
+            <li id="apRemoteMaintenance"><a [routerLink]="'/maintenance/ap/apRemoteMaintenance'">Remote Management</a>
+            </li>
           </ul>
         </li>
       </ul>

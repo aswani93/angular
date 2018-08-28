@@ -209,7 +209,15 @@ body.login{background: #334157 url(../images/login-bg.png) left top no-repeat; p
 /*======================================/HEADER/======================================*/
 header{position: fixed; width: 100%; z-index: 9990;}
 
-.logo{background:#384655; height: 80px; width: 235px; position: relative; float: left;}
+.logo{
+  background: #334157;
+  height: 82px;
+  width: 235px;
+  position: relative;
+  float: left;
+  border-right: 2px solid #334157;
+  border-bottom: 2px solid #526074;
+}
 .logo span, .logo p{display: block; margin: 0px;}
 .logo span{ position: absolute; z-index: 2; font-size: 65px; font-weight: 700; top: -17px; left: 10px; color:rgba(255,255,255,0.07);}
 .logo p{text-align: center; color:#FFFFFF; font-size:18px; line-height: 70px; letter-spacing: 1px; position: relative; z-index: 10;}
@@ -250,9 +258,9 @@ header{position: fixed; width: 100%; z-index: 9990;}
 .notification-tabs .tab-link li a{width: 40px; color: #fff; height: 40px; padding: 3px; border-radius: 50%; margin: 0 auto;}
 .notification-tabs .tab-link li:hover .tab-label{transform: scale(1) translateY(0px); opacity: 1; visibility: visible;}
 .notification-tabs .tab-link li:hover a{opacity: 0.8;}
-.notification-tabs .tab-link li.error a{background: #FF5050;}
-.notification-tabs .tab-link li.warning a{background: #FF9141;}
-.notification-tabs .tab-link li.info a{background: #FAC802;}
+.notification-tabs .tab-link li.error a{background: #EA2027;}
+.notification-tabs .tab-link li.warning a{background: #e67e22;}
+.notification-tabs .tab-link li.info a{background: #f6b93b;}
 .notification-tabs .tab-link li.active a::after{content: ''; position: absolute; bottom: -6px; width: 60%; height: 3px; left: 50%; transform: translateX(-50%);}
 .notification-tabs .tab-link li.active.error a::after{background: #FF5050;}
 .notification-tabs .tab-link li.active.warning a::after{background: #FF9141;}
@@ -1399,31 +1407,31 @@ input[type=radio] {
 /*==/END/==*/
 
 div::-webkit-scrollbar {
-    width:8px;
+  width:8px;
 }
 div::-webkit-scrollbar-track {
   width:8px;
 }
 div::-webkit-scrollbar-thumb {
-    background:transparent;
+  background:transparent;
 }
 div:hover::-webkit-scrollbar-thumb {
-    background:rgba(0,0,0,0.1);
+  background:rgba(0,0,0,0.1);
 }
 
 
-    /*Table pagination  */
+/*Table pagination  */
 .ngx-pagination{float: right;
-    border: solid 1px #EEE;
-    height: 30px;
-    padding: 0px;}
-    .ngx-pagination li {
-    display: inline-block;
-    height: 28px;
-    width: 30px;
-    line-height: 26px;
-    text-align: center;
-    border-left:solid 1px #EEE;
+  border: solid 1px #EEE;
+  height: 30px;
+  padding: 0px;}
+.ngx-pagination li {
+  display: inline-block;
+  height: 28px;
+  width: 30px;
+  line-height: 26px;
+  text-align: center;
+  border-left:solid 1px #EEE;
 }
 .ngx-pagination li:first-child{border-left: 0px;}
 .ngx-pagination .current{margin:0px; background:#756ed1 !important;}
@@ -1431,51 +1439,51 @@ div:hover::-webkit-scrollbar-thumb {
 .ngx-pagination .pagination-next a::after,
 .ngx-pagination .pagination-next.disabled::after {
   content: '>' !important; margin-left:0px!important;}
-  .ngx-pagination .pagination-previous a::before,
+.ngx-pagination .pagination-previous a::before,
 .ngx-pagination .pagination-previous.disabled::before {
   content: '<' !important; margin-right:0px!important;}
 
 .cpagination{
-        position: relative;
-    display: inline-block;
-    float: right;
-    padding: 0 33px;
+  position: relative;
+  display: inline-block;
+  float: right;
+  padding: 0 33px;
 }
 .cpagination span.first,
 .cpagination span.last {
-    border: 1px solid #eee;
-    display: inline-block;
-    width: 35px;
-    height: 30px;
-    position: absolute;
-    line-height: 30px;
-    text-align: center;
-    background: #fff;
-    cursor: pointer;
+  border: 1px solid #eee;
+  display: inline-block;
+  width: 35px;
+  height: 30px;
+  position: absolute;
+  line-height: 30px;
+  text-align: center;
+  background: #fff;
+  cursor: pointer;
 }
 .cpagination span.last{
-    right: 0;
-    border-radius: 0 4px 4px 0;
+  right: 0;
+  border-radius: 0 4px 4px 0;
 }
 .cpagination span.first{
-    left: 0;
-    border-radius: 4px 0 0 4px;
+  left: 0;
+  border-radius: 4px 0 0 4px;
 }
 .cpagination span.last:hover,
 .cpagination span.first:hover{background:#E6E6E6;}
 .button-disabled{
-		 cursor: default;
-         opacity: .4;
-        pointer-events:none;
-	}
+  cursor: default;
+  opacity: .4;
+  pointer-events:none;
+}
 
 .ngx-pagination a:active, .ngx-pagination a:visited, .ngx-pagination a:focus,
-  .ngx-pagination li:active,
-   .ngx-pagination li:visited,
-    .ngx-pagination li:focus
-  {outline:0px!important;}
+.ngx-pagination li:active,
+.ngx-pagination li:visited,
+.ngx-pagination li:focus
+{outline:0px!important;}
 
-  .ngx-pagination li{margin-right: 0px!important;}
+.ngx-pagination li{margin-right: 0px!important;}
 
 .wrapper .portlet-body{min-height: 290px!important;}
 .first-cld{

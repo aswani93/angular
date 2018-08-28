@@ -185,10 +185,13 @@
                   </tr>
   
                   <!-- Default row to be shown where there is no data to show -->
-                  <tr class="table-body" *ngIf="mf.data.length == 0">
+                  <tr class="table-body" *ngIf="regAPCount == 0">
                     <td colspan="8" style="text-align: center;">No APs registered to the system. Please try again after some time</td>
                   </tr>
-  
+                  <tr class="table-body" *ngIf="mf.data.length == 0 && regAPCount > 0">
+                    <td colspan="8" style="text-align: center;">No APs have rogue AP setting enabled.</td>
+                  </tr>
+                  
                   <!-- The showing 10 of 10 items text-->
                   <tr class="page-detail-area" *ngIf="mf.data.length !== 0">
                     <td colspan="8">
@@ -256,7 +259,7 @@
           <div class="portlet-body">
               <div class="form-group row">
                   <label class="col-md-2 col-form-label text-right">Auto RF for 2.4G</label>
-                  <div class="col-lg-5 col-sm-11">
+                  <div class="col-md-3 col-sm-11">
                       <label class="switch">
                           <input type="checkbox" [checked]="autoRF_2dot4g" (click)="autoRFSwitch('2dot4g')">
                           <span class="slider round">
@@ -265,23 +268,108 @@
                           </span>
                       </label>
                   </div>
+                  <div class="col-md-2">
+                      <app-right-tooltip [toolTipText]="getToolTipText('')"></app-right-tooltip>
+                  </div>
               </div>
               <div class="form-group row">
                   <label class="col-md-2 col-form-label text-right">Auto RF for 5G</label>
-                  <div class="col-lg-5 col-sm-11">
+                  <div class="col-md-3 col-sm-11">
                       <label class="switch">
                           <input type="checkbox" [checked]="autoRF_5g" (click)="autoRFSwitch('5g')">
                           <span class="slider round">
                               <i class="enable switch-status">Enable</i>
                               <i class="disable switch-status">Disable</i>
-                          </span>
-                      </label>
+                          </span>                          
+                      </label>                      
                   </div>
+                  <div class="col-md-2">
+                      <app-right-tooltip [toolTipText]="getToolTipText('')"></app-right-tooltip>
+                  </div>
+              </div>
+              <div class="form-group row" *ngIf="selectedAPArray.length == 1">
+                <label class="col-md-2 col-form-label text-right">Location</label>
+                <div class="col-lg-2 col-sm-11">
+                    <input 
+                      ng2-auto-complete
+                      [source]="arrayOfLocations"
+                      max-num-list = 5
+                      type="text" 
+                      class="form-control" 
+                      [ngClass]="{'error':ap_location == '' || ap_location.length < 3}"
+                      [(ngModel)]="ap_location" 
+                      (input)="checkLocationValidity()"
+                      (keypress)="alphaOnly($event)" 
+                      [placeholder]="ap_location == ''?'Please enter a location':''"
+                      #ApLocationField="ngModel">
+                    <div *ngIf="ap_location == '' && (ApLocationField.dirty || ApLocationField.touched)" class="text-danger">This field is required</div>
+                    <div 
+                        *ngIf="ap_location != '' && ap_location.length < 3 && (ApLocationField.dirty || ApLocationField.touched)" 
+                        class="text-danger">The AP Location must be more than 2 characters</div>
+                  </div>
+                <div class="col-md-2" style="margin-left:10px">
+                        <app-right-tooltip [toolTipText]="getToolTipText('')"></app-right-tooltip>
+                </div>
+              </div>
+              <div class="form-group row" *ngIf="selectedAPArray.length > 1">                   
+                <label class="col-md-2 col-form-label text-right" style="margin-top:20px">Location</label> 
+                <div class="col-lg-5 col-sm-11" style="float:none; margin: 0 16%;">
+                  <div class="scrollable-table-buttons-div">
+                    <button 
+                    class="btn btn-xs scrollable-table-buttons" 
+                    [ngClass]="{'scrollable-table-buttons-active':locationList == 'all'}" 
+                    (click)="locationList = 'all';resetLocationList()">Show All</button>
+                  <button 
+                    class="btn btn-xs scrollable-table-buttons"
+                    [ngClass]="{'scrollable-table-buttons-active':locationList == 'empty'}"
+                    (click)="locationList = 'empty';resetLocationList()">Show Empty</button>
+                  <div class="dropdown">
+                    <button type="button" class="btn btn-xs dropdown-toggle scrollable-table-buttons" data-toggle="dropdown">
+                        Fill Location
+                        <i class="fa fa-caret-down" style="color: white"></i>
+                      </button>
+                    <div class="dropdown-menu">
+                      <a  class="dropdown-item" 
+                          href="javascript:void(0)"
+                          *ngFor="let registeredLocation of registeredLocations"
+                          (click)="fillLocations(registeredLocation)">
+                        {{registeredLocation}}</a>
+                    </div>
+                  </div>
+                </div>
+                  <table class="scrollable-table">
+                    <thead>
+                      <tr class="scrollable-table-header">
+                        <th style="width:150px !important;background: #756ed1">AP name</th>
+                        <th style="width:500px !important;background: #756ed1">Location</th>
+                      </tr>
+                    </thead>
+                    
+                    <tbody class="scrollable-table-body">
+                      <tr *ngFor="let ap of selectedAPArray">
+                        <td   style="width:150px !important" 
+                              *ngIf="locationList == 'all' || currentlyEmpty.indexOf(ap.ap_mac) != -1 || selectedAPLocations[ap.ap_mac] == ''">
+                              {{ap.ap_name}}</td>   
+                        <td style="width:500px !important" *ngIf="locationList == 'all' || currentlyEmpty.indexOf(ap.ap_mac) != -1 || selectedAPLocations[ap.ap_mac] == ''">
+                          <input  ng2-auto-complete
+                                  [source]="arrayOfLocations"
+                                  (keypress)="alphaOnly($event)" 
+                                  max-num-list = 5
+                                  type="text" class="form-control" 
+                                  [placeholder]="selectedAPLocations[ap.ap_mac] == ''?'Please enter a location':''"
+                                  [(ngModel)]="selectedAPLocations[ap.ap_mac]"
+                                  [ngClass]="{'error':selectedAPLocations[ap.ap_mac] == '' || selectedAPLocations[ap.ap_mac].length < 3}"
+                                  (input)="checkLocationValidity()"/></td>                      
+                      </tr>
+                    </tbody>
+                  </table>
+                  
+                  </div>                
               </div>
               <div class="form-group row">
                   <div class="col-lg-6 col-sm-11 col-md-offset-4">
                       <input type="reset" value="Cancel" class="btn btn-cancel btn-large" style="margin-right: 15px;" (click)="cancelBtn()">
-                      <input type="submit" value="Save" [disabled]="!isDataChanged" class="btn btn-theme btn-large" (click)="onSubmit()">
+                      <input type="submit" value="Save" [disabled]="!(isDataChanged && locationFieldValid)" class="btn btn-theme btn-large" (click)="onSubmit()">
                   </div>
               </div>
           </div>

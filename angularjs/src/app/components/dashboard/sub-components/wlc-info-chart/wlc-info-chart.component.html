@@ -1,5 +1,5 @@
  
-            <div>  
+            <div class="wlcInfo">  
                 <div class="portlet light bordered stats custom-portlet">
                     <div class="portlet-title custom-title">
                         <div class="caption">
@@ -20,26 +20,26 @@
                                 </li> -->
                                 <li>
                                     <div class="dropdown">
-                                        <a href="#" class="dropdown-toggle selectedOption disabled" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="icon icon-settings"></i></a>
-                                        <div class="dropdown-menu this-list" aria-labelledby="dropdownMenuButton">
+                                        <a  href="javascript:void(0)" (click)="showDialogsetting = !showDialogsetting;openSetting('WLC Info');"><i class="icon icon-settings"></i></a>
+                                        <!--<div class="dropdown-menu this-list" aria-labelledby="dropdownMenuButton">
                                             <ul>
                                                 <li><a class="dropdown-item" href="#">Setting 1</a></li>
                                                 <li><a class="dropdown-item" href="#">Setting 2</a></li>
                                             </ul>
-                                        </div>
+                                        </div>-->
                                     </div>
                                 </li>
                                 <li>
                                     <a href="#"><i class="fa fa-arrows-alt icon"></i></a>
                                 </li>
                                 <li>
-                                    <a href="#"><i class="icon icon-cancel"></i></a>
+                                    <a href="javascript:void(0)" (click)="delete(10)"><i class="icon icon-cancel"></i></a>
                                 </li>
                             </ul>
                         </div>
                     </div>
                     <div class="portlet-body">
-                        <div style="height: 250px;" id="">
+                        <div style="height: 250px;" *ngIf="chartBoolStatus">
                             <ul class="wlc-info">
                                 <li>
                                     
@@ -78,7 +78,11 @@
                                      <div class="icon-wrap"><i class="icon icon-hfcl-3"></i></div>
                                 </li></ul>-->
                         </div>
+                         <div style="height: 240px;" *ngIf="!chartBoolStatus"><p class="no-data" style="font-size: 13px;">No Data Available</p></div>
                     </div>
                 </div>
             </div>
    
+<app-modal-setting [visible]="showDialogsetting" (visibleDisable)="closeSettingPopup($event)" [headerName]="titleText" [autoRefresh]="initialtimerInterval" (modelSettingFun)="modelSettingFun($event)">
+
+ </app-modal-setting>

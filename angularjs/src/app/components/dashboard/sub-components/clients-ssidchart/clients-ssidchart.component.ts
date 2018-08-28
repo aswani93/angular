@@ -1,4 +1,4 @@
-import { Component, OnInit,Input } from '@angular/core';
+import { Component, OnInit,Input,Output,EventEmitter } from '@angular/core';
 import {WebserviceService} from '../../../../services/commonServices/webservice.service';
 import { Chart } from 'angular-highcharts';
 import { Observable } from "rxjs";
@@ -27,14 +27,27 @@ export class ClientsSsidchartComponent implements OnInit {
   showDialogsetting:boolean = false;
   initalcolorArray = ["#F95577","#B8CE69","#AF39DD","#FFCF0B","#09C4D3","#E51919","#54CC19","#ff9141","#95a2a9","#1f2939"];
   colorArray = ["#F95577","#B8CE69","#AF39DD","#FFCF0B","#09C4D3","#E51919","#54CC19","#ff9141","#95a2a9","#1f2939"];
+  SSIDdata:any;
 @Input()
   set visibleStatus(value: boolean) {
      if(value){
        this.loadData();
       this.setIntervalForChart();
+      this.SSIDAPI();
      }
-   }   
-  
+   } 
+
+   @Input()
+ set data(data: any) {
+    if(data){
+     this.initialtimerInterval = data.refresh_interval;
+     this.timerInterval = data.refresh_interval;
+     this.initalcolorArray=data.colour_options;
+     this.colorArray = data.colour_options;
+    }
+   }      
+  @Output() deleteWidget: EventEmitter<any> = new EventEmitter<any>();
+
   constructor(private _service: WebserviceService) {
     this.alive = true;
    }
@@ -43,13 +56,25 @@ export class ClientsSsidchartComponent implements OnInit {
      
   }
 
+  SSIDAPI(){
+        this._service.getWeb('configurations/vap-configurations/', '', '').then(_result => {
+      if (_result) {
+         this.SSIDdata = _result['result'];
+      }else{
+      }
+
+    }).catch((error) => {
+       });
+  }
+
+
   loadData(){
            this.color_data = [];
            this.count = 0;
            this.countSSID_data =[];
            this._service.getWeb('statistics/client-count-vap-dashboard/', '', '').then(_result => {
                // _result = {"status":"1","result":[{"vap_name":"issued_once","client_count":2},{"vap_name":"test_to_test","client_count":3},{"vap_name":"cli_vap1","client_count":10},{"vap_name":"testing_ssid","client_count":20},{"vap_name":"sugarcane","client_count":30},{"vap_name":"hello","client_count":6},{"vap_name":"dollar_million","client_count":6},{"vap_name":"got_it","client_count":9}]}
-                 if (_result && _result.result) {
+                 if (_result && _result.result  && _result.result.length > 0) {
                this.apCountSSIDGroups =_result.result;
                 this.chartBoolStatus = true;
                for(let result of this.apCountSSIDGroups){
@@ -90,9 +115,9 @@ this.clientsSsid = new Chart({
     chart: {
       type: 'column'
     },
-    // title: {
-    //   text: titleText
-    // },
+    title: {
+      text: ''
+    },
     legend: {
         enabled: false
     },
@@ -193,6 +218,13 @@ visibleChange(obj){
       }
       console.log("selected index color Code is "+this.colorArray[index] +"and index is "+index);
      this.loadData();
+  }
+
+      /*---------delete widget-----*/
+  delete(val){
+    if(this.timer)
+    this.timer.unsubscribe();
+   this.deleteWidget.emit({id:val});
   }
 
 }

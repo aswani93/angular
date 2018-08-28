@@ -33,7 +33,7 @@
                                 </li>
                                
                                 <li>
-                                    <a href="#"><i class="icon icon-cancel"></i></a>
+                                    <a href="javascript:void(0)" (click)="delete(8)"><i class="icon icon-cancel"></i></a>
                                 </li>
                             </ul>
                         </div>
@@ -53,6 +53,6 @@
 </app-modal-dialog>
 
 
-<app-modal-setting [visible]="showDialogsetting" (visibleDisable)="closeSettingPopup($event)" [headerName]="titleText"  [autoRefresh]="initialtimerInterval" (modelSettingFun)="modelSettingFun($event)">
+<app-modal-setting [visible]="showDialogsetting" (visibleDisable)="closeSettingPopup($event)" [headerName]="titleText"  [autoRefresh]="initialtimerInterval" (modelSettingFun)="modelSettingFun($event)" [groupData]="group_datas">
 
  </app-modal-setting>

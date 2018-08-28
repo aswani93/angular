@@ -14,6 +14,7 @@ import 'rxjs/add/operator/catch';
   styleUrls: ['./air-quality.component.css']
 })
 export class AirQualityComponent implements OnInit {
+  regAPCount: any;
 constructor(
 private http: Http,
 private _service : WebserviceService,
@@ -45,8 +46,14 @@ selectedAp;
 /*details page vaiarbles*/
 
 
+/*searching */
+dataCopy;
+search_key;
+/*searching */
+
 ngOnInit(): void {
   this.loadData();
+  
 }
 
 ngAfterViewInit() {
@@ -89,6 +96,8 @@ loadData(){
   this._service.getWeb('maintenance/auto-rf-ap-list/', '', '').then(_data => {
     if (_data.status == 1) {
       this.data = _data.result['Registered_aps'];
+      this.dataCopy =  _data.result['Registered_aps'];
+      this.regAPCount = _data.result['ap_count'];
     } else {
       
     }
@@ -125,6 +134,7 @@ this.selectedAp = item;
 emitEve() {
   this.loadData();
   this.isdetailsShowed = false;
+  this.search_key = '';
 }
 count:number = 0;
 selectColoums(event, index) {
@@ -143,6 +153,30 @@ selectColoums(event, index) {
 
 holdPopup(event) {
   event.stopPropagation();
+}
+
+//searching...
+
+searchAp(){
+  let val = this.search_key;
+  let search_columns = ['ap_name', 'ap_ip', 'ap_mac', 'ap_group', 'active_clients', 'ap_model', 'status']
+  if(val.length > 2){
+    this.data = this.dataCopy.filter(function(d){
+      let matchFound = false;
+      for(let data of search_columns){
+        let value = ""+d[data];
+        if(value.toLowerCase().indexOf(val) !== -1 || !val){
+          matchFound = true;
+          break;
+        }
+      }      
+      
+      return matchFound;
+    });
+  }
+  else{
+    this.data = this.dataCopy;
+  }
 }
 
 }

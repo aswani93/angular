@@ -1,0 +1,41 @@
+::ng-deep .dismiss-popup {
+    color: #fff;
+    background-color: #5cb85c;
+    border-color: #5cb85c !important;
+    padding: 6px 20px;
+    width: 100%;
+    height: 50px;
+    font-size: 18px;
+  }
+  
+  ::ng-deep .dismiss-popup:hover{
+    color: #fff;
+    background-color: #59ca2c;
+    border-color:#5cb85c !important;
+  }
+  
+  .notification-modal .modal-dialog {
+    width: 450px;
+  }
+  
+  .vertical-menu {
+    height: 150px;
+    overflow-y: auto;
+}
+
+.vertical-menu a {
+    background-color: #eee;
+    color: black;
+    display: block;
+    padding: 12px;
+    text-decoration: none;
+}
+
+.vertical-menu a:hover {
+    background-color: #ccc;
+}
+
+.ap-modal-body{
+  text-align: center;
+  padding: 15px;
+}

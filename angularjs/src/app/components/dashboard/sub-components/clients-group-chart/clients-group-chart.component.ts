@@ -1,4 +1,4 @@
-import { Component, OnInit,Input} from '@angular/core';
+import { Component, OnInit,Input,Output,EventEmitter} from '@angular/core';
 import {WebserviceService} from '../../../../services/commonServices/webservice.service';
 import { Chart } from 'angular-highcharts';
 import { Observable } from "rxjs";
@@ -27,21 +27,47 @@ export class ClientsGroupChartComponent implements OnInit {
   showDialogsetting:boolean = false;
   initalcolorArray = ["#F95577","#B8CE69","#AF39DD","#FFCF0B","#09C4D3","#E51919","#54CC19","#ff9141","#95a2a9","#1f2939"];
   colorArray = ["#F95577","#B8CE69","#AF39DD","#FFCF0B","#09C4D3","#E51919","#54CC19","#ff9141","#95a2a9","#1f2939"];
-
+ group_datas:any;
   @Input()
   set visibleStatus(value: boolean) {
      if(value){
          this.loadData();
          this.setIntervalForChart();
+         this.groupAPI();
 
      }
-   }   
+   }
+   @Input()
+ set data(data: any) {
+    if(data){
+     this.initialtimerInterval = data.refresh_interval;
+     this.timerInterval = data.refresh_interval;
+     this.initalcolorArray=data.colour_options;
+     this.colorArray = data.colour_options;
+    }
+    
+   } 
+  @Output() deleteWidget: EventEmitter<any> = new EventEmitter<any>();
+    
   constructor(private _service: WebserviceService) {
       this.alive = true;
    }
 
   ngOnInit() {
      
+  }
+
+  groupAPI(){
+    this._service.getWeb('configurations/group-configurations/', '', '').then(_result => {
+      if (_result) {
+        this.group_datas = _result.result;
+       
+      }else{
+       
+      }
+
+    }).catch((error) => {
+         });
   }
 
   loadData(){
@@ -187,6 +213,13 @@ visibleChange(obj){
       }
       console.log("selected index color Code is "+this.colorArray[index] +"and index is "+index);
      this.loadData();
+  }
+
+      /*---------delete widget-----*/
+  delete(val){
+    if(this.timer)
+    this.timer.unsubscribe();
+   this.deleteWidget.emit({id:val});
   }
 
 }

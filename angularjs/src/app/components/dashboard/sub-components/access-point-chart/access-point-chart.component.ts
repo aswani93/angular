@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Input,Output,EventEmitter } from '@angular/core';
 import {WebserviceService} from '../../../../services/commonServices/webservice.service';
 import { Chart } from 'angular-highcharts';
 import { Observable } from "rxjs";
@@ -17,13 +17,22 @@ export class AccessPointChartComponent implements OnInit {
      alive:boolean;
     timerInterval:number = 10000;
     timer:any;
+ @Input()set visibleStatus(value: boolean) {
+     if(value){
+       //console.log("access Point Top"+value);
+       this.callingFn('AccessPointsTop',null);
+        this.setIntervalForChart();  
+     }
+
+   } 
+@Output() deleteWidget: EventEmitter<any> = new EventEmitter<any>();
+  
   constructor(private _service: WebserviceService) { 
       this.alive = true;
   }
 
   ngOnInit() {
-    this.callingFn('AccessPointsTop',null);
-     this.setIntervalForChart();  
+   
   }
 setIntervalForChart(){
        this.timer = IntervalObservable.create(this.timerInterval)
@@ -133,6 +142,11 @@ visibleChange(obj){
      this.alive = false;
      if(this.timer)
     this.timer.unsubscribe();
+  }
+
+      /*---------delete widget-----*/
+  delete(val){
+   this.deleteWidget.emit({id:val});
   }
 
 }

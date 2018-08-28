@@ -19,17 +19,29 @@ export class RestoreDefaultComponent implements OnInit {
               private spinnerService: Ng4LoadingSpinnerService,
               private alertService: AlertService,
               private notifyPopup: NotificationService,
-              private tooltipService: TooltipService) { }
+              private tooltipService: TooltipService) {
+  }
 
   ngOnInit() {
+    this.notifyPopup.confirmationOk().subscribe((page) => {
+      if (page === 'restoreDefault') {
+        this.onRestoreDefault();
+      }
+    });
+  }
+
+
+  onSubmit() {
+    // console.log('clicked');
+    this.notifyPopup.info('Are you sure to restore default?');
   }
 
   onRestoreDefault() {
-   // maintenance/wlc-system-settings-restore/
+    // maintenance/wlc-system-settings-restore/
     this.notifyPopup.showLoader('System restore initiated...');
     this._service.postJson('maintenance/wlc-system-settings-restore/', '').then(_result => {
       if (_result.status === '1') {
-          this.notifyPopup.success('System restored successfully.');
+        this.notifyPopup.success('System restored successfully.');
         //   // this.loadData();
         //
         // } else {
@@ -38,6 +50,8 @@ export class RestoreDefaultComponent implements OnInit {
       } else {
         this.notifyPopup.success('Something went wrong.');
       }
-    }).catch((error) => { this.notifyPopup.logoutpop(commonMessages.InternalserverError); });
+    }).catch((error) => {
+      this.notifyPopup.logoutpop(commonMessages.InternalserverError);
+    });
   }
 }

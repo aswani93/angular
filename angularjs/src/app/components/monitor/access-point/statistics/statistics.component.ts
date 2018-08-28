@@ -96,7 +96,10 @@ export class StatisticsComponent implements OnInit {
   pageModulus = 0;
   currentPage;
   dataLength;
-    /*pagination declaration variable end */
+  /*pagination declaration variable end */
+
+  g_downlink_time;
+
   constructor(private elRef: ElementRef,
               private http: Http,
               private _service: WebserviceService,
@@ -212,6 +215,7 @@ export class StatisticsComponent implements OnInit {
   public selectedVal;
   public selectedGrpVapId;
   public selectedGrpVapname;
+  public show =false;
   drawgraphs(obj, name, tab,event) {
     this.filterOption = false;
     this.rangeVal_open_ap = 'total';
@@ -511,8 +515,16 @@ export class StatisticsComponent implements OnInit {
   }
 
   setScale(from, scale) {
-
-   // console.log(scale);
+    console.log(scale);
+    this.show = false;
+    if(typeof(scale) == 'object'){
+      scale[0] = this.convertToepoch(scale[0]);
+      scale[1] = this.convertToepoch(scale[1]);
+      if(from == 'downlink'){
+        this.scaleText_downlink = 'Custom';
+      }
+      
+    }
     switch (scale + '_' + from) {
       case 'live_cup':
         this.scaleText_cpu = 'Live data';
@@ -755,7 +767,14 @@ export class StatisticsComponent implements OnInit {
   removeClass(className) {
     this.elRef.nativeElement.querySelector('.' + className).classList.remove('open');
   }
-
+  convertToepoch(time){
+    let epochTime = new Date(time).getTime();
+    if(isNaN(epochTime)){
+      return '';
+    }else{
+      return epochTime;
+    }
+  }
   selectAPColoums(event, index) {
     event.stopPropagation();
     event.preventDefault();

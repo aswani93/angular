@@ -37,6 +37,13 @@ export class RedundancyComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.notifyPopup.confirmationOk().subscribe((page) => {
+    
+      if(page == 'redundancy'){
+       
+     this.notifyPopup.hideLoader('');
+    }
+    });
     this.loadData();
     this.systemRedundancy = new FormGroup({
       "redundancy_wlc_ip": new FormControl('', [
@@ -47,6 +54,11 @@ export class RedundancyComponent implements OnInit {
      // 'redundancy_wlc_ipv6' : new FormControl('',[Validators.pattern(this.IPv6Pattern)])
     })
 
+  }
+  disableRedundancy(){
+    if(!this.systemRedundancy.get('redundancy_enabled').value){
+    this.notifyPopup.info("If disbale,Stand by WLC go to default.");
+    }
   }
 
   formReset() {
@@ -69,18 +81,21 @@ export class RedundancyComponent implements OnInit {
   }
 
   onSubmit() {
-    this.notifyPopup.showLoader(commonMessages.save_systemConfig);
+   
     // this.newJson['redundancy_wlc_ip'] = this.systemRedundancy.get('redundancy_wlc_ip').value;
     this._service.putJson('configurations/redundancy-update/', this.systemRedundancy.value).then(_result => {
-   
+      this.notifyPopup.showLoader('Settings applied successfully. It take some to time to complete,Pease wait..');
       if (_result.status == 1) {
+        setTimeout(() => {
           this.notifyPopup.hideLoader('');
-            this.notifyPopup.success("Settings applied successfully");
-           
+          this.notifyPopup.success("Settings applied successfully.");
+         
+        }, 300000);
+        
             //this.spinnerService.hide();
             setTimeout(() => {
               this.loadData();
-            }, 2500);
+            },400000);
        
       } else {
         setTimeout(() => {
@@ -100,7 +115,7 @@ export class RedundancyComponent implements OnInit {
     if (result[0].length == 0) {
       this.iperrorStatus = true;
       this.btndisable = true;
-    } else if (result[0] == "127" || result[0] == "8" || result[0] == "4" ||  result[1] == "0") {
+    } else if (result[0] == "127" || result[0] == "8" || result[0] == "4" ||  (result[1] == "0" && result[2] == "2")) {
       this.iperrorStatus = true;
       this.btndisable = true;
     } else if (result[0] < 224 && result[0] >= 1 && result[3] < 255) {

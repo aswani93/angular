@@ -40,8 +40,9 @@ font-size: 14px;
 }
 
 .no-data{
-font-size: 16px;
-color: #111;
+  font-size: 16px;
+  color: #111;
+  margin-bottom: 0px;
 }
 .portlet-title .back-btn{line-height: 1.2em;}
 .portlet-title .back-btn .btn{padding: 15px 0;}
@@ -102,9 +103,9 @@ select.form-control.caption-select.ng-valid.ng-dirty.ng-touched{
 .notification-tabs .tab-link li a{width: 40px; color: #fff; height: 40px; padding: 3px; border-radius: 50%; margin: 0 auto;}
 .notification-tabs .tab-link li:hover .tab-label{transform: scale(1) translateY(0px); opacity: 1; visibility: visible;}
 .notification-tabs .tab-link li:hover a{opacity: 0.8;}
-.notification-tabs .tab-link li.error a{background: #FF5050;}
-.notification-tabs .tab-link li.warning a{background: #FF9141;}
-.notification-tabs .tab-link li.info a{background: #FAC802;}
+.notification-tabs .tab-link li.error a{background: #EA2027;}
+.notification-tabs .tab-link li.warning a{background: #e67e22;}
+.notification-tabs .tab-link li.info a{background: #f6b93b;}
 .notification-tabs .tab-link li.active a::after{content: ''; position: absolute; bottom: -6px; width: 60%; height: 3px; left: 50%; transform: translateX(-50%);}
 .notification-tabs .tab-link li.active.error a::after{background: #FF5050;}
 .notification-tabs .tab-link li.active.warning a::after{background: #FF9141;}

@@ -23,6 +23,7 @@ import {AngularMultiSelectModule} from 'angular2-multiselect-dropdown/angular2-m
 import {CarouselModule} from 'ngx-bootstrap';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { Ng5SliderModule } from 'ng5-slider';
+import { Ng2AutoCompleteModule } from 'ng2-auto-complete';
 
 
 
@@ -43,9 +44,13 @@ import {FilterPipe} from './services/filters/filterPipe';
 import {NoHyphenPipe} from './services/filters/noHyphen';
 import {OrderByPipe} from './services/filters/sort';
 import {counrtyService} from './services/countryList/country';
+import { FileSizePipe } from './services/filters/filesizepipe';
+import {WidgetServiceService} from './services/widget/widget-service.service';
 
 
 // components
+import {AutoRfComponentsystem} from './components/maintenance/system/auto-rf/auto-rf.component';
+import {DiagnosticComponent} from './components/monitor/access-point/diagnostic/diagnostic.component'
  import {RogueApComponent} from '../app/components/maintenance/accesspoint/rogue-ap/rogue-ap.component';
 import {AppComponent} from './app.component';
 import {NotificationComponent} from './directives/notification.component';
@@ -129,7 +134,17 @@ import { AirQualityDetailsComponent } from './components/monitor/access-point/ai
 import { ModalSettingComponent } from './components/modal-setting/modal-setting.component';
 import { AlarmsettingComponent } from './components/maintenance/system/alarmsetting/alarmsetting.component';
 import { AutoRfmonitoringComponent } from './components/monitor/access-point/auto-rfmonitoring/auto-rfmonitoring.component';
+import { LogsComponent } from './components/monitor/access-point/logs/logs.component';
+import { LogsysComponent } from './components/monitor/system/logsys/logsys.component';
 import { ColorPickerModule } from 'ngx-color-picker';
+import { ScheduleComponent } from './components/maintenance/accesspoint/schedule/schedule.component';
+import { ApRemoteMaintenanceComponent } from './components/maintenance/accesspoint/ap-remote-maintenance/ap-remote-maintenance.component';
+import { VrrpComponent } from './components/configuration/system/vrrp/vrrp.component';
+import { ChannelUtilizationGraphComponent } from './components/monitor/access-point/auto-rfmonitoring/graphs/channel-utilization-graph/channel-utilization-graph.component';
+import { SelfUtilizationGraphComponent } from './components/monitor/access-point/auto-rfmonitoring/graphs/self-utilization-graph/self-utilization-graph.component';
+
+import { PacketCaptureComponent } from './components/maintenance/accesspoint/packet-capture/packet-capture.component';
+import { SystemDiskUtilizationComponent } from './components/monitor/system/system-statistics/graph/system-disk-utilization/system-disk-utilization.component';
 @NgModule({
   declarations: [
     UpToolTipComponent,
@@ -199,6 +214,7 @@ import { ColorPickerModule } from 'ngx-color-picker';
     AaaServerComponent,
     AlarmComponent,
     RogueApComponent,
+    FileSizePipe,
     VmComponent,
     VmCpuMemoryUtilizationComponent,
     VmDownlinkTrafficUtilizationComponent,
@@ -218,7 +234,18 @@ import { ColorPickerModule } from 'ngx-color-picker';
     ModalSettingComponent,
     AutoRfComponent,
     AutoRfmonitoringComponent,
-    AlarmsettingComponent
+    AlarmsettingComponent,
+    ApRemoteMaintenanceComponent,
+    VrrpComponent,
+    ChannelUtilizationGraphComponent,
+    ScheduleComponent,
+    PacketCaptureComponent,
+    SelfUtilizationGraphComponent,
+    AutoRfComponentsystem,
+    DiagnosticComponent,
+    LogsComponent,
+    LogsysComponent,
+    SystemDiskUtilizationComponent
   ],
   imports: [
     PopoverModule,
@@ -234,7 +261,7 @@ import { ColorPickerModule } from 'ngx-color-picker';
     ModalModule.forRoot(),
     Ng4LoadingSpinnerModule.forRoot(),
     BrowserAnimationsModule,
-    AlertModule.forRoot({maxMessages: 1, timeout: 3000}),
+    AlertModule.forRoot({maxMessages: 5, timeout: 3000}),
     TabsModule.forRoot(),
     TimepickerModule.forRoot(),
     BsDatepickerModule.forRoot(),
@@ -245,7 +272,8 @@ import { ColorPickerModule } from 'ngx-color-picker';
     OwlNativeDateTimeModule,
     NgxPaginationModule,
     Ng5SliderModule,
-    ColorPickerModule
+    ColorPickerModule,
+    Ng2AutoCompleteModule
   ],
   providers:
     [
@@ -264,7 +292,8 @@ import { ColorPickerModule } from 'ngx-color-picker';
       AlertService,
       counrtyService,
       NotificationService,
-      TooltipService
+      TooltipService,
+      WidgetServiceService
     ],
   bootstrap: [AppComponent]
 })

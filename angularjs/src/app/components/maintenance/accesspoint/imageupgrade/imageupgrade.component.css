@@ -107,3 +107,56 @@ input[type=number] {
 .view-list{ margin:0px; padding:0px; list-style: none; background:#FFFFFF; border: 1px solid rgba(0,0,0,.15); border-radius: 4px; width: 180px; position: absolute; z-index: 99;}
 .view-list li{position: relative; float:none; margin-right:0px; padding-left:10px; border-bottom: 1px solid rgba(0,0,0,.15)}
 .view-list li label{padding: 8px 5px 8px 30px;}
+.blackOverlay{
+    background: rgba(0,0,0,0.5);
+    position: fixed;
+    left:0px;
+    top:0px;
+    right:0px;
+    bottom:0px;
+}
+.upload-popup{
+    background: #FFFFFF; 
+    padding: 15px; 
+    border:solid 1px #DDDDDD; 
+    position: absolute; 
+    left: 0px; 
+    right: 0px; 
+    top:30%; 
+    max-width: 600px; 
+    width:100%; 
+    margin: auto;
+}
+.upload-popup .title{
+    border-bottom: solid 1px #DDDDDD; 
+    padding: 5px 5px 15px 5px; 
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+.upload-popup .file-upload{
+    border:solid 1px #DDDDDD;
+    padding: 8px;
+    margin: 0px 5px 10px 5px;
+    border-radius: 3px;
+}
+.file-icon{
+    float: left;
+    width: 40px;
+    height: 60px;
+    font-size: 35px;
+    color:#CCCCCC;
+}
+.upload-popup .progress{
+    height: 5px;
+    margin: 10px 0px 7px 0px;
+}
+.upload-popup .pull-left span{
+    font-style: italic;
+}
+.upload-popup .bottom-text{
+    color:#666666;
+    font-size:13px;
+}
+.progress-bar-purple {
+    background-color: #756ed1 !important;
+}

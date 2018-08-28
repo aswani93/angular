@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input,Output,EventEmitter} from '@angular/core';
 import {WebserviceService} from '../../../../services/commonServices/webservice.service';
 import {Chart} from 'angular-highcharts';
 
@@ -20,6 +20,20 @@ export class CpuUtilizationChartComponent implements OnInit {
 
     }
   }
+
+  @Input()
+ set data(data: any) {
+    if(data){
+     this.initialselectedScale = data.graph_period;
+     this.selectedScale = data.graph_period;
+     this.initialslectedVM=data.vm_host;
+     this.selectedVM = data.vm_host;
+     this.initialcolor = data.colour_options[0];
+     this.color = data.colour_options[0];
+    }
+   } 
+@Output() deleteWidget: EventEmitter<any> = new EventEmitter<any>();
+
 
   // @Input() scale: string;
   // @Input() range: string;
@@ -55,7 +69,8 @@ export class CpuUtilizationChartComponent implements OnInit {
   alive:boolean = true;
   chartBoolStatus:boolean = false;
   series1:any;
-
+  initialcolor ="#a377ec";
+  color ="#a377ec";
   constructor(private _service: WebserviceService) {
   }
 
@@ -162,7 +177,7 @@ export class CpuUtilizationChartComponent implements OnInit {
       series: [{
         name: 'CPU',
         data: this.cpuData,
-        color: '#a377ec'
+        color:this.color
       }
       ]
     });
@@ -176,10 +191,9 @@ export class CpuUtilizationChartComponent implements OnInit {
                 const apiLength = t.apiResult[0].length;
 
                 // console.log(` x axis length ${apiLength} selected range ${t.selectedRange}`);
-
+                 if (_data && _data.result &&  _data.result.length > 0) {
                 x1 = parseFloat(t.apiResult[
                   t.selectedRange === 'avg' ? 3 : t.selectedRange === 'min' ? 1 : t.selectedRange === 'max' ? 2 : 1][apiLength - 1]);
-                 if(apiLength > 0){
                 y = parseFloat(t.apiResult[0][apiLength - 1]);
 
                 t.timestamp = y;  // putting the last time value of array into timestamp.
@@ -306,6 +320,7 @@ export class CpuUtilizationChartComponent implements OnInit {
   modelSettingFun(event){
      this.selectedScale = event.period;
      this.selectedVM = event.vm;
+     this.color = event.color;
      if(event.period == 'live')
      this.timeInterval = 10000
      else
@@ -314,6 +329,12 @@ export class CpuUtilizationChartComponent implements OnInit {
       console.log(event.period+"/////"+event.vm+"//////"+this.timeInterval);
 
      this.loadData(event.period,event.vm);
+  }
+
+      /*---------delete widget-----*/
+  delete(val){
+    clearInterval(this.timerVar);
+   this.deleteWidget.emit({id:val});
   }
 
 }

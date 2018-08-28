@@ -2,8 +2,9 @@ import {Component, OnInit, ElementRef, Input, OnChanges, SimpleChange, Output, E
 import {Chart} from 'angular-highcharts';
 import {WebserviceService} from '../../../../../../services/commonServices/webservice.service';
 import {Ng4LoadingSpinnerService} from 'ng4-loading-spinner';
-import { NotificationService,commonMessages} from '../../../../../../services/notificationService/NotificationService';
-import 'rxjs/add/operator/catch'; 
+import {NotificationService, commonMessages} from '../../../../../../services/notificationService/NotificationService';
+import 'rxjs/add/operator/catch';
+
 @Component({
   selector: 'app-ap-downlink-traffic',
   templateUrl: './ap-downlink-traffic.component.html',
@@ -42,7 +43,7 @@ export class ApDownlinkTrafficComponent implements OnInit {
   public number_points = 12;
   public steps = 1;
 
-  constructor(private _service: WebserviceService, private elRef: ElementRef, private spinnerService: Ng4LoadingSpinnerService,private notifyPopup : NotificationService) {
+  constructor(private _service: WebserviceService, private elRef: ElementRef, private spinnerService: Ng4LoadingSpinnerService, private notifyPopup: NotificationService) {
   }
 
   ngOnInit() {

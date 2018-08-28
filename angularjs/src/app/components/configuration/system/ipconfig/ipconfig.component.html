@@ -56,6 +56,7 @@
                   type="text"
                   class="form-control"
                   formControlName="ip"
+                  [readonly]="dhcpPrimaryCheck"
                   #activeIP
                   (blur)="generateEndIPforActive(activePrefix.value, activeIP.value,  '1')"
                   (input)="checkIPActive(activeIP.value)">
@@ -81,6 +82,7 @@
                        class="form-control"
                        (input)="netmaskValidation('ip_active_prefix')"
                        formControlName="ip_prefix"
+                       [readonly]="dhcpPrimaryCheck"
                        maxlength="2"
                        #activePrefix
                        (blur)="generateEndIPforActive(activePrefix.value, this.ipConfigForm.get('ip').value,  '1')">
@@ -106,6 +108,7 @@
 
                 <input
                   type="text"
+                  readonly
                   class="form-control"
                   formControlName="end_ip">
                 <div class="text-danger pull-left" *ngIf="activeIPCallError"> {{activeIPCallErrorTxt}}</div>
@@ -125,6 +128,7 @@
                   <input
                     type="text"
                     class="form-control"
+                    [readonly]="dhcpPrimaryCheck"
                     formControlName="subnet_mask">
 
                   <div
@@ -157,6 +161,7 @@
                   <input
                     type="text"
                     class="form-control"
+                    [readonly]="dhcpPrimaryCheck"
                     formControlName="gateway">
 
                   <div
@@ -190,6 +195,7 @@
                   <input
                     type="text"
                     class="form-control"
+                    [readonly]="dhcpPrimaryCheck"
                     formControlName="primary_dns">
 
                   <div
@@ -222,6 +228,7 @@
                   <input
                     type="text"
                     class="form-control"
+                    [readonly]="dhcpPrimaryCheck"
                     formControlName="secondary_dns">
 
                   <div
@@ -315,6 +322,7 @@
                           type="text"
                           class="form-control"
                           formControlName="r_ip"
+                          [readonly]="dhcpSecondaryCheck"
                           #standByIP
                           (blur)="generateEndIPforStandby(standbyPrefix.value, standByIP.value,  '2')"
                           (input)="checkIPStandBy(standByIP.value)">
@@ -343,6 +351,7 @@
                                class="form-control"
                                (input)="netmaskValidation('ip_standby_prefix')"
                                formControlName="r_ip_prefix"
+                               [readonly]="dhcpSecondaryCheck"
                                maxlength="2"
                                #standbyPrefix
                                (blur)="generateEndIPforStandby(standbyPrefix.value, this.ipConfigForm.get('r_config.r_ip').value, '2')">
@@ -372,6 +381,7 @@
 
                         <input
                           type="text"
+                          readonly
                           class="form-control"
                           formControlName="r_end_ip">
                         <div class="text-danger pull-left" *ngIf="standByIPCallError"> {{ standByIPCallErrorTxt }}</div>
@@ -391,6 +401,7 @@
                         <input
                           type="text"
                           class="form-control"
+                          [readonly]="dhcpSecondaryCheck"
                           formControlName="r_netmask">
 
                         <div
@@ -420,6 +431,7 @@
                         <input
                           type="text"
                           class="form-control"
+                          [readonly]="dhcpSecondaryCheck"
                           formControlName="r_gateway">
 
                         <div
@@ -451,6 +463,7 @@
                         <input
                           type="text"
                           class="form-control"
+                          [readonly]="dhcpSecondaryCheck"
                           formControlName="r_primary_dns">
                         <div
                           *ngIf="ipConfigForm.get('r_config.r_primary_dns').invalid && (ipConfigForm.get('r_config.r_primary_dns').dirty || ipConfigForm.get('r_config.r_primary_dns').touched)">
@@ -482,6 +495,7 @@
                         <input
                           type="text"
                           class="form-control"
+                          [readonly]="dhcpSecondaryCheck"
                           formControlName="r_secondary_dns">
                         <div
                           *ngIf="ipConfigForm.get('r_config.r_secondary_dns').invalid && (ipConfigForm.get('r_config.r_secondary_dns').dirty || ipConfigForm.get('r_config.r_secondary_dns').touched)">

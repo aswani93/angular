@@ -1,8 +1,9 @@
-import {Component, ElementRef, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Ng4LoadingSpinnerService} from 'ng4-loading-spinner';
 import {Http} from '@angular/http';
 import {commonMessages, NotificationService} from '../../../../services/notificationService/NotificationService';
 import {WebserviceService} from '../../../../services/commonServices/webservice.service';
+import {DataTable, SortEvent} from 'angular2-datatable';
 
 @Component({
   selector: 'app-vm',
@@ -10,7 +11,7 @@ import {WebserviceService} from '../../../../services/commonServices/webservice.
   styleUrls: ['./vm.component.css']
 })
 
-export class VmComponent implements OnInit, OnDestroy {
+export class VmComponent implements OnInit, OnDestroy, AfterViewInit {
   percentage = '';
   unit = '';
   degree = '';
@@ -55,8 +56,6 @@ export class VmComponent implements OnInit, OnDestroy {
   isGraphViewSelected = false;
   isTabularViewSelected = false;
 
-
-  interval_details;
   vmTableData: VM;
   selected_vm_name = 'VM Details';
 
@@ -88,6 +87,11 @@ export class VmComponent implements OnInit, OnDestroy {
   ifLiveSelectedFromNetwork = false;
 
   tabular_ping_interval;
+  loadVMTableTimer;
+
+  _sortBy;
+  _sortOrder;
+  @ViewChild('mf') vmDataTable: DataTable;
 
   constructor(private elRef: ElementRef,
               private http: Http,
@@ -98,6 +102,8 @@ export class VmComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.notifyPopup.showLoader('Loading VM Data..');
+    // this.loadVMTableData();
+
     this._service.getWeb('statistics/wlc-host-stats-table/', '', '').then(data => {
       if (data.status === '0') {
         this.vm = this.vm_mock;
@@ -119,10 +125,9 @@ export class VmComponent implements OnInit, OnDestroy {
       this.notifyPopup.logoutpop(commonMessages.InternalserverError);
     });
 
-    setTimeout(() => {
+    this.loadVMTableTimer = setInterval(() => {
       this.loadVMTableData();
-    }, 20000);
-    console.log(this.vm);
+    }, 180000);
   }
 
   setStatView(vName) {
@@ -131,7 +136,7 @@ export class VmComponent implements OnInit, OnDestroy {
     this.loadTabularData(vName);
     this.isGraphDrawn = true;
     this.isGraphViewSelected = true;
-    console.log('clicked on', vName);
+    // console.log('clicked on', vName);
   }
 
   loadTabularData(vName: any) {
@@ -149,18 +154,18 @@ export class VmComponent implements OnInit, OnDestroy {
         // this.rpm = data.result.fan === '-' ? ' ' : 'rpm';
         // this.volt = data.result.power_supply === '-' ? ' ' : 'volts';
         // this.disk = data.result.disk === '-' ? ' ' : '%';
-        setTimeout(() => {
-          this.notifyPopup.clear();
-        }, 20000);
+        // setTimeout(() => {
+        //   this.notifyPopup.clear();
+        // }, 20000);
       }
     }).catch((error) => {
       this.notifyPopup.logoutpop(commonMessages.InternalserverError);
     });
 
-    this.reloadData(vName);
+    this.reloadTabularData(vName);
   }
 
-  reloadData(vName) {
+  reloadTabularData(vName) {
     this.tabular_ping_interval = setInterval(() => {
       this._service.getWeb('statistics/wlc-host-stats-table/?vm=' + vName, '', '').then(data => {
         if (data.status === '0') {
@@ -176,36 +181,34 @@ export class VmComponent implements OnInit, OnDestroy {
           //  this.disk = data.result.disk === '-' ? ' ' : '%';
         }
       });
-    }, 20000);
+    }, 180000);
   }
 
   loadVMTableData() {
-    this.interval_details = setInterval(() => {
-      this._service.getWeb('statistics/wlc-host-stats-table/', '', '').then(data => {
-        if (data.status === '0') {
-          this.vm = this.vm_mock;
-        } else {
-          //  console.log(Object.keys(data.result).length);
-          console.log(data.result);
-          this.vmTableData = data.result;
-          // this.vmTableData = Object.keys(data.result).length !== 0 ? data.result : this.vm_mock;
-          console.log(this.vmTableData);
-          this.percentage = '%';
-          this.unit = 'kbps';
-          // this.degree = data.result.amp_temp === '-' ? ' ' : '°c';
-          // this.rpm = data.result.fan === '-' ? ' ' : 'rpm';
-          // this.volt = data.result.power_supply === '-' ? ' ' : 'volts';
-          // this.disk = data.result.disk === '-' ? ' ' : '%';
-        }
-      }).catch((error) => {
-        this.notifyPopup.logoutpop(commonMessages.InternalserverError);
-      });
-    }, 20000);
+    this._service.getWeb('statistics/wlc-host-stats-table/', '', '').then(data => {
+      if (data.status === '0') {
+        this.vm = this.vm_mock;
+      } else {
+        //  console.log(Object.keys(data.result).length);
+        console.log(data.result);
+        this.vmTableData = data.result;
+        // this.vmTableData = Object.keys(data.result).length !== 0 ? data.result : this.vm_mock;
+        console.log(this.vmTableData);
+        this.percentage = '%';
+        this.unit = 'kbps';
+        // this.degree = data.result.amp_temp === '-' ? ' ' : '°c';
+        // this.rpm = data.result.fan === '-' ? ' ' : 'rpm';
+        // this.volt = data.result.power_supply === '-' ? ' ' : 'volts';
+        // this.disk = data.result.disk === '-' ? ' ' : '%';
+      }
+    }).catch((error) => {
+      this.notifyPopup.logoutpop(commonMessages.InternalserverError);
+    });
   }
 
   // before moving to other components, the timer is cleared so the code be no longer executable.
   ngOnDestroy() {
-    clearInterval(this.interval_details);
+    clearInterval(this.loadVMTableTimer);
     clearInterval(this.tabular_ping_interval);
   }
 
@@ -232,7 +235,17 @@ export class VmComponent implements OnInit, OnDestroy {
     this.ifHourNetworkGraphSelected = false;
     this.ifLiveCPUGraphSelected = true;
     this.ifHourCPUGraphSelected = false;
-    }
+
+    this.scaleText_vm_cpu = 'Live data';
+    this.ifLiveSelectedFromCPU = false;
+    this.ifLiveCPUGraphSelected = true;
+    this.ifHourCPUGraphSelected = false;
+
+    this.scaleText_vm_downlink = 'Live data';
+    this.ifLiveSelectedFromNetwork = false;
+    this.ifLiveNetworkGraphSelected = true;
+    this.ifHourNetworkGraphSelected = false;
+  }
 
   setScale(from, scale) {
 //  for the setting scale of wlc_cpu usage. eg. live, hour, day
@@ -313,6 +326,13 @@ export class VmComponent implements OnInit, OnDestroy {
     if (from === 'vm_downlink') {
       this.rangeVal_vm_downlink = range;
     }
+  }
+
+  ngAfterViewInit() {
+    this.vmDataTable.onSortChange.subscribe((event: SortEvent) => {
+      this._sortBy = event.sortBy;
+      this._sortOrder = event.sortOrder;
+    });
   }
 
 }

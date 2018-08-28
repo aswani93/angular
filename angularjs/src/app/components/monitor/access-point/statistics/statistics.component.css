@@ -166,4 +166,53 @@ background-color: #fff;
     color: #111;
 }
 
+.sub-drop{
+  position: absolute;
+  right: 100%;
+  width: 250px;
+  background-color: #fff;
+  padding: 10px;
+  overflow: hidden;
+  top: 70px;
+  margin-right: 0px;
+  border-radius: 5px;
+  color: #111;
+}
 
+::ng-deep table.owl-dt-calendar-table thead th {
+  background: none;
+  color: #111;
+  padding: 10px !important;
+  font-weight: 500;
+  vertical-align: middle !important;
+  line-height: 0.2 !important;
+  font-size: 12px !important;
+}
+::ng-deep .owl-dt-popup-container {
+  width: 22.1em !important;
+  font-size: 14px !important;
+}
+::ng-deep .owl-dt-calendar-control {
+  font-size: 14px;
+  color: #000;
+}
+::ng-deep  .owl-dt-timer {
+  
+  height: 7em;
+  font-size: 12px;
+}
+::ng-deep .owl-dt-container-buttons {
+ 
+  height: 3em;
+  font-size: 14px;
+}
+::ng-deep table.owl-dt-calendar-table td {
+  padding: 20px !important;
+  font-size: 14px !important;
+}
+::ng-deep  .owl-dt-popup-container .owl-dt-calendar {
+  height: 23.25em !important;
+}
+.table>tbody>tr>td, .table>tbody>tr>th, .table>thead>tr>td, .table>thead>tr>th{
+  line-height: 1.1 !important;
+}

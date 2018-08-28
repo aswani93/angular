@@ -15,7 +15,8 @@ export class ApClientDistributionComponent implements OnInit {
   ngOnInit() {
     this.chart = new Chart({
       chart: {
-        type: 'column'
+        type: 'column',
+        height: 300
     },
 
     title: {

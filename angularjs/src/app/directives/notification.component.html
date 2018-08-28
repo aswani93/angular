@@ -197,7 +197,24 @@
                         </slide>
                       </carousel>
                     </div>
-              
+                    <div class="row" *ngIf="macprofiledelete">
+                      <!-- <div class="col-lg-6 col-sm-6"  *ngFor="let ssid of alert.message">
+                              <label class="labelSsid">{{ssid.ssidname}}</label>
+                              <label *ngFor="let grp of ssid.groups" class="forDetails">{{grp.groupname}}</label>
+                      </div> -->
+                      <carousel [showIndicators]="false" [interval]="false" class="ssidcarousel">
+                        <slide *ngFor="let ssid of alert.message">
+                          <div class="py-5 bg-dark text-white slide-div">
+                            <h4 class="normal-wt">Mac profile in use are:</h4>
+                            <div class="lead">
+                              <p >{{ssid.groups}}</p>
+                            </div>
+                          </div>
+                        </slide>
+                      </carousel>
+                    </div>
+
+
                     <div class="row" *ngIf="aaaDelete">
                       <carousel [showIndicators]="false" [interval]="false" class="ssidcarousel">
                         <slide *ngFor="let obj of alert.message">
@@ -210,10 +227,10 @@
                         </slide>
                       </carousel>
                     </div>
-              
-              
-              
-              
+
+
+
+
                     <div class="row" *ngIf="vlandelete">
                       <!-- <div class="col-lg-6 col-sm-6"  *ngFor="let ssid of alert.message">
                               <label class="labelSsid">{{ssid.ssidname}}</label>
@@ -275,7 +292,7 @@
                                             <strong>changed</strong> for the following APs
                                         </div>
                                     </div>
-                
+
                                     <!-- <div class="row">
                                                           <div class="col-md-6 col-sm-6 text-center">
                                                             <h4>2.4G</h4>
@@ -285,7 +302,7 @@
                                                               </li>
                                                             </ul>
                                                           </div>
-                                                          
+
                                                           <div class="col-md-6 col-sm-6 text-center">
                                                             <h4>5G</h4>
                                                               <ul class="modified-aps" style="text-align: center">
@@ -295,7 +312,7 @@
                                                               </ul>
                                                             </div>
                                                         </div> -->
-                
+
                                     <div style="overflow: scroll;padding: 14px;">
                                         <table class="scrollable-table">
                                             <thead class="scrollable-table-header">
@@ -305,7 +322,7 @@
                                                     <th style="text-align: center;">5G</th>
                                                 </tr>
                                             </thead>
-                
+
                                             <tbody class="scrollable-table-body">
                                                 <tr class=".scrollable-table-row" *ngFor="let ap of alert.message">
                                                     <td class="first-cld scrollable-table-data" style="text-align: center;">
@@ -326,21 +343,21 @@
                                                             <i class="fa fa-close" style="color: red;"></i>
                                                         </div>
                                                     </td>
-                                                </tr>                
+                                                </tr>
 
                                             </tbody>
-                
+
                                         </table>
 
-                                        
-                
-                
-                
+
+
+
+
                                     </div>
                                     <div class="row" style="padding:15px">
-                                      <div class="col-sm-12" style="text-align: center"><i class="fa fa-close" style="color: red;"></i> - Auto RF feature is disabled either because Rogue AP feature is disabled or the AP is offline</div>                                      
+                                      <div class="col-sm-12" style="text-align: center"><i class="fa fa-close" style="color: red;"></i> - Auto RF feature is disabled either because Rogue AP feature is disabled or the AP is offline</div>
                                     </div>
-                
+
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn dismiss-popup" (click)="removeAlert(alert)">Dismiss</button>
@@ -348,6 +365,72 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                    <div *ngIf="alert.type == 10">
+                      <div class="modal-dialog  modal-lg" style="margin-top: -30%">
+                          <div class="modal-content">
+                              <div class="modal-body" style="height: 100%">
+                                  <i class="fa fa-check fa-4x" style="color: #5cb85c"></i>
+                                  <div class="row" style="margin-bottom: 15px">
+                                      <div class="col-sm-12">
+                                          Rogue AP setting has been
+                                          <strong>changed</strong> for the following APs
+                                      </div>
+                                  </div> 
                 
+              
+                                  <div style="overflow: scroll;padding: 14px;">
+                                      <table class="scrollable-table">
+                                          <thead class="scrollable-table-header">
+                                              <tr class="scrollable-table-row">
+                                                  <th class="first-cld" style="text-align: center">AP Name</th>
+                                                  <th style="text-align: center;">2.4G</th>
+                                                  <th style="text-align: center;">5G</th>
+                                              </tr>
+                                          </thead>
+              
+                                          <tbody class="scrollable-table-body">
+                                              <tr class=".scrollable-table-row" *ngFor="let ap of alert.message">
+                                                  <td class="first-cld scrollable-table-data" style="text-align: center;">
+                                                      {{ap.ap_mac_name}}</td>
+                                                  <td class="scrollable-table-data" style="text-align: center;">
+                                                      <div *ngIf="ap.ap_macs_2dot4g==1">
+                                                          <i class="fa fa-check" style="color: green"></i>
+                                                      </div>
+                                                      <div *ngIf="ap.ap_macs_2dot4g==0">
+                                                          <i class="fa fa-close" style="color: red;"></i>
+                                                      </div>
+                                                  </td>
+                                                  <td class="scrollable-table-data" style="text-align: center;">
+                                                      <div *ngIf="ap.ap_macs_5g==1">
+                                                          <i class="fa fa-check" style="color: green"></i>
+                                                      </div>
+                                                      <div *ngIf="ap.ap_macs_5g==0">
+                                                          <i class="fa fa-close" style="color: red;"></i>
+                                                      </div>
+                                                  </td>
+                                              </tr>                
+
+                                          </tbody>
+              
+                                      </table>
+
+                                      
+              
+              
+              
+                                  </div>
+                                  <div class="row" style="padding:15px">
+                                    <div class="col-sm-12" style="text-align: center"><i class="fa fa-close" style="color: red;"></i> - Rogue AP feature is disabled</div>                                      
+                                  </div>
+              
+                              </div>
+                              <div class="modal-footer">
+                                  <button type="button" class="btn dismiss-popup" (click)="removeAlert(alert)">Dismiss</button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+                </div>
+
                 <div class="black-overlay" #overLay></div>

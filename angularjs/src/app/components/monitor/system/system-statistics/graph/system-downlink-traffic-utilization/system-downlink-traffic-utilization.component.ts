@@ -36,7 +36,7 @@ export class SystemDownlinkTrafficUtilizationComponent implements OnInit, OnDest
 
 
   selectedScale;
-  timeInterval = 300000;
+  timeInterval = 10000;
   // timeInterval = 10000;
   number_points = 12;
   steps = 1;
@@ -53,6 +53,11 @@ export class SystemDownlinkTrafficUtilizationComponent implements OnInit, OnDest
     const t = this;
     this.chart = new Chart({
       chart: {
+        spacingBottom: 0,
+        spacingTop: 0,
+        spacingLeft: 20,
+        spacingRight: 20,
+        height: 300,
         type: 'line',
         events: {
           load: function () {
@@ -125,13 +130,11 @@ export class SystemDownlinkTrafficUtilizationComponent implements OnInit, OnDest
                 }
                 series1.addPoint([t.convertTime(y), x1], true, shift);
                 series2.addPoint([t.convertTime(y), x2], true, shift);
-
                 // series3.addPoint([t.convertTime(y), x3], true, shift);
 
-                series1.update({name: ' Total (' + x1 + ' ' + t.unit + ')'});
-                series2.update({name: '<i class=\'down icon icon-download-arrow\'></i> Downlink (' + x2 + ' ' + u + ')'});
-
-                // series3.update({name: '<i class=\'up icon icon-up-arrow-1\'></i> Uplink (' + x3 + ' ' + u + ')'});
+                series2.update({name: '<i class=\'up icon icon-up-arrow-1\'></i> Uplink (' + x1 + ' ' + u + ')'});
+                series1.update({name: '<i class=\'down icon icon-download-arrow\'></i> Downlink (' + x2 + ' ' + u + ')'});
+                // series3.update({name: ' Total (' + x1 + ' ' + t.unit + ')'});
 
                 t.tempData = this.apiResult;
               });
@@ -224,8 +227,9 @@ export class SystemDownlinkTrafficUtilizationComponent implements OnInit, OnDest
       },
 
       series: [
-        //   {
-        //   name: ' Total (' + this.totalData[this.totalData.length - 1] + ' ' + this.unit + ')',
+        // {
+        //   // name: ' Total (' + this.totalData[this.totalData.length - 1] + ' ' + this.unit + ')',
+        //   name: ' Total (' + this.unit + ')',
         //   data: this.totalData,
         //   color: '#f4516c'
         // },
@@ -248,7 +252,7 @@ export class SystemDownlinkTrafficUtilizationComponent implements OnInit, OnDest
   }
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
-    // // console.log(`ngOnChanges lifecycle hook fired! changes.range.current val ${changes.range.currentValue} changes.scale.currentValue ${changes.scale.currentValue}`);
+
     if (changes.range) {
       this.selectedRange = changes.range.currentValue;
     } else {
@@ -264,7 +268,7 @@ export class SystemDownlinkTrafficUtilizationComponent implements OnInit, OnDest
       // this.drawGraph(this.selectedScale);
 
       if (this.selectedScale === 'hour') {
-        // this.timeInterval = 300000;
+        console.log('traffic', this.selectedScale);
         this.timeInterval = 300000;
         this.number_points = 12;
         this.steps = 1;
@@ -312,12 +316,15 @@ export class SystemDownlinkTrafficUtilizationComponent implements OnInit, OnDest
           this.selectedRange === 'avg' ? 6 : this.selectedRange === 'min' ? 4 : this.selectedRange === 'max' ? 5 : 2];
 
         this.xlabel = _data.result[0];
+
+        // Extracting the last time stamp for firing the next interval.
         this.timestamp = this.timeData[this.timeData.length - 1];
 
         // this.unit = _data.unit;  // previously we were fetching the unit from the API response
 
         this.unit = 'kbps';    // now we are setting the unit as 'kbps'.
 
+        console.log(`TimeStamp:  ${this.convertTime(this.timestamp)}`);
 
         // this.previousUnit = this.unit;
         this.init(scaleVal);

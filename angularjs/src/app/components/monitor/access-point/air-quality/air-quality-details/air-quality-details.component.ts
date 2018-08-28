@@ -43,6 +43,7 @@ export class AirQualityDetailsComponent implements OnInit {
     step: 1,
     minRange: 10
   };
+  coloumsObjects:any = [];
   chart: Chart;
   selectedTab = 0;
   detailData;
@@ -82,11 +83,14 @@ export class AirQualityDetailsComponent implements OnInit {
   selectedStatus = [];
   public rssithreshold = 10;
   public selectedrssi;
+  search_key;
+  filterApplied:boolean = false;
   ngOnInit() {
    this.loadData();
    this.generateForm();
    this.generateMultiselect();
    this.generateChannel();
+   this.graphColors = [];
   }
   ngAfterViewInit() {
     this.dataTable.onPageChange.subscribe((x) => {
@@ -120,10 +124,15 @@ export class AirQualityDetailsComponent implements OnInit {
     this.selectedssids = [];
     this.selectedmacs = [];
     this.selectedchannels = [];
+    this.selectedStatus = [];
     this.minValue = -100;
     this.maxValue = -10;
     this.menuState = 'out';
-   
+    this.search_key = '';
+    this.count = 0;
+    this.graphColors = [];
+    this.page = 1;
+
   }
   channelVal;
   generateChannel(){
@@ -152,7 +161,68 @@ export class AirQualityDetailsComponent implements OnInit {
     }
     this.menuState = this.menuState === 'out' ? 'in' : 'out';
   }
+  count:number = 0;
+  selectColoums(event, index) {
+    event.stopPropagation();
+    event.preventDefault();
+    if (event.target.checked == false)
+      this.count = this.count + 1;
+    else {
+      this.count = this.count - 1;
+    }
+    if (this.count <= 4) {
+      this.coloumsObjects[index].checked = event.target.checked;
+    } else
+      this.coloumsObjects[index].checked = true;
+  }
+
+holdPopup(event) {
+  event.stopPropagation();
+}
+  /* pagination declaration variable*/
+    page: number = 1;
+    Math:any = Math;
+    firstarrowStatus:boolean = true;
+    lastarrowStatus:boolean = false;
+  /*pagination declaration variable end */
+  /* pagination method here*/
+  getNext(page){
+  this.page = page;
+  if(this.page == 1){
+  this.firstarrowStatus = true;
+  this.lastarrowStatus = false; 
+  }else if(this.page == this.Math.ceil(this.dataforPlot.length/this.rowsOnPage))
+  { 
+  this.lastarrowStatus = true;
+  this.firstarrowStatus = false; 
+  }
+  else{
+    this.firstarrowStatus = false;
+    this.lastarrowStatus = false;
+  }
+  this.selectAllChecked = true;
+  this.dataforPlot = this.dataforPlot_copy;
+  this.createGraphdataNplot('','');
+}
+  goToPage(num){
+  this.getNext(num);
+  }
+  /* pagination method here end*/
+
   loadData(){
+    this.coloumsObjects=[
+      { name:'SSID Name', checked: true},
+      { name:'SSID MAC', checked: true},
+      { name:'Channel', checked: true},
+      { name:'Channel Width',  checked: true},
+      { name:'RSSI Threshold',  checked: true},
+      { name:'Security',  checked: true},
+      { name:'Rogue AP Status', checked: true}
+  
+    ];
+
+    this.filterApplied = false;
+
     this._service.getWeb('statistics/air-quality-table-view/?radio='+this.selectedTab+'&ap_mac='+this.selectedAp.ap_mac+'', '', '').then(_data => {
       if (_data.status == 1) {
       this.dataforPlot = _data.result.known_ssid_list.concat(_data.result.unknown_ssid_list);
@@ -163,7 +233,7 @@ export class AirQualityDetailsComponent implements OnInit {
       this.lengthVarTemp = this.detailDataLength;
       this.selectAllChecked = true;
       this.graphData = [];
-      this.createGraphdataNplot();
+      this.createGraphdataNplot('','');
       this.ssidList = [];
       this.macList = [];
       for(let i of this.dataforPlot){
@@ -193,7 +263,7 @@ export class AirQualityDetailsComponent implements OnInit {
   goback(){
     this.emitEve.emit();
   }
-
+  
   checkNredraw(eve,item){
   
     
@@ -203,19 +273,20 @@ export class AirQualityDetailsComponent implements OnInit {
         this.selectAllChecked = true;
       }
       let index = this.dataforPlot.findIndex(x => x.ssid_mac==item.ssid_mac);
+     
       if (index == -1) {
         this.dataforPlot.push(item);
       }
       
+      
     }else{
       this.lengthVarTemp = this.lengthVarTemp-1;
       this.selectAllChecked = false;
-      let index = this.dataforPlot.findIndex(x => x.ssid_mac==item.ssid_mac);
-      if (index > -1) {
-        this.dataforPlot.splice(index, 1);
-      }
+      
+      
+      
     }
-    this.createGraphdataNplot();
+    this.createGraphdataNplot(eve,item);
     
    
   }
@@ -227,127 +298,201 @@ export class AirQualityDetailsComponent implements OnInit {
     for (var i = 0; i < chkLen; i++) {
       this.elRef.nativeElement.querySelectorAll('.ssid-check')[i]['checked'] = true;
     }
-    this.loadData();
+    if(this.filterApplied){
+      this.dataforPlot = this.filterCopy;
+      this.createGraphdataNplot('','');
+    }else{
+      this.loadData();
+    }
+    
    }else{
     this.selectAllChecked = false;
     for (var i = 0; i < chkLen; i++) {
       this.elRef.nativeElement.querySelectorAll('.ssid-check')[i]['checked'] = false;
     }
-    this.dataforPlot =[];
-    this.createGraphdataNplot();
+   this.dataforPlot = [];
+    this.createGraphdataNplot('','');
    }
   }
   generateGraph(tab){
-    if(tab == 0){
+    if (tab == 0) {
       this.chart = new Chart({
-        chart: {
-        type: 'spline',
-        height: 300
-      },
+          chart: {
+              type: 'spline',
+              height: 300,
+          },
 
-      title: {
-        text: null
-      },
+          title: {
+              text: null
+          },
 
-      subtitle: {
-        text: null
-      },
-
-      xAxis: [{
-        tickPositions: [1,2,3,4,5,6,7,8,9,10,11],
-        min: -3,
-        max: 15,
-        title: {
-        text: 'Channel',
-        style: {
-          fontWeight: 'bold'
-        }
-        }
-      }
-      ],
-      yAxis: {    
-        showLastLabel:false,
-        title: {
-          text: 'RSSI',
-          style: {
-          fontWeight: 'bold'
+          subtitle: {
+              text: null
+          },
+          xAxis: [{
+              tickPositions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+              min: -3,
+              max: 15,
+              title: {
+                  text: 'Channel',
+                  style: {
+                      fontWeight: 'bold'
+                  }
+              }
+          }],
+          yAxis: {
+              showLastLabel: false,
+              title: {
+                  text: 'RSSI',
+                  style: {
+                      fontWeight: 'bold'
+                  }
+              },
+              labels: {
+                  format: '{value}', 
+              },
+              tickInterval: 10,
+              reversed: true
+          },
+          tooltip: {
+            formatter: function () {console.log(this.series)
+              return 'SSID Name : <b>' + this.series.name + '</b><br/>RSSI Threshold: <b>' + this.series.processedYData[1] + '</b><br/>Channel: <b>' + this.series.processedXData[1] + '</b>';
+    
+            }
+          },
+          legend: {
+              layout: 'vertical',
+              align: 'right',
+              verticalAlign: 'top',
+              symbolWidth: 5,
+              enabled: false
+          },
+          series: this.graphData,
+          plotOptions: {
+            series: {
+              dataLabels: {
+                enabled: false,
+                crop: false,
+                overflow: 'none',
+                align: 'center',
+                verticalAlign: 'middle',
+                //y: 5,
+                //x: 5,
+                formatter: function() {
+                  return '<span style="color:'+this.series.color+'">'+this.series.name+'</span>';
+                }
+              }
+            }
           }
-        },
-        labels: {
-          format: '{value}',
-        },
-        tickInterval: 10,
-        reversed: true
-      },
-      legend: {
-        layout: 'vertical',
-        align: 'right',
-        verticalAlign: 'top',
-        symbolWidth: 5,
-        enabled: false
-      },
-      series: this.graphData
       });
-    }else{
+  } else {
       this.chart = new Chart({
-      chart: {
-      type: 'spline',
-      height: 300
-      },
+          chart: {
+              type: 'spline',
+              height: 300
+          },
 
-      title: {
-      text: null
-      },
+          title: {
+              text: null
+          },
 
-      subtitle: {
-      text: null
-      },
+          subtitle: {
+              text: null
+          },
 
-      xAxis: [{
-      tickPositions: [36,40,44,48,52,56,60,64,100,104,108,112,116,132,136,140,149,153,157,161,165],
-      min: 25,
-      max: 175,
-      title: {
-      text: 'Channel',
-      style: {
-      fontWeight: 'bold'
-      }
-      }
-      }
-      ],
+          xAxis: [{
+              tickPositions: [36, 40, 44, 48, 52, 56, 60, 64, 100, 104, 108, 112, 116, 132, 136, 140, 149, 153, 157, 161, 165],
+              min: 25,
+              max: 175,
+              title: {
+                  text: 'Channel',
+                  style: {
+                      fontWeight: 'bold'
+                  }
+              }
+          }],
 
-      yAxis: {    
-      showLastLabel:false,
-      title: {
-      text: 'RSSI',
-      style: {
-      fontWeight: 'bold'
-      }
-      },
-      labels: {
-      format: '{value}'
-      },
-      tickInterval: 10,
-      reversed: true
-      },
-      legend: {
-      layout: 'vertical',
-      align: 'right',
-      verticalAlign: 'top',
-      symbolWidth: 5,
-      enabled: false
-      },
-      series: this.graphData
+          yAxis: {
+              showLastLabel: false,
+              title: {
+                  text: 'RSSI',
+                  style: {
+                      fontWeight: 'bold'
+                  }
+              },
+              labels: {
+                  format: '{value}'
+              },
+              tickInterval: 10,
+              reversed: true
+          },
+          legend: {
+              layout: 'vertical',
+              align: 'right',
+              verticalAlign: 'top',
+              symbolWidth: 5,
+              enabled: false
+          },
+          tooltip: {
+            formatter: function () {
+              return 'SSID Name : <b>' + this.series.name + '</b><br/>RSSI Threshold: <b>' + this.series.processedYData[1] + '</b><br/>Channel: <b>' + this.series.processedXData[1] + '</b>';
+    
+            }
+          },
+          series: this.graphData,
+          plotOptions: {
+            series: {
+              dataLabels: {
+                enabled: false,
+                crop: false,
+                overflow: 'none',
+                align: 'center',
+                verticalAlign: 'middle',
+                //y: 5,
+                //x: 5,
+                formatter: function() {
+                  return '<span style="color:'+this.series.color+'">'+this.series.name+'</span>';
+                }
+              }
+            }
+          }
       });
-    }
+  }
    
   
   }
 
-  createGraphdataNplot(){
+  createGraphdataNplot(eve,item){
     this.graphData = [];
     let index = 0;
-    for(let ssid of this.dataforPlot){
+    let plotArr = [];
+    if(eve != ''){
+      if(eve.target.checked){
+        plotArr = this.dataforPlot;
+      }else{
+        for(let i = (this.rowsOnPage*this.page)-this.rowsOnPage;i<this.rowsOnPage*this.page;i++){
+          if(this.dataforPlot[i]!=undefined){
+             plotArr.push(this.dataforPlot[i])
+          }
+        } 
+      
+        let index = plotArr.findIndex(x => x.ssid_mac==item.ssid_mac);
+       
+        if (index > -1) {
+          plotArr.splice(index, 1);
+         this.dataforPlot = plotArr;
+        }
+      }
+     
+    }else{
+      for(let i = (this.rowsOnPage*this.page)-this.rowsOnPage;i<this.rowsOnPage*this.page;i++){
+        if(this.dataforPlot[i]!=undefined)
+        plotArr.push(this.dataforPlot[i])
+       } 
+    }
+   
+   
+    for(let ssid of plotArr){
       let ssidname = ssid.known_ssid_name;
       let channel  = ssid.channel;
       let channelWidth  = ssid.channel_width/10;
@@ -355,11 +500,13 @@ export class AirQualityDetailsComponent implements OnInit {
       let start_point = channel - (channelWidth/2);
       let end_point   = channel + (channelWidth/2);
       let data = this.generatePoints(start_point,end_point,channelWidth,rssi,channel);
+      this.graphChannelColors[index] = this.getRandomColor(index);
       let series = {
         name: ssidname,
-        data: data,
-        color: this.selectedTab == 0 ? this.color_24[index]:this.color_5[index]
+        data: [{x: start_point, y: 0}, {x: channel, y: rssi,dataLabels:{enabled: true}},{x: end_point, y: 0}],
+        color: this.graphChannelColors[index]
       }
+
       this.graphData.push(series);
      
      index = index+1;
@@ -471,7 +618,7 @@ export class AirQualityDetailsComponent implements OnInit {
   };
   //console.log(this.ssidArray);
   }
-
+  filterCopy = [];
   filter(){
     let names = [];
     let macs = [];
@@ -519,16 +666,72 @@ export class AirQualityDetailsComponent implements OnInit {
     this.detailData = JSON.parse(JSON.stringify(this.dataforPlot));
     this.graphData = [];
     this.toggleMenu();
-    this.createGraphdataNplot();
+    this.createGraphdataNplot('','');
+    this.filterApplied = true;
+    this.filterCopy = res;
     
   }
   resetfilter(){
     this.selectedssids = [];
     this.selectedmacs = [];
     this.selectedchannels = [];
+    this.selectedStatus = [];
     this.minValue = -100;
     this.maxValue = -10;
     this.toggleMenu();
     this.loadData();
+    this.filterApplied = false;
   }
+//search...
+  searchSsid(){
+    let val = this.search_key;
+    let search_columns = ['known_ssid_name', 'ssid_mac', 'channel', 'channel_width', 'rssi', 'auth_type', 'status']
+    if(val.length > 2){
+      this.dataforPlot = this.dataforPlot_copy.filter(function(d){
+        let matchFound = false;
+        for(let data of search_columns){
+          let value = ""+d[data];
+          if(value.toLowerCase().indexOf(val) !== -1 || !val){
+            matchFound = true;
+            break;
+          }
+        }      
+        
+        return matchFound;
+      });
+    }
+    else{
+      this.dataforPlot = this.dataforPlot_copy;
+    }
+    this.detailData = JSON.parse(JSON.stringify(this.dataforPlot));
+    this.graphData = [];
+    this.createGraphdataNplot('','');
+    
+  }
+
+  //randomm color generating function
+  public graphChannelColors = {};
+  public graphColors = [];
+  getRandomColor(key) {
+    
+    if(key in this.graphChannelColors){
+      return this.graphChannelColors[key];      
+    }else{
+
+      var letters = '0123456789ABCDEF';
+      var color = '#';
+      for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      if(this.graphColors.indexOf(color) != -1){
+        color = this.getRandomColor(key);
+      }
+      else{
+        this.graphColors.push(color);
+        return color;
+      }  
+    }
+      
+  }       
+  
 }

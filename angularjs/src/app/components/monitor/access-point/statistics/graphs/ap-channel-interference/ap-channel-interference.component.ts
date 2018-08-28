@@ -14,7 +14,8 @@ export class ApChannelInterferenceComponent implements OnInit {
   ngOnInit() {
     this.chart = new Chart({
       chart: {
-        type: 'line'
+        type: 'line',
+        height: 300
     },
 
     title: {

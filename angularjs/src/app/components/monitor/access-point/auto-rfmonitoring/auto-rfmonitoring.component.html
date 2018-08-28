@@ -210,7 +210,7 @@
                       <a href="javascript:void(0)" class="btn" (click)="goBack()">
                           <i class="icon icon-left-arrow-1" style="font-size: 20px;"></i>
                         </a> 
-                          <i class="icon icon-router-signal"></i> <span class="text-bold" id="ap_name">{{selectedApname==''?'Please select the AP': selectedApname}}</span>
+                          <i class="icon icon-router-signal"></i> <span class="text-bold" id="ap_name">{{selectedAp.ap_name ==''?'Please select the AP': selectedAp.ap_name}}</span>
                     </div>
                   </div>
               </div>
@@ -229,21 +229,35 @@
               <div class="portlet light bordered custom-portlet">
                 <div class="portlet-title custom-title">
                     <div class="caption">
-                        <span>Channel Utilization Graph</span>
+                        <span>Channels Utilization Graph</span>
                     </div>
                   </div> 
                   
                   <div class="portlet-body">
-                      <div *ngIf="!chartEmpty" style="height: 250px;" [chart]="AutoRFAPChart"></div>
-                      <div *ngIf="chartEmpty">No Data available</div>
+                      <app-channel-utilization-graph [selectedAP]="selectedAp" [selectedGraphChannel]="selectedGraphChannel"></app-channel-utilization-graph>
                  </div>
                  
               </div>
 
           </div>
-        </div>
-         
-
+        </div>         
+        <div class="row">
+            <div class="col-lg-12 col-sm-12">
+                <div class="portlet light bordered custom-portlet">
+                  <div class="portlet-title custom-title">
+                      <div class="caption">
+                          <span>Current Utilization Graph</span>
+                      </div>
+                    </div> 
+                    
+                    <div class="portlet-body">
+                        <app-self-utilization-graph [selectedAP]="selectedAp" [selectedGraphChannel]="selectedGraphChannel"></app-self-utilization-graph>
+                   </div>
+                   
+                </div>
+  
+            </div>
+          </div>  
          
         </div>
       </div>

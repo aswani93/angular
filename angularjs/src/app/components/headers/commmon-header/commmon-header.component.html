@@ -4,8 +4,10 @@
           <div class="sidebar-mobile-menu mobclick visible-xs">
               <i class="fa fa-navicon" aria-hidden="true"></i>
           </div>
-          <span>HFCL</span>
-          <p>HFCL</p>
+          <div class="logo">
+            <img src="../../../assets/images/logo.png" alt="logo">
+            <!--<span>HFCL</span>-->
+          </div>                   
           <div class="sidebar-mact-menu visible-xs">
               <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
           </div>
@@ -14,13 +16,25 @@
           <!-- <div class="bread-crumb">
               Dashboard
           </div> -->
-          <div class="dropdown scrollableList graph btn btn-theme rounded pull-left wdgbtn" *ngIf="web_wrl_bool_status">
+          <div class="dropdown graph btn btn-theme rounded pull-left wdgbtn" *ngIf="web_wrl_bool_status">
                 <a href="#" class="dropdown-toggle selectedOption" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add Widgets <i class="icon icon-arrow-point-to-down"></i></a>
-                <div class="dropdown-menu this-list" aria-labelledby="dropdownMenuButton">
-                    <ul>
+                <div class="dropdown-menu widget-count this-list" aria-labelledby="dropdownMenuButton" (click)="holdPopup($event)">
+                    <!--<ul>
                         <li><a class="dropdown-item" href="#">CSV</a></li>
                         <li><a class="dropdown-item" href="#">PDF</a></li>
-                    </ul>
+                    </ul>-->
+                     <ul>
+                        <li class="dropdown-item" *ngFor="let i of arrayObj;let index = index">
+                          <label>
+                              <span class="checkbox">
+                            <input class="register-check" type="checkbox" [(ngModel)]="i.checked" (change)="selectColoums($event,index)">
+                            <div class="check"></div>
+                            </span>
+                            <span class="check-label">{{i.name}}</span>
+                          </label>
+                        </li>
+
+                      </ul>
                 </div>
             </div>
           <div class="account-menu">
@@ -38,7 +52,7 @@
                   </li>
                   <li id="alarmPopup">
                     <a href="#" class="notification dropdown-toggle" (click)="callNotificationList()" id="bellDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span *ngIf="notificationStatus">{{initialCount}}</span>
+                        <span *ngIf="notificationStatus" id="alarmNotification">{{initialCount}}</span>
                         <i class="icon icon-notification" aria-hidden="true"></i>
                     </a>
                     <div class="notification-dropdown-wrap dropdown-menu" aria-labelledby="bellDropdown">
@@ -163,9 +177,9 @@
                         </div>
                     </div><!-- /notification-dropdown-wrap-->
                   </li>
-                  <li class="sep"><span class="name">S</span></li>
+                  <li class="sep"><span class="name">{{username | slice:0:1}}</span></li>
                   <li class="dropdown">
-                      <a href="#" class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ritika Paul J. <i class="fa fa-chevron-down" aria-hidden="true"></i></a>
+                      <a href="#" class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{username}}<i class="fa fa-chevron-down" aria-hidden="true"></i></a>
                       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                           <a class="dropdown-item" href="#">Profile</a>
                           <a class="dropdown-item" href="#">Setting</a>

@@ -27,7 +27,7 @@ export class VmDownlinkTrafficUtilizationComponent implements OnInit, OnDestroy,
   apiResult: any = [];
 
   timerVar: any;
-  timeInterval = 300000;
+  timeInterval = 10000;
 
   xlabel: any;
   liveFlag = false;
@@ -54,6 +54,10 @@ export class VmDownlinkTrafficUtilizationComponent implements OnInit, OnDestroy,
     this.chart = new Chart({
       chart: {
         type: 'line',
+        spacingBottom: 0,
+        spacingTop: 0,
+        spacingLeft: 20,
+        spacingRight: 20,
         height: 300,
         events: {
           load: function () {
@@ -81,7 +85,8 @@ export class VmDownlinkTrafficUtilizationComponent implements OnInit, OnDestroy,
             t.timerVar = setInterval(function () {
               // console.log(`Timeflag:  ${timeFlag} TimeStamp:  ${t.timestamp}`);
 
-              t._service.getWeb('statistics/wlc-sys-stats/?scale=' + timeFlag + '&vm=' + vName + '&time=' + t.timestamp, '', '').then(_data => {
+              t._service.getWeb('statistics/wlc-net-stats/?scale=' + timeFlag +
+                '&vm=' + vName + '&time=' + t.timestamp, '', '').then(_data => {
 
                 // console.log('with timestamp :load:  method is fired of network graph');
                 // console.log(_data);
@@ -125,13 +130,11 @@ export class VmDownlinkTrafficUtilizationComponent implements OnInit, OnDestroy,
                 }
                 series1.addPoint([t.convertTime(y), x1], true, shift);
                 series2.addPoint([t.convertTime(y), x2], true, shift);
-
                 // series3.addPoint([t.convertTime(y), x3], true, shift);
 
-                series1.update({name: ' Total (' + x1 + ' ' + t.unit + ')'});
-                series2.update({name: '<i class=\'down icon icon-download-arrow\'></i> Downlink (' + x2 + ' ' + u + ')'});
-
-                // series3.update({name: '<i class=\'up icon icon-up-arrow-1\'></i> Uplink (' + x3 + ' ' + u + ')'});
+                series2.update({name: '<i class=\'up icon icon-up-arrow-1\'></i> Uplink (' + x1 + ' ' + u + ')'});
+                series1.update({name: '<i class=\'down icon icon-download-arrow\'></i> Downlink (' + x2 + ' ' + u + ')'});
+                // series3.update({name: ' Total (' + x1 + ' ' + t.unit + ')'});
 
                 t.tempData = this.apiResult;
               });
@@ -153,7 +156,7 @@ export class VmDownlinkTrafficUtilizationComponent implements OnInit, OnDestroy,
       xAxis: {
         gridLineWidth: 1,
         title: {
-          text: 'Time'
+          text: ' ' // Time
         },
         labels: {
           step: this.steps,
@@ -176,7 +179,7 @@ export class VmDownlinkTrafficUtilizationComponent implements OnInit, OnDestroy,
         minRange: 0.1,
         showLastLabel: false,
         title: {
-          text: `Usage in ${this.unit}`
+          text: `(${this.unit})`
         },
         labels: {
           formatter: function () {
@@ -224,9 +227,10 @@ export class VmDownlinkTrafficUtilizationComponent implements OnInit, OnDestroy,
       },
 
       series: [
-        //   {
-        //   name: ' Total (' + this.totalData[this.totalData.length - 1] + ' ' + this.unit + ')',
-        //   data: this.totalData,
+        // {  if giving total then add in the load method also...
+        //  // name: ' Total (' + this.totalData[this.totalData.length - 1] + ' ' + this.unit + ')',
+        //   name: ' Total (' + this.unit + ')',
+        //   data: [], // this.totalData
         //   color: '#f4516c'
         // },
         {
@@ -293,12 +297,11 @@ export class VmDownlinkTrafficUtilizationComponent implements OnInit, OnDestroy,
   }
 
   ngOnInit() {
-    // this.loadData('live','');
-    // this.drawGraph(this.timeStamp);
+
   }
 
   loadData(scaleVal, status) {
-    // this.spinnerService.show();
+
     // console.log('load data method fired of network graph!');
     // http://192.168.0.27:8000/api/statistics/wlc-sys-stats/?scale=hour&vm=MVM
     this._service.getWeb('statistics/wlc-net-stats/?scale=' + scaleVal + '&vm=' + this.selectedVM, '', '').then(_data => {
@@ -366,20 +369,8 @@ export class VmDownlinkTrafficUtilizationComponent implements OnInit, OnDestroy,
     return formattedTime;
   }
 
-  // formateobject(obj) {
-  //   var output = [];
-  //   for (var key in obj) {
-  //     var tempObj = {};
-  //     tempObj[key] = obj[key];
-  //     output.push(tempObj);
-  //   }
-  //   return output;
-  // }
 
   ngOnDestroy() {
     clearInterval(this.timerVar);
-    //  if(this.spinnerService){
-    //   this.spinnerService.hide();
-    // }
   }
 }

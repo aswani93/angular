@@ -46,7 +46,7 @@
                               </div>
 
                             </div>
-                             <form [formGroup]="mailForm" id="mailForm" novalidate>
+                             <form [formGroup]="mailForm" id="mailForm" novalidate enctype="multipart/form-data">
                             <div class="upload-ftp filter-content" id="ftp" #ftp >
 
                                 <div class="form-group row">
@@ -245,6 +245,20 @@
                                 <app-right-tooltip [toolTipText]="getToolTipText('access_point_upgrade_upgrade_ap_model')"></app-right-tooltip>
                               </div>
                             </div>
+                            <div class="form-group row" [class.button-disabled]="upgradeApModel != 'Please select' && upgradeGroupName != -1  ? false:true">
+                                    <label class="col-md-2 col-form-label text-right">Board Type</label>
+                                    <div class="col-lg-2 col-sm-11">
+                                      <select name="ap-model" class="form-control" [(ngModel)]="upgradeboard">
+                                        <option value="-1">Please select</option>
+                                        <option value="1">Indoor</option>
+                                        <option value="2">Outdoor</option>
+                                        
+                                      </select>
+                                    </div>
+                                    <div>
+                                      <app-right-tooltip [toolTipText]="getToolTipText('access_point_upgrade_upgrade_ap_model')"></app-right-tooltip>
+                                    </div>
+                                  </div>
                           </div>
                               <div class="upgrade_model filter-content-upgrade" id="upgrade_model" #ap style="display:none">
                               <div class="form-group row">
@@ -263,8 +277,23 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="form-group row" [class.button-disabled]="upgradeGroupName != '-1' && upgradeApModel != 'Please select'  ? false:true">
+                                    <label class="col-md-2 col-form-label text-right">Board Type</label>
+                                    <div class="col-lg-2 col-sm-11">
+                                      <select name="ap-model" class="form-control" [(ngModel)]="upgradeboard">
+                                        <option value="-1">Please select</option>
+                                        <option value="1">Indoor</option>
+                                        <option value="2">Outdoor</option>
+                                        
+                                      </select>
+                                    </div>
+                                    <div>
+                                      <app-right-tooltip [toolTipText]="getToolTipText('access_point_upgrade_upgrade_ap_model')"></app-right-tooltip>
+                                    </div>
+                                  </div>
 
                             </div>
+                           
                             <div class="form-group row">
                                 <label class="col-md-2 col-form-label text-right"></label>
                                 <div class="col-lg-5 col-sm-11">
@@ -422,7 +451,7 @@
                             <div class="form-group row">
                                 <div class="col-lg-6 col-sm-11 col-md-offset-4">
                                     <input type="reset" value="Reset" class="btn btn-cancel btn-large" (click)="upgradeReset()" style="margin-right: 15px;">
-                                    <input type="submit" value="Save" class="btn btn-theme btn-large" [disabled]="upgradeGroupName == '-1' || upgradeApModel == 'Please select' || upgrade_time == 'Please select' || saveBtnStatus == true" (click)="saveUpgrade()">
+                                    <input type="submit" value="Save" class="btn btn-theme btn-large" [disabled]="upgradeGroupName == '-1' || upgradeApModel == 'Please select' || upgradeboard == '-1' || upgrade_time == 'Please select' || saveBtnStatus == true" (click)="saveUpgrade()">
                                 </div>
                             </div>
                         </div>
@@ -519,6 +548,44 @@
                 <!-- /portlet-->
             </div>
         </div>
+        <div *ngIf="isModalShown" [config]="{ show: true }" (onHidden)="onHidden()" bsModal #autoShownModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <!-- <div class="modal-dialog modal-md">
+              <div class="modal-content">
+                <div class="modal-body"> 
+                      <h5>{{fileName}} (<span>{{ fileSizeByte | fileSize}}</span>)</h5>
+                      <div class="progress">
+                        <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" attr.aria-valuenow="{{progressVal}}" aria-valuemin="0" aria-valuemax="100" [style.width.%]="progressVal">
+                          <span class="sr-only">{{progressVal}}% Complete (success)</span>
+                        </div>
+                      </div>
+                      <p>Upload in progress({{progressVal}}% completed)</p>
+                      <p>Time remaining : {{progressSecond}} sec</p>
+                </div>
+               
+              </div>
+            </div> -->
+            <div class="blackOverlay">
+                <div class="upload-popup">
+                    <div class="title">File Upload</div>
+                    <div class="file-upload">
+                        <div class="file-icon">
+                            <span class="glyphicon glyphicon-open-file" aria-hidden="true"></span>
+                        </div>
+                        <div>
+                            <strong>{{fileName}} ({{ fileSizeByte | fileSize}})</strong>
+                            <div class="progress">
+                              <div class="progress-bar progress-bar-success progress-bar-purple" role="progressbar" attr.aria-valuenow="{{progressVal}}" aria-valuemin="0" aria-valuemax="100" [style.width.%]="progressVal"></div>
+                            </div>
+                            <div class="bottom-text">
+                                <div class="pull-left"><span>Upload in progress({{progressVal}}% completed)</span></div>
+                                <div class="pull-right"><strong>Time remaning: </strong>{{progressSecond}} sec</div>
+                                <div class="clearfix"></div>
+                            </div>                   
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
 
 </div>
 <!--/===/WORK AREA END/===/-->

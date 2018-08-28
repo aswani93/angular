@@ -2,8 +2,8 @@ import {Component, OnInit, ElementRef, Input, OnChanges, SimpleChange} from '@an
 import {Chart} from 'angular-highcharts';
 import {WebserviceService} from '../../../../../../services/commonServices/webservice.service';
 import {Ng4LoadingSpinnerService} from 'ng4-loading-spinner';
-import { NotificationService,commonMessages} from '../../../../../../services/notificationService/NotificationService';
-import 'rxjs/add/operator/catch'; 
+import {NotificationService, commonMessages} from '../../../../../../services/notificationService/NotificationService';
+import 'rxjs/add/operator/catch';
 
 @Component({
   selector: 'app-ap-cpu-memory-utilization',
@@ -38,7 +38,7 @@ export class ApCpuMemoryUtilizationComponent implements OnInit, OnChanges {
   public number_points = 12;
   public steps = 1;
 
-  constructor(private _service: WebserviceService, private elRef: ElementRef, private spinnerService: Ng4LoadingSpinnerService, private notifyPopup : NotificationService) {
+  constructor(private _service: WebserviceService, private elRef: ElementRef, private spinnerService: Ng4LoadingSpinnerService, private notifyPopup: NotificationService) {
   }
 
   init(timeFlag) {
@@ -89,8 +89,8 @@ export class ApCpuMemoryUtilizationComponent implements OnInit, OnChanges {
 
                   }
                 }).catch((error) => {
-                  this.notifyPopup.logoutpop(commonMessages.InternalserverError);
-                });
+                this.notifyPopup.logoutpop(commonMessages.InternalserverError);
+              });
               // console.log(series1);
             }, t.timeInterval);
             // }
@@ -125,7 +125,7 @@ export class ApCpuMemoryUtilizationComponent implements OnInit, OnChanges {
       yAxis: {
         min: 0,
         title: {
-          text: null
+          text: '(%)'
         },
         labels: {
           formatter: function () {

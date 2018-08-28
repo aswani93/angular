@@ -21,6 +21,7 @@ export class NotificationComponent implements OnInit, AfterViewInit {
   public ssiddelete = false;
   public vlandelete = false;
   public aaaDelete = false;
+  public macprofiledelete = false;
 
   @ViewChild('btn') btn: ElementRef;
   @ViewChild('overLay') overLay: ElementRef;
@@ -39,6 +40,7 @@ export class NotificationComponent implements OnInit, AfterViewInit {
     this.ssiddelete = false;
     this.vlandelete = false;
     this.aaaDelete = false;
+    this.macprofiledelete = false;
 
     // var alert = {type: 0, message: "hello"};
     //  this.alerts.push(alert);
@@ -108,6 +110,11 @@ console.log(JSON.stringify(obj))
       this.ssiddelete = false;
       this.vlandelete = false;
       this.aaaDelete = true;
+    } else if (obj.message == 'Mapped mac profile not deleted') {
+      this.ssiddelete = false;
+      this.vlandelete = false;
+      this.aaaDelete = false;
+      this.macprofiledelete = true;
     }
     this.showedDetails.emit(obj);
   }

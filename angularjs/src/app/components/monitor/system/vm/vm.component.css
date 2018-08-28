@@ -54,3 +54,21 @@ portlet.light .portlet-title .caption  {
   background-color: #334157;
   color: white;
 }
+
+.custom-padding {
+  padding-top: 0px !important;
+  padding-left: 0px !important;
+}
+
+.portlet-title {
+  margin-bottom: 0px;
+}
+
+::ng-deep mfdefaultsorter .glyphicon{
+  display: none;
+}
+
+::ng-deep .activeIcon{
+  font-weight: bold;
+  color: #fff !important;
+}

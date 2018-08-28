@@ -1,4 +1,4 @@
-import { Component, OnInit,Input } from '@angular/core';
+import { Component, OnInit,Input,Output,EventEmitter } from '@angular/core';
 import {WebserviceService} from '../../../../services/commonServices/webservice.service';
 import { Chart } from 'angular-highcharts';
 import { Observable } from "rxjs";
@@ -17,13 +17,23 @@ export class ClientTopChartsComponent implements OnInit {
      alive:boolean;
     timerInterval:number = 12000;
     timer:any;
+         @Input()
+  set visibleStatus(value: boolean) {
+     if(value){
+       //console.log("client Top"+value);
+      this.callingFn('clientsTop',null);
+      this.setIntervalForChart();  
+     }
+
+   } 
+@Output() deleteWidget: EventEmitter<any> = new EventEmitter<any>();
+
   constructor(private _service: WebserviceService) {
       this.alive = true;
    }
 
   ngOnInit() {
-    this.callingFn('clientsTop',null);
-     this.setIntervalForChart();  
+   
   }
 
 setIntervalForChart(){
@@ -101,6 +111,12 @@ visibleChange(obj){
      this.alive = false;
      if(this.timer)
     this.timer.unsubscribe();
+  }
+      /*---------delete widget-----*/
+  delete(val){
+    if(this.timer)
+    this.timer.unsubscribe();
+   this.deleteWidget.emit({id:val});
   }
 
 }

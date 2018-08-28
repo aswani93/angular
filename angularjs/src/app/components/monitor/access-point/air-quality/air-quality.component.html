@@ -1,13 +1,14 @@
  <!--/======================/WORK AREA/======================/-->
  <div class="page-content-wrapper" *ngIf="!isdetailsShowed">
-  <!-- <div class="row">
-      <div class="col-lg-5 col-sm-12">
-          <div class="searchBar">
-              <i class="icon icon-magnifying-glass"></i>
-              <input type="text" placeholder="Search">
-          </div>
-      </div>
-  </div> -->
+  <div class="row">
+    <div class="col-lg-5 col-sm-12">
+        
+        <div class="searchBar">
+            <i class="icon icon-magnifying-glass"></i>
+            <input type="text" placeholder="Search" (keyup)="searchAp()" [(ngModel)]="search_key">
+        </div>
+    </div>
+</div>
   <div class="row">
       <div class="col-lg-12 col-sm-12">
           <div class="portlet light bordered">
@@ -156,8 +157,11 @@
                               </tr>
               
                               <!-- Default row to be shown where there is no data to show -->
-                              <tr class="table-body" *ngIf="mf.data.length == 0">
+                              <tr class="table-body" *ngIf="regAPCount == 0">
                                 <td colspan="8" style="text-align: center;">No APs registered to the system. Please try again after some time</td>
+                              </tr>
+                              <tr class="table-body" *ngIf="mf.data.length == 0 && regAPCount > 0">
+                                <td colspan="8" style="text-align: center;">Rogue AP feature is not enabled.Please enable the rogue AP to see the air quality graph</td>
                               </tr>
               
                               <!-- The showing 10 of 10 items text-->

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Input,Output,EventEmitter} from '@angular/core';
 import {WebserviceService} from '../../../../services/commonServices/webservice.service';
 import { Chart } from 'angular-highcharts';
 import { Observable } from "rxjs";
@@ -43,6 +43,26 @@ export class ApStatusChartComponent implements OnInit {
     initialOnlineColor = '#3bb300';
     offlineColor = '#cc0000';
     onlineColor = '#3bb300';
+@Input()
+  set visibleStatus(value: boolean) {
+     if(value){
+      this.loadData();
+       this.setIntervalForChart(); 
+     }
+
+   }
+@Input()
+ set data(data: any) {
+     if(data){
+     this.initialtimerInterval=data.refresh_interval;
+     this.timerInterval = data.refresh_interval;
+     this.initialOfflineColor = data.offline_colour;
+     this.offlineColor = data.offline_colour;
+     this.onlineColor = data.online_colour;
+     this.initialOnlineColor=data.online_colour;
+     }
+   } 
+@Output() deleteWidget: EventEmitter<any> = new EventEmitter<any>();
   constructor(private _service: WebserviceService) { }
 
   ngOnInit() {
@@ -66,8 +86,7 @@ export class ApStatusChartComponent implements OnInit {
                 }
             }
          });
-       this.loadData();
-       this.setIntervalForChart();
+   
   }
 
   loadData(){
@@ -328,6 +347,13 @@ visibleChange(obj){
      this.offlineColor = event.offlinecolor;
       this.timerInterval = event.timer;
      this.loadData();
+  }
+
+  /*---------delete widget-----*/
+  delete(val){
+    if(this.timer)
+    this.timer.unsubscribe();
+   this.deleteWidget.emit({id:val});
   }
 
 

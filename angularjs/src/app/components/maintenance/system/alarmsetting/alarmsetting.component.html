@@ -77,9 +77,9 @@
                               </label>
                             </td>
                               <td class="text-center" style="overflow:hidden;width: 60%" nowrap="nowrap"><div style="word-wrap: break-word;" Tooltip="item.description">{{item.description| slice: 0:130}} </div></td>
-                              <td><i class="fa fa-circle" [style.color]="item.priority == 'critical' ? 'red' : null"  [hidden]="!(item.priority == 'critical')"></i>
-                                <i class="fa fa-circle"   [style.color]="item.priority == 'major' ? 'orange' : null"  [hidden]="!(item.priority == 'major')"></i>
-                                <i class="fa fa-circle"   [style.color]="item.priority == 'normal' ? 'yellow' : null" [hidden]="!(item.priority == 'normal')"></i>
+                              <td><i class="fa fa-circle" [style.color]="item.priority == 'critical' ? '#EA2027' : null"  [hidden]="!(item.priority == 'critical')"></i>
+                                <i class="fa fa-circle"   [style.color]="item.priority == 'major' ? '#e67e22' : null"  [hidden]="!(item.priority == 'major')"></i>
+                                <i class="fa fa-circle"   [style.color]="item.priority == 'normal' ? '#f6b93b' : null" [hidden]="!(item.priority == 'normal')"></i>
                                 <select class="caption-select" [(ngModel)]="item.priority" (change)="changePriorty($event,item)">
                                 <option value="critical" [selected]="item.priority == 'critical'">Critical</option>
                                 <option value="major" [selected]="item.priority == 'major'">Major</option>

@@ -176,7 +176,7 @@
                                     <div class="form-group row">
                                         <label class="col-md-2 col-form-label text-right">Profile Name</label>
                                         <div class="col-lg-2 col-sm-11">
-                                            <input type="text" class="form-control" value="" formControlName="profile_name" minlength="8" maxlength="32">
+                                            <input type="text" class="form-control" formControlName="profile_name" minlength="8" maxlength="32">
                                             <div *ngIf="DHCPForm.get('profile_name').invalid && (DHCPForm.get('profile_name').dirty || DHCPForm.get('profile_name').touched)">
                                                 <div class="text-danger pull-left" *ngIf="DHCPForm.get('profile_name').errors.required">
                                                     Profile Name is required.

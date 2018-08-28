@@ -14,11 +14,11 @@ export class SystemCpuMemoryUtilizationComponent implements OnInit, OnChanges, O
   @Input() range: string;
 
 
-  cpuData;
-  memoryData;
-  timeData;
+  cpuData: any;
+  memoryData: any;
+  timeData: any;
   timeStamp = 'hour';
-  timestamp;
+  timestamp: any;
   selectedRange = 'total';
   chart: Chart;
   tempData: any = [];
@@ -26,16 +26,18 @@ export class SystemCpuMemoryUtilizationComponent implements OnInit, OnChanges, O
   timerVar: any;
   xlabel: any = [];
   liveFlag = false;
+  selectedScale: string;
+  timeInterval = 10000;
+  number_points = 12;
+  steps = 1;
 
 
   unit = '%';
   noDataMsg = '';
 
 
-
   constructor(private _service: WebserviceService,
-              private elRef: ElementRef,
-              private spinnerService: Ng4LoadingSpinnerService) {
+              private elRef: ElementRef) {
   }
 
   init(timeFlag) {
@@ -43,6 +45,14 @@ export class SystemCpuMemoryUtilizationComponent implements OnInit, OnChanges, O
     this.chart = new Chart({
       chart: {
         type: 'line',
+        spacingBottom: 0,
+        spacingTop: 0,
+        spacingLeft: 20,
+        spacingRight: 20,
+
+        // Explicitly tell the width and height of a chart
+        width: null,
+      //  height: null
         height: 300,
         events: {
           load: function () {
@@ -55,6 +65,8 @@ export class SystemCpuMemoryUtilizationComponent implements OnInit, OnChanges, O
             const series2 = this.series[1];  // series for the memory
             //   let series3 = this.series[2];  // series for the
             // var c = this;
+            // console.log(`series 1 :  ${this.series1}`);
+            // console.log(`series 2 :  ${this.series2}`);
 
             let x1, // for up cpu (tx)
               x2,  //  for down memory (rx)
@@ -67,14 +79,14 @@ export class SystemCpuMemoryUtilizationComponent implements OnInit, OnChanges, O
             // t.previousUnit = t.unit;
 
             // setInterval function to hit the api within the specified interval.
+            console.log('before interval', t.timestamp);
             t.timerVar = setInterval(function () {
-              // console.log(`Timeflag:  ${timeFlag} TimeStamp:  ${t.timestamp}`);
+              console.log(`Timeflag:  ${timeFlag} TimeStamp:  ${t.convertTime(t.timestamp)}`);
 
               t._service.getWeb('statistics/wlc-sys-stats/?scale=' + timeFlag +
                 '&time=' + t.timestamp, '', '').then(_data => {
 
-                // console.log('with timestamp :load:  method is fired of network graph');
-                // console.log(_data);
+                console.log(_data);
 
                 // if (_data.unit !== t.previousUnit) {
                 //   t.loadData('hour', '');
@@ -116,12 +128,10 @@ export class SystemCpuMemoryUtilizationComponent implements OnInit, OnChanges, O
                 series1.addPoint([t.convertTime(y), x1], true, shift);
                 series2.addPoint([t.convertTime(y), x2], true, shift);
 
-                // series3.addPoint([t.convertTime(y), x3], true, shift);
+                // series1.update({name: 'CPU (' + x1 + ' ' + u + ')'});
+                // series2.update({name: 'Memory (' + x2 + ' ' + u + ')'});
 
-                series1.update({name: ' Total (' + x1 + ' ' + t.unit + ')'});
-                series2.update({name: '<i class=\'down icon icon-download-arrow\'></i> Downlink (' + x2 + ' ' + u + ')'});
-
-                // series3.update({name: '<i class=\'up icon icon-up-arrow-1\'></i> Uplink (' + x3 + ' ' + u + ')'});
+                // series3.update({name: ' Total (' + x1 + ' ' + t.unit + ')'});
 
                 t.tempData = t.apiResult; // changed from this to t.
               });
@@ -129,7 +139,6 @@ export class SystemCpuMemoryUtilizationComponent implements OnInit, OnChanges, O
             }, t.timeInterval);
 
             // }
-            // t.spinnerService.hide();
           }
 
         }
@@ -202,76 +211,33 @@ export class SystemCpuMemoryUtilizationComponent implements OnInit, OnChanges, O
         }
       },
       series: [{
-        name: 'CPU Usage',
+
+        name: 'CPU',
         data: this.cpuData,
         color: '#a377ec'
       },
         {
-          name: 'Memory Usage',
+          name: 'Memory',
           data: this.memoryData,
           color: '#fa894e'
         }]
     });
   }
 
-  selectedScale;
-  timeInterval = 300000;
-  number_points = 12;
-  steps = 1;
-
-  ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
-    if (changes.range) {
-      this.selectedRange = changes.range.currentValue;
-    } else {
-      this.selectedRange = 'total';
-    }
-    if (changes.scale) {
-      this.scale = changes.scale.currentValue;
-      this.selectedScale = changes.scale.currentValue;
-      if (this.selectedScale === '' || this.selectedScale === undefined) {
-        this.selectedScale = 'hour';
-      }
-
-      // this.drawGraph(this.selectedScale);
-
-      if (this.selectedScale === 'hour') {
-        this.timeInterval = 300000;
-        this.number_points = 12;
-        this.steps = 1;
-      }
-      if (this.selectedScale === 'day') {
-        this.timeInterval = 300000;
-        this.number_points = 24;
-        if (this.timeData) {
-          if (this.timeData.length > 12) {
-            this.steps = 2;
-          } else {
-            this.steps = 1;
-          }
-        }
-
-      }
-      clearInterval(this.timerVar);
-    } else {
-      this.scale = this.scale;
-    }
-    this.drawGraph(this.selectedScale);
-  }
-
   ngOnInit() {
-    // this.loadData('live','');
-    // this.loadRegAp();
   }
 
   loadData(scaleVal, status) {
-    // this.spinnerService.show();
-    // console.log('load data method fired of network graph!');
+
+    console.log(`scale value ${scaleVal}`);
     this._service.getWeb('statistics/wlc-sys-stats/?scale=' + scaleVal, '', '').then(_data => {
 
-      // console.log(_data);
+      console.log('initial fire', _data);
 
-     // if (_data.status !== 0) {
       if (_data.result[0].length >= 1 && _data.result[1].length >= 1 && _data.result[2].length >= 1) {
+
+        // If data from server is not null and the  count of values is atleast one, then store the data.
+
         this.timeData = _data.result[0];
 
         // this.totalData = _data.result[
@@ -283,12 +249,15 @@ export class SystemCpuMemoryUtilizationComponent implements OnInit, OnChanges, O
           this.selectedRange === 'avg' ? 6 : this.selectedRange === 'min' ? 4 : this.selectedRange === 'max' ? 5 : 2];
 
         this.xlabel = _data.result[0];
+
+        // Extracting the last time stamp for firing the next interval.
         this.timestamp = this.timeData[this.timeData.length - 1];
 
-        // this.unit = _data.unit;  // previously we were fetching the unit from the API response
+        // this.unit = _data.unit;   previously we were fetching the unit from the API response
 
         this.unit = '%';    // now we are setting the unit as '%'.
 
+        console.log(`TimeStamp:  ${this.convertTime(this.timestamp)}`);
 
         // this.previousUnit = this.unit;
         // render the graph.
@@ -296,11 +265,8 @@ export class SystemCpuMemoryUtilizationComponent implements OnInit, OnChanges, O
         this.noDataMsg = '';
 
       } else {
-        // console.log('In else block');
-        // this.noDataMsg = _data.msg;
         this.noDataMsg = 'No Data Available';
         clearInterval(this.timerVar);
-
       }
     });
   }
@@ -320,7 +286,6 @@ export class SystemCpuMemoryUtilizationComponent implements OnInit, OnChanges, O
 
 
   convertTime(date) {
-
     const dt = new Date(date * 1000);
     const hours = dt.getHours();
     const minutes = '0' + dt.getMinutes();
@@ -334,10 +299,48 @@ export class SystemCpuMemoryUtilizationComponent implements OnInit, OnChanges, O
     return formattedTime;
   }
 
+  ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+    if (changes.range) {
+      this.selectedRange = changes.range.currentValue;
+    } else {
+      this.selectedRange = 'total';
+    }
+    if (changes.scale) {
+      this.scale = changes.scale.currentValue;
+      this.selectedScale = changes.scale.currentValue;
+      if (this.selectedScale === '' || this.selectedScale === undefined) {
+        this.selectedScale = 'hour';
+      }
+
+      // this.drawGraph(this.selectedScale);
+
+      if (this.selectedScale === 'hour') {
+        console.log(this.selectedScale);
+        this.timeInterval = 300000;
+        this.number_points = 12;
+        this.steps = 1;
+      }
+      if (this.selectedScale === 'day') {
+        console.log('cpu', this.selectedScale);
+        this.timeInterval = 300000;
+        this.number_points = 24;
+        if (this.timeData) {
+          if (this.timeData.length > 12) {
+            this.steps = 2;
+          } else {
+            this.steps = 1;
+          }
+        }
+
+      }
+      clearInterval(this.timerVar);
+    } else {
+      this.scale = this.scale;
+    }
+    this.drawGraph(this.selectedScale);
+  }
+
   ngOnDestroy() {
     clearInterval(this.timerVar);
-    //  if(this.spinnerService){
-    //   this.spinnerService.hide();
-    // }
   }
 }

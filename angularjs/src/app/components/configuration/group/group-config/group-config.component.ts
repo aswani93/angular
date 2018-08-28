@@ -124,6 +124,14 @@ export class GroupConfigComponent implements OnInit {
       return value+'%';
     }
   };
+  value_5: number = 1;
+  options_5: Options = {
+    floor: 1,
+    ceil: 100,
+    translate: (value: number): string => {
+      return value+'%';
+    }
+  };
   //slider for Channel Utilization
 
   //slider for max client
@@ -132,6 +140,12 @@ export class GroupConfigComponent implements OnInit {
     floor: 1,
     ceil: 64
   };
+  clinet_value_5: number = 1;
+  clinet_options_5: Options = {
+    floor: 1,
+    ceil: 64
+  };
+
 
   //slider for max client
 
@@ -204,7 +218,7 @@ export class GroupConfigComponent implements OnInit {
       "group_name": new FormControl('', [
         Validators.required,
         Validators.minLength(2),
-        Validators.maxLength(25),
+        Validators.maxLength(32),
         Validators.pattern(this.namepattern),
         this.noEmoji
 
@@ -1110,7 +1124,16 @@ deactivateGeneral() {
             let res = _data.result;
             delete res.group_id;
             delete res.ssids;
+            
+          
             this.GroupRegForm.setValue(res);
+            this.clinet_value = this.GroupRegForm.get('radio_2_4.max_clients').value;
+            this.clinet_value_5 = this.GroupRegForm.get('radio_5.max_clients').value;
+
+            console.log(this.clinet_value,'******edit********');
+            console.log(this.clinet_value_5,'******edit5********');
+
+
             this.generateChannel_5(this.GroupRegForm.get('radio_5.channel_width').value,this.GroupRegForm.get('radio_5.primary_channel').value);
 
             // this.selectedChannel = this.GroupRegForm.get('radio_5')['controls']["channel"].value;
@@ -1121,6 +1144,16 @@ deactivateGeneral() {
 
             this.generateChannelWidth2(this.GroupRegForm.get('radio_2_4.wireless_mode').value,'edit');
             this.generateChannelWidth5(this.GroupRegForm.get('radio_5.wireless_mode').value,'edit');
+            if(this.GroupRegForm.get('radio_2_4.is_enabled').value == false){
+              this.ifRadio24Disabled = false;
+            }else{
+              this.ifRadio24Disabled = true;
+            }
+            if(this.GroupRegForm.get('radio_5.is_enabled').value == false){
+              this.ifRadio5Disabled = false;
+            }else{
+              this.ifRadio5Disabled = true;
+            }
             this.GroupRegForm.setValue(res);
             //this.scrollHelper.scrollToFirst("inputGroupName");
             this.checkAnyUpdate();

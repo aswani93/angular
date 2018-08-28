@@ -29,14 +29,28 @@ export class ApRebootComponent implements OnInit, AfterViewInit {
   ap_mac;
   AP_name;
   public rowsOnPage = 20;
-  private showingfrom = 0;
-  private showingto = 0;
-  private pageModulus = 0;
-  public currentPage;
-  public dataLength;
+  showingfrom = 0;
+  showingto = 0;
+  pageModulus = 0;
+  currentPage;
+  dataLength;
   coloumsObjects;
 
+  /* pagination declaration variable*/
+  page = 1;
+  Math: any = Math;
+  firstarrowStatus = true;
+  lastarrowStatus = false;
+
+  /*pagination declaration variable end */
+
   ngOnInit() {
+    this.notifyPopup.confirmationOk().subscribe((page) => {
+      if (page === 'apReboot') {
+        this.rebootAP();
+      }
+    });
+
     this.rogueAPForm = new FormGroup({
       'rogue_ap_2dot4_policy': new FormControl('10', []),
       'is_rogue_ap_2dot4_enabled': new FormControl(false, []),
@@ -134,6 +148,12 @@ export class ApRebootComponent implements OnInit, AfterViewInit {
 
   }
 
+
+  onSubmit() {
+    // console.log('clicked');
+    this.notifyPopup.info('Are you sure to reboot AP?');
+  }
+
   rebootAP() {
     console.log(this.selectedAPArray);
     this.notifyPopup.success(commonMessages.rougeAP_reboot_initiated);
@@ -158,7 +178,8 @@ export class ApRebootComponent implements OnInit, AfterViewInit {
           this.notifyPopup.error(commonMessages.rougeAp_failed_Reboot);
           //  this.formReset();
           this.loadData();
-        }}).catch((error) => {
+        }
+      }).catch((error) => {
         this.notifyPopup.logoutpop(commonMessages.InternalserverError);
       });
     } else {
@@ -205,5 +226,27 @@ export class ApRebootComponent implements OnInit, AfterViewInit {
 
 
   }
+
+  /* pagination method here*/
+  getNext(page) {
+    this.page = page;
+    if (this.page == 1) {
+      this.firstarrowStatus = true;
+      this.lastarrowStatus = false;
+    } else if (this.page == this.Math.ceil(this.data.length / this.rowsOnPage)) {
+      this.lastarrowStatus = true;
+      this.firstarrowStatus = false;
+    } else {
+      this.firstarrowStatus = false;
+      this.lastarrowStatus = false;
+    }
+  }
+
+  goToPage(num) {
+    this.getNext(num);
+  }
+
+  /* pagination method here end*/
+
 
 }

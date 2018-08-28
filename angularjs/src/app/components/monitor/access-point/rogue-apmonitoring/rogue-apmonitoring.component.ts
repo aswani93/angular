@@ -18,13 +18,14 @@ export class RogueApmonitoringComponent implements OnInit {
   public detectedValuesArray;
   public UnknowndetectedValuesArray;
   public _sortBy;
+  private autoRefreshTable;
   public _sortOrder;
   @ViewChild('mf')
   private rogueAPTable: DataTable;
   @ViewChild('mf2')
   private dataTable: DataTable;
 
-
+  private autoRefreshTime: Number = 50000;
   public interval_details;
   selectallCheck = false;
   selectedDHCPMAC = [];
@@ -59,10 +60,12 @@ export class RogueApmonitoringComponent implements OnInit {
   }
 
   ngOnDestroy() {
+
+    clearInterval(this.autoRefreshTable);
     if (this.notifyPopup) {
       this.notifyPopup.hideLoader('');
     }
-    clearInterval(this.interval_details);
+
   }
 
 
@@ -87,9 +90,10 @@ export class RogueApmonitoringComponent implements OnInit {
         this.RadioCount_2 = _data.result.radio_two_count;
         this.RadioCount_5 = _data.result.radio_five_count;
         this.notifyPopup.hideLoader('');
-        this.interval_details = setInterval(() => {
-          this.loadData();
-        }, 50000);
+        // this.interval_details = setInterval(() => {
+        //   this.loadData();
+        // }, 50000);
+
 
       } else {
         this.notifyPopup.hideLoader('');
@@ -113,31 +117,73 @@ export class RogueApmonitoringComponent implements OnInit {
         this.notifyPopup.hideLoader('');
         this.notifyPopup.error('Some thing went wrong');
       }
+      this.autoRefreshTable = setInterval(() => this.fetchDataFromServer(), this.autoRefreshTime);
     }).catch((error) => {
       this.notifyPopup.logoutpop(commonMessages.InternalserverError);
     });
 
 
   }
+
+  fetchDataFromServer() {
+
+    this._service.getWeb('statistics/known-ap-list/', '', '').then(_data => {
+      if (_data.status == '1') {
+
+        this.data = _data.result.data;
+        this.RadioCount_2 = _data.result.radio_two_count;
+        this.RadioCount_5 = _data.result.radio_five_count;
+        this.notifyPopup.hideLoader('');
+        // this.interval_details = setInterval(() => {
+        //   this.loadData();
+        // }, 50000);
+
+      } else {
+        this.notifyPopup.hideLoader('');
+        this.notifyPopup.error(commonMessages.serverError);
+      }
+    }).catch((error) => {
+      this.notifyPopup.logoutpop(commonMessages.InternalserverError);
+    });
+    //unknownAP APIO Call
+    this._service.getWeb('statistics/unknown-ap-list/', '', '').then(_data => {
+      if (_data.status == '1') {
+
+        this.unknownData = _data.result.data;
+        this.UnknownRadioCount_2 = _data.result.radio_two_count;
+        this.UnknownRadioCount_5 = _data.result.radio_five_count;
+        this.notifyPopup.hideLoader('');
+
+
+
+      } else {
+        this.notifyPopup.hideLoader('');
+        this.notifyPopup.error('Some thing went wrong');
+      }
+    }).catch((error) => {
+      this.notifyPopup.logoutpop(commonMessages.InternalserverError);
+    });
+
+  }
   callDelete() {
-    this.notifyPopup.showLoader(commonMessages.delete_knownAP)
+    if (this.selectedknownDHCPMAC.length > 0) {
+      this.notifyPopup.showLoader(commonMessages.delete_knownAP);
     this._service.deleteWeb('statistics/known-ap-list/?ap_mac=' + this.selectedknownDHCPMAC, '').then(_data => {
       if (_data.status == "1") {
         this.notifyPopup.hideLoader('');
         this.notifyPopup.success(commonMessages.AP_delete_success);
         setTimeout(() => {
-          this.loadData();
           this.reset();
         }, 2000);
       } else {
         this.notifyPopup.hideLoader('');
         this.notifyPopup.error(commonMessages.InternalserverError);
         setTimeout(() => {
-          this.loadData();
           this.reset();
         }, 2000);
       }
     });
+    }
   }
   reset() {
     this.loadData();
@@ -223,7 +269,6 @@ export class RogueApmonitoringComponent implements OnInit {
           this.notifyPopup.hideLoader('')
           this.notifyPopup.success("AP moved successfully.")
           setTimeout(() => {
-            this.loadData();
             this.reset();
           }, 2000);
 
@@ -232,7 +277,6 @@ export class RogueApmonitoringComponent implements OnInit {
           this.notifyPopup.hideLoader('');
           this.notifyPopup.error(commonMessages.InternalserverError);
           setTimeout(() => {
-            this.loadData();
             this.reset();
           }, 2000);
 

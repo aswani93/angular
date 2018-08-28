@@ -43,6 +43,9 @@
     display: block;
     text-align: center !important;
 }
+::ng-deep .radio-tab .tab-content {
+   padding: 0 !important;
+}
 ::ng-deep tabset.radio-tab.tab-container {
     display: block;
     text-align: center;
@@ -302,6 +305,6 @@ body {
 ::ng-deep .ng5-slider .ng5-slider-pointer .ng5-slider-active:after{
     background-color: #6660b3 !important;  
 }
-.portlet.light>.portlet-title {
+.portlet.light>.portlet-title.for-graph {
     border-radius: 8px 8px 0px 0px;
 }

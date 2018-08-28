@@ -32,7 +32,7 @@
                                     <a href="javascript:void(0)" (click)="showDialog = !showDialog;drawGraph('apTraffic','AP Traffic Usage');"><i class="fa fa-arrows-alt icon"></i></a>
                                 </li>
                                 <li>
-                                    <a href="#"><i class="icon icon-cancel"></i></a>
+                                    <a href="javascript:void(0)" (click)="delete(4)"><i class="icon icon-cancel"></i></a>
                                 </li>
                             </ul>
                         </div>
@@ -46,4 +46,5 @@
        
 <app-modal-dialog [(visible)]="showDialog" (visibleChange)="visibleChange()" [headerName]="titleText">
 <div class="graphClass"  [chart]="apTraffic" *ngIf="showDialog && graphdata =='apTraffic' "></div>
+<div class="graphClass"><p class="no-data" style="font-size: 13px;" *ngIf="!isApsysConnected && showDialog && graphdata =='apTraffic' ">No Data Available</p></div>
 </app-modal-dialog>

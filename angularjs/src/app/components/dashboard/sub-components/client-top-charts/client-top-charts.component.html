@@ -1,4 +1,4 @@
-<div>  
+<div class="clientTop">  
                 <div class="portlet light bordered stats custom-portlet">
                     <div class="portlet-title custom-title">
                         <div class="caption">
@@ -22,7 +22,7 @@
                                     <a href="javascript:void(0)" (click)="showDialog = !showDialog;drawGraph('clientsTop','Clients (Top 5)');"><i class="fa fa-arrows-alt icon"></i></a>
                                 </li>
                                 <li>
-                                    <a href="#"><i class="icon icon-cancel"></i></a>
+                                    <a href="javascript:void(0)" (click)="delete(3)"><i class="icon icon-cancel"></i></a>
                                 </li>
                             </ul>
                         </div>
@@ -36,4 +36,5 @@
    
 <app-modal-dialog [(visible)]="showDialog" (visibleChange)="visibleChange()" [headerName]="titleText">
 <div class="graphClass"  [chart]="clientsTop" *ngIf="showDialog && graphdata =='clientsTop' "></div>
+<div class="graphClass"><p class="no-data" style="font-size: 13px;" *ngIf="!isApsysConnected && showDialog && graphdata =='clientsTop' ">No Data Available</p></div>
 </app-modal-dialog>

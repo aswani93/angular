@@ -157,11 +157,11 @@
                             <div class="form-group row">
                               <label class="col-md-2 col-form-label text-right">Group Name</label>
                               <div class="col-lg-2 col-sm-11">
-                                <input type="text" class="form-control" formControlName="group_name" id="group_name" maxlength="25" #groupname>
+                                <input type="text" class="form-control" formControlName="group_name" id="group_name" maxlength="32" #groupname>
                                 <div *ngIf="GroupRegForm.get('group_name').invalid && (GroupRegForm.get('group_name').dirty || GroupRegForm.get('group_name').touched)">
                                   <div class="text-danger pull-left" *ngIf="GroupRegForm.get('group_name').errors.required">Name is required.</div>
                                   <div class="text-danger pull-left" *ngIf="GroupRegForm.get('group_name').errors.minlength && !GroupRegForm.get('group_name').errors.pattern">Minimum 2 character</div>
-                                  <div class="text-danger pull-left" *ngIf="GroupRegForm.get('group_name').errors.maxlength && !isDuplicate">Maximum 25 character allowed</div>
+                                  <div class="text-danger pull-left" *ngIf="GroupRegForm.get('group_name').errors.maxlength && !isDuplicate">Maximum 32 character allowed</div>
                                   <div class="text-danger pull-left" *ngIf="GroupRegForm.get('group_name').errors.pattern && !GroupRegForm.get('group_name').errors.emoji">Should not start with a space</div>
                                   <div class="text-danger pull-left" *ngIf="GroupRegForm.get('group_name').errors.emoji">Should not allow symbols.</div>
                                 </div>
@@ -713,7 +713,6 @@
                                               </div> -->
                                               <input type="hidden"  formControlName="channel_util" [(ngModel)]="value">
                                               <ng5-slider [(value)]="value" [options]="options"></ng5-slider>
-                                             
 
                                         </div>
                                        
@@ -1095,28 +1094,32 @@
                                       <div class="form-group row" style="margin-top: 30px;" *ngIf="GroupRegForm.get('radio_5.is_channel_util_enabled').value == true">
                                           <label class="col-md-2 col-form-label text-right"></label>
                                           <div class="col-lg-2">
-                                              <div class="slidecontainer">
+                                              <!-- <div class="slidecontainer">
                                                 <p class="result-tip" [style.left.px]="20 + (2*GroupRegForm.get('radio_5.channel_util').value)">{{GroupRegForm.get('radio_5.channel_util').value}}</p>
                                                   <input type="range" min="1" max="100"  class="range-slider" list="tickmarks1"  formControlName="channel_util">
                                                     <datalist id="tickmarks1" class="ticklabel">
                                                       <option value="1" label="1%" class="opt1">
                                                       <option value="100" label="100%" class="opt2">
                                                     </datalist>
-                                                </div>
+                                                </div> -->
+                                                <input type="hidden"  formControlName="channel_util" [(ngModel)]="value_5">
+                                                <ng5-slider [(value)]="value_5" [options]="options_5"></ng5-slider>
                                           </div>
                                          
                                         </div>
                                         <div class="form-group row" style="margin-top: 30px;">
                                             <label class="col-md-2 col-form-label text-right">Max client allowed</label>
                                             <div class="col-lg-2">
-                                                <div class="slidecontainer">
+                                                <!-- <div class="slidecontainer">
                                                     <p class="result-tip" [style.left.px]="20 + (3.2*GroupRegForm.get('radio_5.max_clients').value)">{{GroupRegForm.get('radio_5.max_clients').value}}</p>
                                                     <input type="range" min="1" max="64"  class="range-slider"  list="tickmarks" formControlName="max_clients">
                                                       <datalist id="tickmarks" class="ticklabel">
                                                         <option value="1" label="1" class="opt1">
                                                         <option value="64" label="64" class="opt2">
                                                       </datalist>
-                                                  </div>
+                                                  </div> -->
+                                                  <input type="hidden"  formControlName="max_clients" [(ngModel)]="clinet_value_5">
+                                                <ng5-slider [(value)]="clinet_value_5" [options]="clinet_options_5"></ng5-slider>
                                             </div>
                                            
                                           </div>

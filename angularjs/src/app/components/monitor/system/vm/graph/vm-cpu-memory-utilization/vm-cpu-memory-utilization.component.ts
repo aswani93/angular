@@ -28,7 +28,7 @@ export class VmCpuMemoryUtilizationComponent implements OnInit, OnDestroy, OnCha
   apiResult: any = [];
 
   timerVar: any;
-  timeInterval = 300000;
+  timeInterval = 10000;
 
   xlabel: any = [];
   liveFlag = false;
@@ -51,6 +51,10 @@ export class VmCpuMemoryUtilizationComponent implements OnInit, OnDestroy, OnCha
     this.chart = new Chart({
       chart: {
         type: 'line',
+        spacingBottom: 0,
+        spacingTop: 0,
+        spacingLeft: 20,
+        spacingRight: 20,
         height: 300,
         events: {
           load: function () {
@@ -76,9 +80,9 @@ export class VmCpuMemoryUtilizationComponent implements OnInit, OnDestroy, OnCha
 
             // setInterval function to hit the api within the specified interval.
             t.timerVar = setInterval(function () {
-              // console.log(`Timeflag:  ${timeFlag} TimeStamp:  ${t.timestamp}`);
-              // http://192.168.0.27:8000/api/statistics/wlc-sys-stats/?scale=hour&vm=HOST&time=1532413801
-              t._service.getWeb('statistics/wlc-sys-stats/?scale=' + timeFlag + '&vm=' + vName + '&time=' + t.timestamp, '', '').then(_data => {
+
+              t._service.getWeb('statistics/wlc-sys-stats/?scale=' + timeFlag +
+                '&vm=' + vName + '&time=' + t.timestamp, '', '').then(_data => {
 
                 // console.log('with timestamp :load:  method is fired of network graph');
                 // console.log(_data);
@@ -123,12 +127,10 @@ export class VmCpuMemoryUtilizationComponent implements OnInit, OnDestroy, OnCha
                 series1.addPoint([t.convertTime(y), x1], true, shift);
                 series2.addPoint([t.convertTime(y), x2], true, shift);
 
-                // series3.addPoint([t.convertTime(y), x3], true, shift);
+               // series1.update({name: 'CPU (' + x1 + ' ' + u + ')'});
+               // series2.update({name: 'Memory (' + x2 + ' ' + u + ')'});
 
-                series1.update({name: ' Total (' + x1 + ' ' + t.unit + ')'});
-                series2.update({name: '<i class=\'down icon icon-download-arrow\'></i> Downlink (' + x2 + ' ' + u + ')'});
-
-                // series3.update({name: '<i class=\'up icon icon-up-arrow-1\'></i> Uplink (' + x3 + ' ' + u + ')'});
+                // series3.update({name: ' Total (' + x1 + ' ' + t.unit + ')'});
 
                 t.tempData = t.apiResult; // changed from this to t.
               });
@@ -151,7 +153,7 @@ export class VmCpuMemoryUtilizationComponent implements OnInit, OnDestroy, OnCha
         gridLineWidth: 1,
         // tickInterval: 1,
         title: {
-          text: 'Time',
+          text: ' ', // time
         },
         labels: {
           step: this.steps,
@@ -172,7 +174,7 @@ export class VmCpuMemoryUtilizationComponent implements OnInit, OnDestroy, OnCha
       yAxis: {
         min: 0,
         title: {
-          text: `Usage in %`
+          text: `(%)`
         },
         labels: {
           formatter: function () {
@@ -209,12 +211,12 @@ export class VmCpuMemoryUtilizationComponent implements OnInit, OnDestroy, OnCha
         }
       },
       series: [{
-        name: 'CPU Usage %',
+        name: 'CPU',
         data: this.cpuData,
         color: '#a377ec'
       },
         {
-          name: 'Memory Usage %',
+          name: 'Memory',
           data: this.memoryData,
           color: '#fa894e'
         }]
@@ -276,7 +278,7 @@ export class VmCpuMemoryUtilizationComponent implements OnInit, OnDestroy, OnCha
     // this.spinnerService.show();
     // console.log('load data method fired of network graph!');
     // this._service.getWeb('statistics/wlc-sys-stats/?scale=' + scaleVal, '', '').then(_data => {
-    this._service.getWeb('statistics/wlc-net-stats/?scale=' + scaleVal + '&vm=' + this.selectedVM, '', '').then(_data => {
+    this._service.getWeb('statistics/wlc-sys-stats/?scale=' + scaleVal + '&vm=' + this.selectedVM, '', '').then(_data => {
       // console.log(_data);
 
       // if (_data.status !== 0) {

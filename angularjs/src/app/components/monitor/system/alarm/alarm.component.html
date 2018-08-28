@@ -29,7 +29,14 @@
                                      <li><a href="#"><i class="icon icon-rubbish-bin"></i> Delete</a></li>
                                  </ul> -->
                              </div>                              
-                             <table id="example" class="display theme table record_table table-striped table-sort text-center" cellspacing="0" width="100%"  [mfData]="alarmData" #mf="mfDataTable" >
+                             <table 
+                                    id="example" 
+                                    class="display theme table record_table table-striped table-sort text-center" 
+                                    cellspacing="0" 
+                                    style="white-space: normal"
+                                    width="100%"  
+                                    [mfData]="alarmData" 
+                                    #mf="mfDataTable" >
                                  <thead>
                                      <tr class="table-head">
                                          <th class="text-center " *ngIf="(coloumsObjects[0].checked) == true" style="text-align: left">
